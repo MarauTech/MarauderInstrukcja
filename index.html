@@ -602,10 +602,7 @@
                     <p>Mapowanie sieci WiFi z danymi GPS w czasie rzeczywistym.</p>
                 </div>
 
-                <div class="feature-card">
-                    <h4>⌨️ BadUSB</h4>
-                    <p>Emulacja klawiatury USB do wykonywania skryptów automatyzacyjnych.</p>
-                </div>
+                
             </section>
 
             <section id="quick-start" class="content-section">
@@ -920,50 +917,6 @@ hashcat -m 22000 pmkid.hc22000 wordlist.txt</code></pre>
                 </div>
             </section>
 
-            <section id="badusb" class="content-section">
-                <h2>⌨️ BadUSB</h2>
-
-                <div class="alert alert-info">
-                    <strong>ℹ️ Info:</strong> BadUSB emuluje klawiaturę USB do wykonywania skryptów Ducky. Nie wszystkie wersje Marauder mają tę funkcję!
-                </div>
-
-                <div class="feature-card">
-                    <h4>Jak używać BadUSB</h4>
-                    <ol>
-                        <li>Przygotuj skrypt Ducky (.txt) na karcie SD w katalogu <code>/badusb/</code></li>
-                        <li><code>Device → BadUSB → Run Ducky Script</code></li>
-                        <li>Wybierz skrypt z listy</li>
-                        <li>Podłącz Marauder jako USB do komputera</li>
-                        <li>Skrypt zostanie wykonany jako wejście z klawiatury</li>
-                    </ol>
-                </div>
-
-                <div class="feature-card">
-                    <h4>Przykładowy skrypt Ducky</h4>
-                    <pre><code>REM Otwiera Notatnik i pisze tekst
-DELAY 1000
-GUI r
-DELAY 500
-STRING notepad.exe
-ENTER
-DELAY 1000
-STRING Hello from ESP32 Marauder!
-ENTER</code></pre>
-                </div>
-
-                <div class="feature-card">
-                    <h4>Dostępne komendy Ducky</h4>
-                    <ul>
-                        <li><code>REM</code> - Komentarz</li>
-                        <li><code>DELAY [ms]</code> - Opóźnienie</li>
-                        <li><code>STRING [tekst]</code> - Wpisuje tekst</li>
-                        <li><code>ENTER, GUI, ALT, CTRL, SHIFT, TAB, ESC</code></li>
-                        <li><code>UP, DOWN, LEFT, RIGHT</code> - Strzałki</li>
-                        <li><code>F1-F12</code> - Klawisze funkcyjne</li>
-                    </ul>
-                </div>
-            </section>
-
             <section id="cli" class="content-section">
                 <h2>💻 Komendy CLI</h2>
 
@@ -1163,7 +1116,6 @@ ENTER</code></pre>
                         <li>Zapisywania PCAP (packet capture)</li>
                         <li>Evil Portal HTML</li>
                         <li>Wardrive</li>
-                        <li>BadUSB scripts</li>
                         <li>Firmware updates (SD Update)</li>
                     </ul>
                 </div>
@@ -1195,7 +1147,7 @@ ENTER</code></pre>
                     <li>❌ BLE spam przeciwko cudzym urządzeniom</li>
                     <li>❌ Łamanie haseł WiFi bez zgody</li>
                     <li>❌ Nieuprawniony dostęp do sieci</li>
-                    <li>❌ BadUSB przeciwko cudzym komputerom</li>
+        
                 </ul>
 
                 <h3>✅ Legalne zastosowania</h3>
