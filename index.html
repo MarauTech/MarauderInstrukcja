@@ -4,1401 +4,3244 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESP32 Marauder - Pełna Instrukcja Obsługi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
-        :root {
-            --bg-primary: #0d1117;
-            --bg-secondary: #161b22;
-            --bg-tertiary: #1c2128;
-            --accent-yellow: #fbbf24;
-            --accent-blue: #3b82f6;
-            --text-primary: #e6edf3;
-            --text-secondary: #8b949e;
-            --border: #30363d;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --success: #10b981;
-        }
-
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
+            font-family: 'Segoe UI', 'Roboto', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.8;
+            color: #e0e0e0;
+            background: #0a0a0f;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 255, 255, 0.03) 0%, transparent 50%),
+                linear-gradient(180deg, #0a0a0f 0%, #0f0f1a 100%);
+            padding: 20px;
+            min-height: 100vh;
         }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, #1a1f2e 100%);
-            border-bottom: 2px solid var(--accent-yellow);
-            padding: 1.5rem;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .logo-icon {
-            font-size: 2rem;
-        }
-
-        .logo h1 {
-            font-size: 1.5rem;
-            color: var(--accent-yellow);
-            font-weight: 700;
-        }
-
-        .search-container {
-            flex: 1;
-            max-width: 500px;
-            position: relative;
-        }
-
-        .search-box {
-            width: 100%;
-            padding: 0.75rem 1rem 0.75rem 2.5rem;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            transition: all 0.3s;
-        }
-
-        .search-box:focus {
-            outline: none;
-            border-color: var(--accent-yellow);
-            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 0.75rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-        }
-
-        .menu-toggle {
-            display: none;
-            background: var(--accent-yellow);
-            color: var(--bg-primary);
-            border: none;
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-
-        /* Container */
+        
         .container {
-            max-width: 1400px;
+            max-width: 1000px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 2rem;
-            padding: 2rem 1rem;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            background: var(--bg-secondary);
+            background: rgba(15, 15, 25, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 40px;
             border-radius: 12px;
-            padding: 1.5rem;
-            height: fit-content;
-            position: sticky;
-            top: 100px;
-            border: 1px solid var(--border);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(0, 255, 136, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 136, 0.15);
         }
-
-        .sidebar h3 {
-            color: var(--accent-yellow);
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-section {
-            margin-bottom: 1.5rem;
-        }
-
-        .nav-section h4 {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.5rem;
+        
+        h1 {
+            color: #00ff88;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 255, 136, 0.3);
+            padding-bottom: 15px;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
             font-weight: 600;
+            letter-spacing: -0.5px;
         }
-
-        .nav-link {
-            display: block;
-            padding: 0.5rem 0.75rem;
-            color: var(--text-primary);
-            text-decoration: none;
-            border-radius: 6px;
-            transition: all 0.2s;
-            font-size: 0.9rem;
-            margin-bottom: 0.25rem;
+        
+        h2 {
+            color: #00d4ff;
+            font-size: 1.8em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-left: 3px solid #00ff88;
+            padding-left: 15px;
+            transition: all 0.3s ease;
+            position: relative;
+            font-weight: 500;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
         }
-
-        .nav-link:hover {
-            background: var(--bg-tertiary);
-            color: var(--accent-yellow);
-            transform: translateX(4px);
+        
+        h2:hover {
+            border-left-width: 5px;
+            padding-left: 18px;
+            transform: translateX(5px);
+            text-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+            color: #00ff88;
         }
-
-        .nav-link.active {
-            background: var(--accent-yellow);
-            color: var(--bg-primary);
-            font-weight: 600;
+        
+        h3 {
+            color: #00ff88;
+            font-size: 1.4em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 500;
         }
-
-        .main-content {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 2rem;
-            border: 1px solid var(--border);
-            min-height: calc(100vh - 200px);
+        
+        h4 {
+            color: #00d4ff;
+            font-size: 1.2em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: 500;
         }
-
-        .content-section {
-            display: none;
+        
+        p {
+            margin: 15px 0;
+            text-align: justify;
+            color: #c0c0c0;
         }
-
-        .content-section.active {
-            display: block;
-            animation: fadeIn 0.3s;
+        
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 40px;
         }
-
-        @keyframes fadeIn {
+        
+        li {
+            margin: 10px 0;
+            color: #c0c0c0;
+        }
+        
+        .toc {
+            background: rgba(0, 255, 136, 0.05);
+            padding: 25px;
+            border-radius: 8px;
+            margin: 30px 0;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            border: none;
+            padding: 0;
+            color: #00ff88;
+        }
+        
+        .toc ol {
+            margin-top: 15px;
+        }
+        
+        .toc li {
+            margin: 8px 0;
+        }
+        
+        .warning {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 3px solid #ffc107;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            animation: slideIn 0.5s ease;
+            border: 1px solid rgba(255, 193, 7, 0.2);
+            box-shadow: 0 0 20px rgba(255, 193, 7, 0.1);
+        }
+        
+        .warning:hover {
+            box-shadow: 0 4px 20px rgba(255, 193, 7, 0.3);
+            transform: translateX(5px);
+            border-left-width: 5px;
+        }
+        
+        .warning strong {
+            color: #ffc107;
+        }
+        
+        @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateX(-20px);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateX(0);
             }
         }
-
-        h2 {
-            color: var(--accent-yellow);
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 0.75rem;
+        
+        .warning strong {
+            color: #856404;
+            font-size: 1.1em;
         }
-
-        h3 {
-            color: var(--accent-blue);
-            font-size: 1.5rem;
-            margin: 2rem 0 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        
+        .info-box {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 3px solid #00d4ff;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 5px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+            transition: all 0.3s ease;
         }
-
-        h4 {
-            color: var(--text-primary);
-            font-size: 1.2rem;
-            margin: 1.5rem 0 0.75rem;
+        
+        .info-box:hover {
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+            transform: translateX(5px);
+            border-left-width: 5px;
         }
-
-        p {
-            margin-bottom: 1rem;
-            color: var(--text-secondary);
+        
+        .info-box strong {
+            color: #00d4ff;
         }
-
-        .feature-card {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            transition: all 0.3s;
-        }
-
-        .feature-card:hover {
-            border-color: var(--accent-yellow);
-            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .feature-card h4 {
-            color: var(--accent-yellow);
-            margin-top: 0;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-right: 0.5rem;
-        }
-
-        .badge-wifi { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
-        .badge-bluetooth { background: rgba(16, 185, 129, 0.2); color: var(--success); }
-        .badge-gps { background: rgba(251, 191, 36, 0.2); color: var(--accent-yellow); }
-        .badge-warning { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
-
-        ul, ol {
-            margin: 1rem 0 1rem 1.5rem;
-            color: var(--text-secondary);
-        }
-
-        li {
-            margin-bottom: 0.5rem;
-        }
-
-        code {
-            background: var(--bg-primary);
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            color: var(--accent-yellow);
-            font-size: 0.9rem;
-        }
-
-        pre {
-            background: var(--bg-primary);
-            padding: 1rem;
-            border-radius: 8px;
+        
+        .code-block {
+            background: #0a0a0f;
+            color: #00ff88;
+            padding: 20px;
+            border-radius: 5px;
             overflow-x: auto;
-            margin: 1rem 0;
-            border: 1px solid var(--border);
+            margin: 20px 0;
+            font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            position: relative;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            box-shadow: 
+                0 0 20px rgba(0, 255, 136, 0.1),
+                inset 0 0 20px rgba(0, 255, 136, 0.05);
         }
-
-        pre code {
-            background: none;
-            padding: 0;
-        }
-
-        .alert {
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            margin: 1.5rem 0;
-            border-left: 4px solid;
-        }
-
-        .alert-warning {
-            background: rgba(245, 158, 11, 0.1);
-            border-color: var(--warning);
-            color: var(--warning);
-        }
-
-        .alert-danger {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: var(--danger);
-            color: var(--danger);
-        }
-
-        .alert-info {
-            background: rgba(59, 130, 246, 0.1);
-            border-color: var(--accent-blue);
-            color: var(--accent-blue);
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background: var(--accent-yellow);
-            color: var(--bg-primary);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background: #fcd34d;
+        
+        .code-block:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+            box-shadow: 
+                0 5px 25px rgba(0, 255, 136, 0.3),
+                inset 0 0 20px rgba(0, 255, 136, 0.1);
+            border-color: rgba(0, 255, 136, 0.4);
         }
-
-        .quick-access {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
+        
+        .code-block code {
+            color: #00ff88;
         }
-
-        .quick-card {
-            background: var(--bg-tertiary);
-            padding: 1.5rem;
+        
+        code {
+            background: rgba(0, 255, 136, 0.15);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', 'Consolas', monospace;
+            color: #00ff88;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+        
+        .section-divider {
+            border-top: 1px solid rgba(0, 255, 136, 0.2);
+            margin: 40px 0;
+            position: relative;
+        }
+        
+        .section-divider::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 0;
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, #00ff88, transparent);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+        
+        .legal-warning {
+            background: rgba(220, 53, 69, 0.1);
+            border: 2px solid rgba(220, 53, 69, 0.4);
+            padding: 25px;
+            margin: 30px 0;
             border-radius: 8px;
-            border: 1px solid var(--border);
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
+            box-shadow: 0 0 20px rgba(220, 53, 69, 0.2);
         }
-
-        .quick-card:hover {
-            border-color: var(--accent-yellow);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        
+        .legal-warning h3 {
+            color: #ff6b6b;
+            margin-top: 0;
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
         }
-
-        .quick-card-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.75rem;
+        
+        .legal-warning ul {
+            margin-top: 15px;
         }
-
-        .quick-card h3 {
-            font-size: 1.1rem;
-            margin: 0;
-            color: var(--text-primary);
+        
+        .legal-warning li {
+            margin: 8px 0;
         }
-
-        .footer {
-            background: var(--bg-secondary);
-            border-top: 1px solid var(--border);
-            padding: 2rem 1rem;
-            margin-top: 4rem;
-            text-align: center;
-            color: var(--text-secondary);
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-                padding: 1rem;
-            }
-
-            .sidebar {
-                position: fixed;
-                top: 0;
-                left: -100%;
-                height: 100vh;
-                width: 80%;
-                max-width: 300px;
-                z-index: 2000;
-                transition: left 0.3s;
-                overflow-y: auto;
-            }
-
-            .sidebar.active {
-                left: 0;
-            }
-
-            .menu-toggle {
-                display: block;
-            }
-
-            .overlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.7);
-                z-index: 1500;
-            }
-
-            .overlay.active {
-                display: block;
-            }
-
-            .header-content {
-                justify-content: space-between;
-            }
-
-            .search-container {
-                order: 3;
-                width: 100%;
-                max-width: 100%;
-            }
-
-            h2 {
-                font-size: 1.5rem;
-            }
-
-            .main-content {
-                padding: 1.5rem;
-            }
-
-            .quick-access {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-primary);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-yellow);
-        }
-
+        
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 1.5rem 0;
+            margin: 20px 0;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
         }
-
+        
         th, td {
-            padding: 0.75rem;
+            border: 1px solid rgba(0, 255, 136, 0.15);
+            padding: 12px;
             text-align: left;
-            border-bottom: 1px solid var(--border);
         }
-
+        
         th {
-            background: var(--bg-tertiary);
-            color: var(--accent-yellow);
+            background: rgba(0, 255, 136, 0.15);
+            color: #00ff88;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+        
+        tr:nth-child(even) {
+            background: rgba(0, 255, 136, 0.03);
+        }
+        
+        tr:hover {
+            background: rgba(0, 255, 136, 0.1);
+            transition: background 0.2s ease;
+        }
+        
+        .highlight {
+            background: rgba(255, 193, 7, 0.2);
+            padding: 2px 6px;
+            border-radius: 3px;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            color: #ffc107;
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+        }
+        
+        a {
+            color: #00d4ff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid transparent;
+        }
+        
+        a:hover {
+            color: #00ff88;
+            border-bottom-color: rgba(0, 255, 136, 0.5);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+        
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 15, 25, 0.5);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 136, 0.3);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 136, 0.5);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+        
+        ::selection {
+            background: rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+        }
+        
+        ::-moz-selection {
+            background: rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+        }
+        
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, #00ff88, #00d4ff);
+            z-index: 10000;
+            transition: width 0.1s ease;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+        
+        *:focus {
+            outline: 2px solid rgba(0, 255, 136, 0.5);
+            outline-offset: 2px;
+        }
+        
+        button:focus,
+        input:focus,
+        a:focus {
+            outline: 2px solid rgba(0, 255, 136, 0.6);
+            outline-offset: 3px;
+        }
+        
+        button,
+        a,
+        input {
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 136, 0.3);
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 136, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            a, button {
+                min-height: 44px;
+                min-width: 44px;
+            }
+        }
+        
+        body.light-mode {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            color: #333;
+        }
+        
+        body.light-mode .container {
+            background: white;
+            color: #333;
+            border-color: #ddd;
+        }
+        
+        body.light-mode h1, body.light-mode h2, body.light-mode h3 {
+            color: #667eea;
+        }
+        
+        body.light-mode .toc {
+            background: #f8f9fa;
+            border-color: #e0e0e0;
+        }
+        
+        body.light-mode .warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+        
+        body.light-mode .info-box {
+            background: #d1ecf1;
+            border-color: #0c5460;
+        }
+        
+        body.light-mode .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+        }
+        
+        body.light-mode code {
+            background: #f4f4f4;
+            color: #e83e8c;
+        }
+        
+        body.light-mode .section-divider {
+            border-color: #ddd;
+        }
+        
+        body.light-mode p, body.light-mode li {
+            color: #333;
+        }
+        
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 280px;
+            height: 100vh;
+            background: rgba(15, 15, 25, 0.98);
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                2px 0 20px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(0, 255, 136, 0.1);
+            transition: left 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+            border-right: 1px solid rgba(0, 255, 136, 0.2);
+        }
+        
+        .sidebar.active {
+            left: 0;
+        }
+        
+        .sidebar h3 {
+            margin-top: 0;
+            color: #00ff88;
+            font-size: 1.2em;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .sidebar li {
+            margin: 8px 0;
+        }
+        
+        .sidebar a {
+            color: #c0c0c0;
+            text-decoration: none;
+            display: block;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .sidebar a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 0;
+            background: linear-gradient(180deg, #00ff88, #00d4ff);
+            transition: height 0.3s ease;
+            border-radius: 0 3px 3px 0;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+        
+        .sidebar a:hover {
+            background: rgba(0, 255, 136, 0.1);
+            padding-left: 20px;
+            transform: translateX(5px);
+            color: #00ff88;
+        }
+        
+        .sidebar a:hover::before {
+            height: 60%;
+        }
+        
+        .sidebar a.active {
+            background: rgba(0, 255, 136, 0.15);
+            color: #00ff88;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+        
+        .sidebar a.active::before {
+            height: 80%;
+            background: #00ff88;
+        }
+        
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            border: 1px solid rgba(0, 255, 136, 0.4);
+            padding: 12px 16px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(0, 255, 136, 0.2);
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        
+        .menu-toggle:hover {
+            background: rgba(0, 255, 136, 0.3);
+            transform: scale(1.1);
+            box-shadow: 
+                0 4px 20px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(0, 255, 136, 0.4);
+            border-color: rgba(0, 255, 136, 0.6);
+        }
+        
+        .search-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+        }
+        
+        .search-box {
+            padding: 12px 20px;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 25px;
+            font-size: 1em;
+            width: 300px;
+            transition: all 0.3s;
+            background: rgba(15, 15, 25, 0.9);
+            backdrop-filter: blur(10px);
+            color: #00ff88;
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(0, 255, 136, 0.1);
+        }
+        
+        .search-box::placeholder {
+            color: rgba(0, 255, 136, 0.5);
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: rgba(0, 255, 136, 0.6);
+            box-shadow: 
+                0 4px 20px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(0, 255, 136, 0.3);
+            width: 350px;
+        }
+        
+        .dark-mode-toggle {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            z-index: 1001;
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            border: 1px solid rgba(0, 212, 255, 0.4);
+            padding: 12px 16px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(0, 212, 255, 0.2);
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        
+        .dark-mode-toggle:hover {
+            background: rgba(0, 212, 255, 0.3);
+            transform: scale(1.1);
+            box-shadow: 
+                0 4px 20px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(0, 212, 255, 0.4);
+            border-color: rgba(0, 212, 255, 0.6);
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            border: 1px solid rgba(0, 255, 136, 0.4);
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(0, 255, 136, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 999;
+            backdrop-filter: blur(10px);
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            background: rgba(0, 255, 136, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 
+                0 6px 20px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(0, 255, 136, 0.4);
+            border-color: rgba(0, 255, 136, 0.6);
+        }
+        
+        .collapsible {
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            padding-right: 30px;
+        }
+        
+        .collapsible::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 0;
+            transition: transform 0.3s;
+        }
+        
+        .collapsible.collapsed::after {
+            transform: rotate(-90deg);
+        }
+        
+        .collapsible-content {
+            max-height: 5000px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .collapsible-content.collapsed {
+            max-height: 0;
+        }
+        
+        .search-highlight {
+            background: rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+            padding: 2px 4px;
+            border-radius: 3px;
+            border: 1px solid rgba(0, 255, 136, 0.5);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
             font-weight: 600;
         }
-
-        tr:hover {
-            background: var(--bg-tertiary);
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        h2 {
+            scroll-margin-top: 80px;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 20px;
+                margin-top: 100px;
+                border-radius: 8px;
+            }
+            
+            h1 {
+                font-size: 2em;
+                text-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+            }
+            
+            h2 {
+                font-size: 1.5em;
+                scroll-margin-top: 100px;
+            }
+            
+            .search-box {
+                width: 180px;
+                font-size: 0.9em;
+                padding: 10px 15px;
+            }
+            
+            .search-box:focus {
+                width: 220px;
+            }
+            
+            .sidebar {
+                width: 250px;
+            }
+            
+            .menu-toggle {
+                top: 10px;
+                left: 10px;
+                padding: 10px 14px;
+                font-size: 1em;
+            }
+            
+            .search-container {
+                top: 10px;
+                right: 10px;
+            }
+            
+            .dark-mode-toggle {
+                top: 60px;
+                right: 10px;
+                padding: 10px 14px;
+                font-size: 1em;
+            }
+            
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px;
+                font-size: 1em;
+            }
+            
+            .toc {
+                padding: 15px;
+            }
+            
+            ul, ol {
+                padding-left: 25px;
+            }
+            
+            .code-block {
+                font-size: 0.85em;
+                padding: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .search-box {
+                width: 150px;
+                font-size: 0.9em;
+                padding: 10px 15px;
+            }
+            
+            .search-box:focus {
+                width: 180px;
+            }
+            
+        }
+        
+        @media (hover: none) and (pointer: coarse) {
+            .sidebar a:hover {
+                background: rgba(0, 255, 136, 0.1);
+            }
+        }
+        
+        @media print {
+            .sidebar,
+            .menu-toggle,
+            .search-container,
+            .dark-mode-toggle,
+            .back-to-top,
+            .reading-progress {
+                display: none !important;
+            }
+            
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .container {
+                box-shadow: none;
+                border: none;
+                padding: 20px;
+            }
+            
+            h1, h2, h3 {
+                color: #000;
+                page-break-after: avoid;
+            }
+            
+            .code-block {
+                page-break-inside: avoid;
+            }
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <span class="logo-icon">📡</span>
-                <div>
-                    <h1>ESP32 Marauder</h1>
-                </div>
-            </div>
-            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-            <div class="search-container">
-                <span class="search-icon">🔍</span>
-                <input type="text" class="search-box" id="searchInput" placeholder="Szukaj w dokumentacji...">
-            </div>
-        </div>
-    </header>
-
-    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
-
+    <div class="reading-progress" id="readingProgress"></div>
+    
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <div class="sidebar" id="sidebar">
+        <h3><i class="fas fa-list"></i> Spis Treści</h3>
+        <ul id="toc-list"></ul>
+    </div>
+    
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <div class="search-container">
+        <input type="text" class="search-box" id="searchBox" placeholder="Szukaj...">
+    </div>
+    
+    <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+    </button>
+    
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    
     <div class="container">
-        <aside class="sidebar" id="sidebar">
-            <h3>📚 Spis Treści</h3>
+        <h1>ESP32 Marauder - Pełna Instrukcja Obsługi</h1>
+        
+        <div class="toc">
+            <h2>Spis Treści</h2>
+            <ol>
+                <li>Wprowadzenie</li>
+                <li>WiFi - Aplikacje</li>
+                <li>Bluetooth - Aplikacje</li>
+                <li>GPS - Aplikacje</li>
+                <li>Device - Ustawienia Urządzenia</li>
+                <li>Reboot - Restart</li>
+            </ol>
+        </div>
+        
+        <div class="section-divider"></div>
+        
+        <h2 id="wprowadzenie">Wprowadzenie</h2>
+        <p>ESP32 Marauder to przenośne narzędzie do testowania penetracyjnego WiFi i Bluetooth. Urządzenie oferuje szeroki zakres funkcji do analizy, atakowania i monitorowania sieci bezprzewodowych. Ta instrukcja zawiera opis wszystkich dostępnych aplikacji i funkcji.</p>
+        
+        <div class="warning">
+            <strong>⚠️ Uwaga:</strong> Korzystanie z tych narzędzi bez zgody właściciela sieci jest nielegalne w większości krajów. Używaj tylko w celach edukacyjnych i testowania własnych sieci.
+        </div>
+        
+        <div class="section-divider"></div>
+        
+        <h2 id="wifi">WiFi - Aplikacje</h2>
+        
+        <h3>WiFi Sniffers (Przechwytywanie Ruchu)</h3>
+        
+        <h4>1. Probe Request Sniff</h4>
+        <p><strong>Opis:</strong> Przechwytuje żądania probe request od klientów WiFi szukających sieci.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → Sniffers → Probe Request Sniff</li>
+            <li>Urządzenie rozpocznie przechwytywanie żądań</li>
+            <li>Wyświetlane są informacje o urządzeniach szukających sieci</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Wykrywanie aktywnych urządzeń w pobliżu, analiza wzorców połączeń.</p>
+        
+        <h4>2. Beacon Sniff</h4>
+        <p><strong>Opis:</strong> Przechwytuje ramki beacon wysyłane przez punkty dostępowe.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → Sniffers → Beacon Sniff</li>
+            <li>Urządzenie zbiera informacje o dostępnych sieciach</li>
+            <li>Zapisywane są dane: SSID, MAC, kanał, siła sygnału</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Mapowanie sieci WiFi w okolicy.</p>
+        
+        <h4>3. Channel Analyzer</h4>
+        <p><strong>Opis:</strong> Analizuje aktywność na poszczególnych kanałach WiFi.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → Sniffers → Channel Analyzer</li>
+            <li>Wybierz kanał lub tryb automatycznego skanowania</li>
+            <li>Obserwuj wykres aktywności pakietów</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Optymalizacja kanałów WiFi, wykrywanie zakłóceń.</p>
+        
+        <h4>4. Deauth Sniff</h4>
+        <p><strong>Opis:</strong> Monitoruje ramki deautoryzacji w sieci.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → Sniffers → Deauth Sniff</li>
+            <li>Urządzenie przechwytuje pakiety deauth</li>
+            <li>Wyświetla źródło i cel ataku</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Wykrywanie aktywnych ataków deautoryzacji.</p>
+        
+        <h4>5. Packet Count</h4>
+        <p><strong>Opis:</strong> Zlicza wszystkie pakiety WiFi w czasie rzeczywistym.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → Sniffers → Packet Count</li>
+            <li>Wybierz kanał do monitorowania</li>
+            <li>Obserwuj liczbę przechwyconych pakietów</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Pomiar aktywności sieci.</p>
+        
+        <h4>6. Packet Monitor</h4>
+        <p><strong>Opis:</strong> Zaawansowane monitorowanie ruchu WiFi z wyświetlaniem szczegółów pakietów.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → Sniffers → Packet Monitor</li>
+            <li>Urządzenie wyświetla wszystkie przechwycone pakiety</li>
+            <li>Dane mogą być zapisywane do pliku PCAP (wymaga karty SD)</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Szczegółowa analiza ruchu sieciowego.</p>
+        
+        <h4>7. Ping Scan</h4>
+        <p><strong>Opis:</strong> Skanuje sieć w poszukiwaniu aktywnych hostów.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Połącz się z siecią WiFi (WiFi → General → Join WiFi)</li>
+            <li>Przejdź do: WiFi → Sniffers → Ping Scan</li>
+            <li>Wprowadź zakres IP do skanowania</li>
+            <li>Urządzenie wyświetli aktywne hosty</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Mapowanie urządzeń w sieci.</p>
+        
+        <h4>8. EAPOL PMKID Scan</h4>
+        <p><strong>Opis:</strong> Przechwytuje ramki EAPOL zawierające PMKID do łamania haseł WPA2.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → Sniffers → EAPOL PMKID Scan</li>
+            <li>Urządzenie nasłuchuje wymiany kluczy</li>
+            <li>PMKID zapisywane są na kartę SD</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Testowanie bezpieczeństwa WPA2 (wymaga zewnętrznych narzędzi do crackowania).</p>
+        
+        <h4>9. Detect Pwnagotchi</h4>
+        <p><strong>Opis:</strong> Wykrywa urządzenia Pwnagotchi w pobliżu.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → Sniffers → Detect Pwnagotchi</li>
+            <li>Urządzenie skanuje charakterystyczne ramki Pwnagotchi</li>
+            <li>Wyświetla znalezione urządzenia</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Identyfikacja urządzeń pentestingowych w okolicy.</p>
+        
+        <h4>10. Scan APs (Skanuj Punkty Dostępowe)</h4>
+        <p><strong>Opis:</strong> Skanuje wszystkie dostępne punkty dostępowe WiFi.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → Sniffers → Scan APs</li>
+            <li>Czekaj na zakończenie skanowania</li>
+            <li>Lista APs zostanie wyświetlona z informacjami:
+                <ul>
+                    <li>SSID</li>
+                    <li>MAC adres</li>
+                    <li>Kanał</li>
+                    <li>Szyfrowanie</li>
+                    <li>Siła sygnału</li>
+                </ul>
+            </li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Podstawowe skanowanie sieci WiFi.</p>
+        
+        <h4>11. Scan All</h4>
+        <p><strong>Opis:</strong> Kompleksowe skanowanie - APs i stacje jednocześnie.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → Sniffers → Scan All</li>
+            <li>Urządzenie skanuje zarówno punkty dostępowe, jak i klientów</li>
+            <li>Wyświetla pełną mapę sieci</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Szybkie rozpoznanie infrastruktury WiFi.</p>
+        
+        <h4>12. Raw Sniff</h4>
+        <p><strong>Opis:</strong> Przechwytuje wszystkie surowe ramki WiFi bez filtrowania.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → Sniffers → Raw Sniff</li>
+            <li>Wybierz kanał</li>
+            <li>Dane zapisywane są w formacie PCAP (wymaga karty SD)</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Zaawansowana analiza ruchu, wymaga zewnętrznych narzędzi jak Wireshark.</p>
+        
+        <h4>13. Scan Stations (Skanuj Stacje)</h4>
+        <p><strong>Opis:</strong> Skanuje klientów (stacje) połączonych z punktami dostępowymi.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Najpierw wykonaj Scan APs</li>
+            <li>Przejdź do: WiFi → Sniffers → Scan Stations</li>
+            <li>Urządzenie wykrywa połączonych klientów</li>
+            <li>Wyświetla MAC klientów i AP, do których są podłączeni</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Identyfikacja urządzeń w sieci.</p>
+        
+        <h4>14. Signal Monitor</h4>
+        <p><strong>Opis:</strong> Monitoruje siłę sygnału wybranej sieci WiFi.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Wykonaj Scan APs</li>
+            <li>Wybierz sieć z listy: WiFi → General → Select APs</li>
+            <li>Przejdź do: WiFi → Sniffers → Signal Monitor</li>
+            <li>Obserwuj wykres siły sygnału</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Lokalizacja routerów, optymalizacja umiejscowienia AP.</p>
+        
+        <h4>15. Wardrive</h4>
+        <p><strong>Opis:</strong> Gromadzi dane GPS i informacje o sieciach WiFi podczas poruszania się.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Podłącz moduł GPS (jeśli dostępny)</li>
+            <li>Przejdź do: WiFi → Sniffers → Wardrive</li>
+            <li>Urządzenie zbiera dane o sieciach z koordynatami GPS</li>
+            <li>Dane zapisywane są na kartę SD w formacie CSV</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Tworzenie map WiFi, analiza pokrycia.</p>
+        
+        <h4>16. Station Wardrive</h4>
+        <p><strong>Opis:</strong> Wardrive skupiony na wykrywaniu klientów WiFi.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Jak w przypadku Wardrive, ale focus na stacjach</li>
+            <li>Zapisuje lokalizacje aktywnych urządzeń klienckich</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Mapowanie lokalizacji użytkowników WiFi.</p>
+        
+        <h3>WiFi Attacks (Ataki WiFi)</h3>
+        
+        <h4>1. Beacon Spam List</h4>
+        <p><strong>Opis:</strong> Transmituje wiele fałszywych punktów dostępowych z listy SSID.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przygotuj listę SSID:
+                <ul>
+                    <li>WiFi → General → Add SSID (ręczne dodawanie)</li>
+                    <li>WiFi → General → Generate SSIDs (automatyczne generowanie)</li>
+                    <li>WiFi → General → Load SSIDs (załaduj z karty SD)</li>
+                </ul>
+            </li>
+            <li>Przejdź do: WiFi → Attacks → Beacon Spam List</li>
+            <li>Ataka rozpoczyna transmission fałszywych beaconów</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Zagłuszanie list WiFi, testy odporności urządzeń.</p>
+        
+        <h4>2. Beacon Spam Random</h4>
+        <p><strong>Opis:</strong> Generuje losowe fałszywe sieci WiFi.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → Attacks → Beacon Spam Random</li>
+            <li>Urządzenie automatycznie generuje i broadcastuje losowe SSID</li>
+            <li>Setki fałszywych sieci pojawiają się na liście dostępnych WiFi</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Test odporności, chaos na liście sieci.</p>
+        
+        <h4>3. Evil Portal</h4>
+        <p><strong>Opis:</strong> Tworzy fałszywy punkt dostępowy z captive portal do phishingu.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przygotuj plik HTML dla portalu:
+                <ul>
+                    <li>Umieść plik index.html w katalogu głównym karty SD</li>
+                    <li>Możesz użyć gotowych szablonów z repozytorium EvilPortal</li>
+                </ul>
+            </li>
+            <li>Wybierz SSID:
+                <ul>
+                    <li>Z listy SSID</li>
+                    <li>Z listy zeskanowanych APs (klonowanie)</li>
+                    <li>Z pliku na karcie SD</li>
+                </ul>
+            </li>
+            <li>WiFi → General → Select EP HTML File (wybierz plik HTML)</li>
+            <li>WiFi → Attacks → Evil Portal</li>
+            <li>Klienci łączący się z AP zostaną przekierowani na fałszywą stronę</li>
+            <li>Wprowadzone dane wyświetlają się w serialu i na ekranie</li>
+        </ol>
+        <div class="info-box">
+            <strong>Uwaga:</strong> Wymaga karty SD z plikiem index.html.
+        </div>
+        <p><strong>Zastosowanie:</strong> Testy świadomości phishingu.</p>
+        
+        <h4>4. Rick Roll Beacon</h4>
+        <p><strong>Opis:</strong> Specjalny typ beacon spam - transmituje tekst piosenki "Never Gonna Give You Up".</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → Attacks → Rick Roll Beacon</li>
+            <li>W liście WiFi pojawią się kolejne linijki tekstu piosenki</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Żart, demonstracja możliwości.</p>
+        
+        <h4>5. Probe Request Flood</h4>
+        <p><strong>Opis:</strong> Wysyła masowe żądania probe request do celu.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Wykonaj Scan APs</li>
+            <li>WiFi → General → Select APs (wybierz cel)</li>
+            <li>Przejdź do: WiFi → Attacks → Probe Request Flood</li>
+            <li>Urządzenie wysyła tysiące probe requests</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Test odporności AP na flooding.</p>
+        
+        <h4>6. Deauth Flood</h4>
+        <p><strong>Opis:</strong> Atak deautoryzacji - rozłącza klientów z punktu dostępowego.</p>
+        <p><strong>Jak używać:</strong></p>
+        <p><strong>Metoda 1 - Cel konkretny AP:</strong></p>
+        <ol>
+            <li>Wykonaj Scan APs</li>
+            <li>WiFi → General → Select APs</li>
+            <li>Opcjonalnie: Scan Stations i Select Stations (dla konkretnych klientów)</li>
+            <li>WiFi → Attacks → Deauth Flood</li>
+        </ol>
+        <p><strong>Metoda 2 - Broadcast:</strong></p>
+        <ol>
+            <li>Przejdź bezpośrednio do WiFi → Attacks → Deauth Flood</li>
+            <li>Atakuje wszystkie sieci w zasięgu</li>
+        </ol>
+        <p><strong>Parametry:</strong></p>
+        <ul>
+            <li>Duration: Czas trwania ataku</li>
+            <li>Random: Losowe cele</li>
+        </ul>
+        <div class="warning">
+            <strong>Uwaga:</strong> W wielu krajach nielegalne bez zgody właściciela sieci.
+        </div>
+        <p><strong>Zastosowanie:</strong> Test odporności na ataki deauth, wymuszanie ponownego łączenia (do przechwytywania handshake).</p>
+        
+        <h4>7. AP Clone Spam</h4>
+        <p><strong>Opis:</strong> Klonuje istniejące punkty dostępowe i transmituje je jako fałszywe.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Wykonaj Scan APs</li>
+            <li>WiFi → General → Select APs (wybierz AP do sklonowania)</li>
+            <li>Przejdź do: WiFi → Attacks → AP Clone Spam</li>
+            <li>Fałszywe kopie wybranych APs są broadcastowane</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Evil Twin attack preparation, testy bezpieczeństwa.</p>
+        
+        <h4>8. Karma Attack</h4>
+        <p><strong>Opis:</strong> Odpowiada na wszystkie probe requesty, podszywając się pod szukane sieci.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → Attacks → Karma</li>
+            <li>Urządzenie automatycznie odpowiada na probe requests</li>
+            <li>Klienci mogą połączyć się z fałszywym AP</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Testowanie automatycznego łączenia się urządzeń z sieciami.</p>
+        
+        <h4>9. Bad Msg</h4>
+        <p><strong>Opis:</strong> Wysyła nieprawidłowe/zdeformowane pakiety WiFi.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → Attacks → Bad Msg</li>
+            <li>Urządzenie generuje nieprawidłowe ramki</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Test stabilności sterowników WiFi.</p>
+        
+        <h4>10. Association Sleep Attack</h4>
+        <p><strong>Opis:</strong> Wykorzystuje lukę w protokole WiFi do uśpienia urządzeń.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Wykonaj Scan APs i Scan Stations</li>
+            <li>WiFi → General → Select Stations</li>
+            <li>WiFi → Attacks → Sleep Attack</li>
+            <li>Wybrane urządzenia otrzymują pakiety power-save</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Testowanie implementacji 802.11 power management.</p>
+        
+        <h3>WiFi General (Ogólne Funkcje WiFi)</h3>
+        
+        <h4>1. Add SSID</h4>
+        <p><strong>Opis:</strong> Ręczne dodawanie SSID do listy.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → General → Add SSID</li>
+            <li>Wprowadź nazwę SSID</li>
+            <li>SSID zostaje dodane do listy</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Przygotowanie własnej listy SSID do beacon spam.</p>
+        
+        <h4>2. Generate SSIDs</h4>
+        <p><strong>Opis:</strong> Automatyczne generowanie listy losowych SSID.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → General → Generate SSIDs</li>
+            <li>Wprowadź liczbę SSID do wygenerowania</li>
+            <li>Lista zostaje automatycznie utworzona</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Szybkie tworzenie dużej listy SSID.</p>
+        
+        <h4>3. Save SSIDs</h4>
+        <p><strong>Opis:</strong> Zapisuje listę SSID na kartę SD.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → General → Save SSIDs</li>
+            <li>Wprowadź nazwę pliku</li>
+            <li>Lista zapisana zostaje w formacie tekstowym</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Backup list SSID.</p>
+        
+        <h4>4. Load SSIDs</h4>
+        <p><strong>Opis:</strong> Wczytuje listę SSID z karty SD.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Umieść plik tekstowy z SSID (jeden na linię) na karcie SD</li>
+            <li>Przejdź do: WiFi → General → Load SSIDs</li>
+            <li>Wybierz plik do załadowania</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Import list SSID.</p>
+        
+        <h4>5. Save APs</h4>
+        <p><strong>Opis:</strong> Zapisuje listę zeskanowanych punktów dostępowych.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Wykonaj Scan APs</li>
+            <li>Przejdź do: WiFi → General → Save APs</li>
+            <li>Dane zapisywane są na kartę SD</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Dokumentacja wyników skanowania.</p>
+        
+        <h4>6. Load APs</h4>
+        <p><strong>Opis:</strong> Wczytuje wcześniej zapisaną listę APs.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → General → Load APs</li>
+            <li>Wybierz plik z karty SD</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Import poprzednich skanów.</p>
+        
+        <h4>7. Clear SSIDs</h4>
+        <p><strong>Opis:</strong> Usuwa wszystkie SSID z bieżącej listy.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → General → Clear SSIDs</li>
+            <li>Potwierdź usunięcie</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Czyszczenie listy przed nową operacją.</p>
+        
+        <h4>8. Clear APs</h4>
+        <p><strong>Opis:</strong> Usuwa listę zeskanowanych punktów dostępowych.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → General → Clear APs</li>
+            <li>Potwierdź usunięcie</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Czyszczenie wyników skanowania.</p>
+        
+        <h4>9. Select APs</h4>
+        <p><strong>Opis:</strong> Wybiera punkty dostępowe do dalszych operacji.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Wykonaj Scan APs</li>
+            <li>Przejdź do: WiFi → General → Select APs</li>
+            <li>Zaznacz wybrane APs z listy</li>
+            <li>Użyj ich w atakach lub monitoringu</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Celowanie operacji na konkretne sieci.</p>
+        
+        <h4>10. Select Stations</h4>
+        <p><strong>Opis:</strong> Wybiera stacje (klientów) do operacji.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Wykonaj Scan Stations</li>
+            <li>Przejdź do: WiFi → General → Select Stations</li>
+            <li>Zaznacz klientów</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Targetowanie konkretnych urządzeń.</p>
+        
+        <h4>11. Select EP HTML File</h4>
+        <p><strong>Opis:</strong> Wybiera plik HTML dla Evil Portal.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Umieść pliki HTML na karcie SD</li>
+            <li>Przejdź do: WiFi → General → Select EP HTML File</li>
+            <li>Wybierz plik z listy</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Zmiana wyglądu Evil Portal.</p>
+        
+        <h4>12. View AP Info</h4>
+        <p><strong>Opis:</strong> Wyświetla szczegółowe informacje o wybranym AP.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Wykonaj Scan APs</li>
+            <li>WiFi → General → Select APs (wybierz jeden AP)</li>
+            <li>WiFi → General → View AP Info</li>
+            <li>Wyświetlane są szczegóły: kanał, szyfrowanie, vendor, itp.</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Szczegółowa analiza punktu dostępowego.</p>
+        
+        <h4>13. Set MACs</h4>
+        <p><strong>Opis:</strong> Ustawia własne adresy MAC dla operacji.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → General → Set MACs</li>
+            <li>Wprowadź adresy MAC (źródłowy i/lub docelowy)</li>
+            <li>MAC będzie używany w kolejnych operacjach</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Spoofing MAC address w atakach.</p>
+        
+        <h4>14. Join WiFi</h4>
+        <p><strong>Opis:</strong> Łączy się z wybraną siecią WiFi.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Wykonaj Scan APs</li>
+            <li>Przejdź do: WiFi → General → Join WiFi</li>
+            <li>Wybierz sieć i wprowadź hasło</li>
+            <li>Urządzenie łączy się z siecią</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Dostęp do internetu, ataki wewnątrz sieci (ping scan, itp.).</p>
+        
+        <h4>15. Shutdown WiFi</h4>
+        <p><strong>Opis:</strong> Wyłącza moduł WiFi.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: WiFi → General → Shutdown WiFi</li>
+            <li>Radio WiFi zostaje wyłączone</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Oszczędzanie energii.</p>
+        
+        <div class="section-divider"></div>
+        
+        <h2 id="bluetooth">Bluetooth - Aplikacje</h2>
+        
+        <h3>Bluetooth Sniffers (Przechwytywanie Bluetooth)</h3>
+        
+        <h4>1. Bluetooth Analyzer</h4>
+        <p><strong>Opis:</strong> Analizuje ruch Bluetooth w pobliżu.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: Bluetooth → Sniffers → Bluetooth Analyzer</li>
+            <li>Urządzenie wykrywa urządzenia BLE</li>
+            <li>Wyświetla: MAC, RSSI, typ urządzenia, producenta</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Mapowanie urządzeń Bluetooth.</p>
+        
+        <h4>2. Bluetooth Sniffer</h4>
+        <p><strong>Opis:</strong> Zaawansowane przechwytywanie pakietów BLE.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: Bluetooth → Sniffers → Bluetooth Sniffer</li>
+            <li>Wybierz urządzenie docelowe (opcjonalnie)</li>
+            <li>Pakiety mogą być zapisywane na kartę SD</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Analiza komunikacji BLE.</p>
+        
+        <h4>3. Flipper Sniff</h4>
+        <p><strong>Opis:</strong> Wykrywa urządzenia Flipper Zero w trybie Bluetooth.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: Bluetooth → Sniffers → Flipper Sniff</li>
+            <li>Urządzenie skanuje charakterystyczne sygnatury Flipper Zero</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Identyfikacja Flipper Zero w okolicy.</p>
+        
+        <h4>4. Airtag Sniff</h4>
+        <p><strong>Opis:</strong> Wykrywa Apple AirTagi w pobliżu.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: Bluetooth → Sniffers → Airtag Sniff</li>
+            <li>Urządzenie nasłuchuje sygnałów AirTag</li>
+            <li>Wyświetla wykryte AirTagi</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Wykrywanie śledzących urządzeń.</p>
+        
+        <h4>5. Airtag Monitor</h4>
+        <p><strong>Opis:</strong> Monitoruje ruch AirTagów w czasie rzeczywistym.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: Bluetooth → Sniffers → Airtag Monitor</li>
+            <li>Wyświetla aktywność wszystkich AirTagów w zasięgu</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Detekcja stalking devices.</p>
+        
+        <h4>6. Bluetooth Wardrive</h4>
+        <p><strong>Opis:</strong> Gromadzi dane o urządzeniach Bluetooth z lokalizacją GPS.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Podłącz GPS</li>
+            <li>Przejdź do: Bluetooth → Sniffers → Bluetooth Wardrive</li>
+            <li>Dane zapisywane są na kartę SD</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Mapowanie urządzeń BLE.</p>
+        
+        <h4>7. Bluetooth Wardrive Continuous</h4>
+        <p><strong>Opis:</strong> Ciągły wardrive bez przerw.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Jak Bluetooth Wardrive, ale w trybie ciągłym</li>
+            <li>Zapisuje dane przez cały czas działania</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Długotrwałe zbieranie danych.</p>
+        
+        <h4>8. Detect Card Skimmers</h4>
+        <p><strong>Opis:</strong> Wykrywa potencjalne skimmery kart Bluetooth.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: Bluetooth → Sniffers → Detect Card Skimmers</li>
+            <li>Urządzenie skanuje podejrzane urządzenia BLE</li>
+            <li>Alarmuje przy wykryciu znanej sygnatury skimmera</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Bezpieczeństwo płatności.</p>
+        
+        <h4>9. Flock Sniff</h4>
+        <p><strong>Opis:</strong> Wykrywa urządzenia flock tracking.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: Bluetooth → Sniffers → Flock Sniff</li>
+            <li>Nasłuchuje sygnałów systemów Flock</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Detekcja systemów śledzenia Flock.</p>
+        
+        <h4>10. Flock Wardrive</h4>
+        <p><strong>Opis:</strong> Wardrive skupiony na systemach Flock.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Jak Flock Sniff + GPS</li>
+            <li>Mapuje lokalizacje czujników Flock</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Analiza zasięgu systemów Flock.</p>
+        
+        <h3>Bluetooth Attacks (Ataki Bluetooth)</h3>
+        
+        <h4>1. Sour Apple</h4>
+        <p><strong>Opis:</strong> Atak na urządzenia Apple - wysyła fałszywe BLE advertisementy.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: Bluetooth → Attacks → Sour Apple</li>
+            <li>Urządzenie emituje sygnały podobne do urządzeń Apple</li>
+            <li>Może wywoływać powiadomienia na urządzeniach iOS</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Test odporności urządzeń Apple na BLE spam.</p>
+        
+        <h4>2. Swiftpair Spam</h4>
+        <p><strong>Opis:</strong> Spam parowania Windows SwiftPair.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: Bluetooth → Attacks → Swiftpair Spam</li>
+            <li>Wysyła fałszywe żądania parowania do urządzeń Windows</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Test reakcji Windows na spam parowania.</p>
+        
+        <h4>3. Samsung BLE Spam</h4>
+        <p><strong>Opis:</strong> Spam dla urządzeń Samsung.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: Bluetooth → Attacks → Samsung BLE Spam</li>
+            <li>Emituje sygnały Samsung Fast Pair</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Test urządzeń Samsung.</p>
+        
+        <h4>4. Flipper BLE Spam</h4>
+        <p><strong>Opis:</strong> Spam BLE skierowany na Flipper Zero.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: Bluetooth → Attacks → Flipper BLE Spam</li>
+            <li>Wysyła spam do urządzeń Flipper Zero</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Test / zabawa z Flipper Zero.</p>
+        
+        <h4>5. BT Spam All</h4>
+        <p><strong>Opis:</strong> Uniwersalny spam BLE dla wszystkich typów urządzeń.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: Bluetooth → Attacks → BT Spam All</li>
+            <li>Równocześnie wysyła spam dla Apple, Samsung, Windows, Google</li>
+            <li>Maksymalny chaos powiadomień</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Test ogólnej odporności na BLE spam.</p>
+        
+        <h4>6. Spoof Airtag</h4>
+        <p><strong>Opis:</strong> Podszywanie się pod AirTag.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: Bluetooth → Attacks → Spoof Airtag</li>
+            <li>Możliwość wprowadzenia własnego ID</li>
+            <li>Urządzenie emituje sygnały AirTag</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Testowanie mechanizmów anti-tracking Apple.</p>
+        
+        <h4>7. Google BLEA Spam</h4>
+        <p><strong>Opis:</strong> Spam Bluetooth Low Energy Advertisement dla urządzeń Google.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: Bluetooth → Attacks → Google BLEA Spam</li>
+            <li>Emituje sygnały Google Fast Pair</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Test urządzeń Android/Google.</p>
+        
+        <div class="section-divider"></div>
+        
+        <h2 id="gps">GPS - Aplikacje</h2>
+        
+        <h4>1. GPS Data</h4>
+        <p><strong>Opis:</strong> Wyświetla aktualne dane GPS.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Podłącz moduł GPS (jeśli nie jest wbudowany)</li>
+            <li>Przejdź do: GPS → GPS Data</li>
+            <li>Wyświetlane informacje:
+                <ul>
+                    <li>Szerokość geograficzna</li>
+                    <li>Długość geograficzna</li>
+                    <li>Wysokość</li>
+                    <li>Liczba satelitów</li>
+                    <li>Dokładność</li>
+                </ul>
+            </li>
+        </ol>
+        <div class="info-box">
+            <strong>Uwaga:</strong> Wymaga modułu GPS (wbudowanego lub zewnętrznego).
+        </div>
+        <p><strong>Zastosowanie:</strong> Weryfikacja działania GPS, geolokalizacja.</p>
+        
+        <h4>2. GPS Tracker</h4>
+        <p><strong>Opis:</strong> Śledzi trasę i zapisuje ją na kartę SD.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: GPS → GPS Tracker</li>
+            <li>Rozpocznij tracking</li>
+            <li>Trasa zapisywana jest w formacie GPX lub KML</li>
+            <li>Zatrzymaj gdy skończysz</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Rejestracja trasy, późniejsza analiza w Google Earth.</p>
+        
+        <h4>3. NMEA Stream</h4>
+        <p><strong>Opis:</strong> Strumieniuje surowe dane NMEA z GPS przez serial.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: GPS → NMEA Stream</li>
+            <li>Podłącz urządzenie do komputera przez USB</li>
+            <li>Otwórz terminal serial</li>
+            <li>Obserwuj surowe dane NMEA</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Debugowanie GPS, integracja z zewnętrznym oprogramowaniem.</p>
+        
+        <div class="section-divider"></div>
+        
+        <h2 id="device">Device - Ustawienia Urządzenia</h2>
+        
+        <h4>1. Update Firmware (Aktualizacja Firmware)</h4>
+        
+        <h5>Web Update</h5>
+        <p><strong>Opis:</strong> Aktualizacja przez WiFi z internetu.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Połącz się z WiFi (WiFi → General → Join WiFi)</li>
+            <li>Przejdź do: Device → Update Firmware → Web Update</li>
+            <li>Urządzenie pobiera i instaluje najnowszą wersję firmware</li>
+            <li>Automatyczny restart po instalacji</li>
+        </ol>
+        <p><strong>Wymagania:</strong> Połączenie z internetem.</p>
+        
+        <h5>SD Update</h5>
+        <p><strong>Opis:</strong> Aktualizacja z pliku na karcie SD.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Pobierz plik firmware (.bin) z GitHub releases</li>
+            <li>Umieść plik na karcie SD (katalog główny lub /updates/)</li>
+            <li>Przejdź do: Device → Update Firmware → SD Update</li>
+            <li>Wybierz plik z listy</li>
+            <li>Potwierdź aktualizację</li>
+            <li>Urządzenie zrestartuje się po instalacji</li>
+        </ol>
+        <p><strong>Zaleta:</strong> Nie wymaga WiFi.</p>
+        
+        <h4>2. Device Info</h4>
+        <p><strong>Opis:</strong> Wyświetla informacje o urządzeniu.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: Device → Device Info</li>
+            <li>Wyświetlane dane:
+                <ul>
+                    <li>Wersja firmware</li>
+                    <li>Wersja hardware</li>
+                    <li>Wolna pamięć RAM</li>
+                    <li>Status karty SD</li>
+                    <li>Status GPS</li>
+                    <li>MAC address</li>
+                </ul>
+            </li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Diagnostyka, weryfikacja wersji.</p>
+        
+        <h4>3. Settings (Ustawienia)</h4>
+        <p><strong>Opis:</strong> Konfiguracja parametrów urządzenia.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: Device → Settings</li>
+            <li>Dostępne opcje:
+                <ul>
+                    <li>LED Settings: Jasność, kolory LED</li>
+                    <li>Screen Settings: Jasność ekranu, timeout</li>
+                    <li>WiFi Settings: Domyślny kanał, moc nadawania</li>
+                    <li>BT Settings: Ustawienia Bluetooth</li>
+                    <li>GPS Settings: Baudrate, pin GPS</li>
+                    <li>SD Settings: Autodetekcja karty SD</li>
+                    <li>Touch Settings: Czułość dotyku</li>
+                    <li>Web Interface: Włącz/wyłącz interfejs webowy</li>
+                </ul>
+            </li>
+        </ol>
+        <p><strong>Zapisywanie:</strong> Ustawienia są automatycznie zapisywane w pamięci flash.</p>
+        
+        <h4>4. GPS Data</h4>
+        <p><strong>Opis:</strong> Zobacz sekcję GPS → GPS Data.</p>
+        <p><strong>Alternatywna ścieżka dostępu:</strong> Device → GPS Data.</p>
+        
+        <h4>5. GPS Tracker</h4>
+        <p><strong>Opis:</strong> Zobacz sekcję GPS → GPS Tracker.</p>
+        <p><strong>Alternatywna ścieżka dostępu:</strong> Device → GPS Tracker.</p>
+        
+        <div class="section-divider"></div>
+        
+        <h2 id="reboot">Reboot - Restart</h2>
+        
+        <h4>Reboot</h4>
+        <p><strong>Opis:</strong> Restartuje urządzenie.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przejdź do: Reboot</li>
+            <li>Potwierdź restart</li>
+            <li>Urządzenie wykonuje pełny restart</li>
+        </ol>
+        <p><strong>Kiedy używać:</strong></p>
+        <ul>
+            <li>Po zmianie ustawień</li>
+            <li>Po problemach z działaniem</li>
+            <li>Po aktualizacji (jeśli nie nastąpił automatyczny restart)</li>
+        </ul>
+        
+        <div class="section-divider"></div>
+        
+        <h2>Bezpieczeństwo i Legalność</h2>
+        
+        <div class="legal-warning">
+            <h3>⚠️ WAŻNE OSTRZEŻENIE PRAWNE</h3>
+            <p><strong>PRZECZYTAJ PRZED UŻYCIEM</strong></p>
             
-            <div class="nav-section">
-                <h4>Rozpocznij</h4>
-                <a href="#" class="nav-link active" data-section="intro">Wprowadzenie</a>
-                <a href="#" class="nav-link" data-section="quick-start">Szybki Start</a>
-            </div>
-
-            <div class="nav-section">
-                <h4>WiFi</h4>
-                <a href="#" class="nav-link" data-section="wifi-sniffers">Sniffers</a>
-                <a href="#" class="nav-link" data-section="wifi-attacks">Ataki</a>
-                <a href="#" class="nav-link" data-section="wifi-general">Funkcje Ogólne</a>
-            </div>
-
-            <div class="nav-section">
-                <h4>Bluetooth</h4>
-                <a href="#" class="nav-link" data-section="bt-sniffers">Sniffers</a>
-                <a href="#" class="nav-link" data-section="bt-attacks">Ataki</a>
-            </div>
-
-            <div class="nav-section">
-                <h4>Dodatkowe</h4>
-                <a href="#" class="nav-link" data-section="gps">GPS</a>
-                <a href="#" class="nav-link" data-section="cli">Komendy CLI</a>
-            </div>
-
-            <div class="nav-section">
-                <h4>Pomoc</h4>
-                <a href="#" class="nav-link" data-section="troubleshooting">Rozwiązywanie Problemów</a>
-                <a href="#" class="nav-link" data-section="faq">FAQ</a>
-                <a href="#" class="nav-link" data-section="legal">Bezpieczeństwo i Legalność</a>
-            </div>
-        </aside>
-
-        <main class="main-content">
-            <section id="intro" class="content-section active">
-                <h2>📡 Wprowadzenie do ESP32 Marauder</h2>
-                
-                <div class="alert alert-info">
-                    <strong>ℹ️ Info:</strong> ESP32 Marauder to przenośne narzędzie do testowania penetracyjnego WiFi i Bluetooth. Oferuje szeroki zakres funkcji do analizy, atakowania i monitorowania sieci bezprzewodowych.
-                </div>
-
-                <div class="alert alert-danger">
-                    <strong>⚠️ UWAGA PRAWNA:</strong> Korzystanie z tych narzędzi bez zgody właściciela sieci jest nielegalne w większości krajów. Używaj tylko w celach edukacyjnych i testowania własnych sieci!
-                </div>
-
-                <h3>🎯 Szybki Dostęp</h3>
-                <div class="quick-access">
-                    <div class="quick-card" onclick="showSection('wifi-sniffers')">
-                        <div class="quick-card-icon">📶</div>
-                        <h3>WiFi Sniffers</h3>
-                        <p>Przechwytywanie i analiza ruchu WiFi</p>
-                    </div>
-                    <div class="quick-card" onclick="showSection('wifi-attacks')">
-                        <div class="quick-card-icon">⚔️</div>
-                        <h3>Ataki WiFi</h3>
-                        <p>Testowanie bezpieczeństwa sieci</p>
-                    </div>
-                    <div class="quick-card" onclick="showSection('bt-sniffers')">
-                        <div class="quick-card-icon">📲</div>
-                        <h3>Bluetooth</h3>
-                        <p>Analiza urządzeń BLE</p>
-                    </div>
-                    <div class="quick-card" onclick="showSection('gps')">
-                        <div class="quick-card-icon">🛰️</div>
-                        <h3>GPS</h3>
-                        <p>Wardrive i geolokalizacja</p>
-                    </div>
-                </div>
-
-                <h3>📋 Główne Funkcje</h3>
-                <div class="feature-card">
-                    <h4>🔍 Zaawansowane Skanowanie</h4>
-                    <p>Wykrywanie punktów dostępowych, klientów WiFi, urządzeń Bluetooth i analiza kanałów radiowych.</p>
-                </div>
-
-                <div class="feature-card">
-                    <h4>🎣 Evil Portal</h4>
-                    <p>Tworzenie fałszywych captive portali do testowania świadomości użytkowników.</p>
-                </div>
-
-                <div class="feature-card">
-                    <h4>📊 Wardrive</h4>
-                    <p>Mapowanie sieci WiFi z danymi GPS w czasie rzeczywistym.</p>
-                </div>
-
-                
-            </section>
-
-            <section id="quick-start" class="content-section">
-                <h2>🚀 Szybki Start</h2>
-
-                <h3>1. Pierwsze Uruchomienie</h3>
-                <ol>
+            <h4>1. Legalność</h4>
+            <p>Używanie większości funkcji ESP32 Marauder bez zgody właściciela sieci jest <strong>NIELEGALNE</strong> w większości krajów świata, włączając Polskę, USA, UE i inne jurysdykcje.</p>
+            
+            <p><strong>Zakazane działania bez autoryzacji:</strong></p>
+            <ul>
+                <li>❌ Ataki deautoryzacji na cudze sieci</li>
+                <li>❌ Evil Portal i phishing</li>
+                <li>❌ Przechwytywanie ruchu sieciowego nie-własnych sieci</li>
+                <li>❌ BLE spam przeciwko cudzym urządzeniom</li>
+                <li>❌ Łamanie haseł WiFi</li>
+                <li>❌ Nieuprawniony dostęp do sieci</li>
+                <li>❌ BadUSB przeciwko cudzym komputerom</li>
+            </ul>
+            
+            <h4>2. Dozwolone użycie</h4>
+            <p><strong>✅ Legalne zastosowania:</strong></p>
+            <ul>
+                <li>Testy własnych sieci i urządzeń</li>
+                <li>Badania edukacyjne w kontrolowanych środowiskach</li>
+                <li>Autoryzowane testy penetracyjne (z pisemną zgodą)</li>
+                <li>Wardrive w trybie pasywnym (w niektórych jurysdykcjach)</li>
+                <li>Badania akademickie za zgodą uczelni</li>
+                <li>Certyfikowane audyty bezpieczeństwa</li>
+            </ul>
+            
+            <h4>3. Konsekwencje prawne</h4>
+            <p><strong>Możliwe kary za nielegalne użycie:</strong></p>
+            <ul>
+                <li>💰 Grzywny (od kilku tysięcy do setek tysięcy PLN/USD)</li>
+                <li>🔒 Kary więzienia (do 5 lat lub więcej w zależności od jurysdykcji)</li>
+                <li>⚖️ Odpowiedzialność cywilna (odszkodowania)</li>
+                <li>📋 Wpis do akt karnych</li>
+                <li>🚫 Konfiskata sprzętu</li>
+            </ul>
+            
+            <p><strong>Przykładowe ustawy:</strong></p>
+            <ul>
+                <li>Polska: Art. 267-269a Kodeksu Karnego</li>
+                <li>USA: Computer Fraud and Abuse Act (CFAA)</li>
+                <li>UE: Dyrektywa 2013/40/EU</li>
+            </ul>
+        </div>
+        
+        <div class="section-divider"></div>
+        
+        <h2>Szybki Start (Quick Start Guide)</h2>
+        
+        <h3>Pierwsze uruchomienie</h3>
+        <ol>
+            <li><strong>Ładowanie</strong>
+                <ul>
                     <li>Podłącz USB-C lub power bank</li>
                     <li>Poczekaj na boot (5-10 sekund)</li>
                     <li>Ekran powita się logo</li>
-                </ol>
-
-                <h3>2. Pierwsze Skanowanie WiFi</h3>
-                <div class="feature-card">
-                    <h4>Przez Menu</h4>
-                    <ol>
-                        <li>Przejdź do: <code>WiFi → Sniffers → Scan APs</code></li>
-                        <li>Poczekaj 10-15 sekund</li>
-                        <li>Zobacz listę sieci w okolicy</li>
-                    </ol>
-                </div>
-
-                <div class="feature-card">
-                    <h4>Przez CLI</h4>
-                    <ol>
-                        <li>Podłącz USB do komputera</li>
-                        <li>Otwórz terminal serial (115200 baud)</li>
-                        <li>Wpisz: <code>scanap</code></li>
-                        <li>Wpisz: <code>list -a</code> - zobacz wyniki</li>
-                    </ol>
-                </div>
-
-                <h3>3. Test Podstawowy (TYLKO własna sieć!)</h3>
-                <ol>
-                    <li><code>WiFi → General → Select APs</code> - wybierz swoją sieć</li>
-                    <li><code>WiFi → Attacks → Deauth Flood</code> - test 10 sekund</li>
+                </ul>
+            </li>
+            <li><strong>Pierwsze skanowanie</strong>
+                <ul>
+                    <li>Przejdź do: WiFi → Sniffers → Scan APs</li>
+                    <li>Poczekaj 10-15 sekund</li>
+                    <li>Zobacz listę sieci w okolicy</li>
+                </ul>
+            </li>
+            <li><strong>Podstawowy atak (TYLKO własna sieć!)</strong>
+                <ul>
+                    <li>WiFi → General → Select APs - wybierz swoją sieć</li>
+                    <li>WiFi → Attacks → Deauth Flood - test 10 sekund</li>
                     <li>Sprawdź czy urządzenia się rozłączyły</li>
-                </ol>
-
-                <div class="alert alert-warning">
-                    <strong>⚠️ Ostrzeżenie:</strong> Testuj TYLKO własne sieci! Atakowanie cudzych sieci jest nielegalne.
-                </div>
-            </section>
-
-            <section id="wifi-sniffers" class="content-section">
-                <h2>📶 WiFi Sniffers</h2>
-                
-                <h3>Podstawowe Sniffery</h3>
-
-                <div class="feature-card">
-                    <h4><span class="badge badge-wifi">WiFi</span> Scan APs</h4>
-                    <p><strong>Opis:</strong> Skanuje wszystkie dostępne punkty dostępowe WiFi.</p>
-                    <p><strong>Jak używać:</strong></p>
-                    <ol>
-                        <li>Przejdź do: <code>WiFi → Sniffers → Scan APs</code></li>
-                        <li>Czekaj na zakończenie skanowania</li>
-                        <li>Lista APs wyświetli informacje: SSID, MAC, Kanał, Szyfrowanie, RSSI</li>
-                    </ol>
-                    <p><strong>CLI:</strong> <code>scanap</code></p>
-                </div>
-
-                <div class="feature-card">
-                    <h4><span class="badge badge-wifi">WiFi</span> Probe Request Sniff</h4>
-                    <p><strong>Opis:</strong> Przechwytuje żądania probe request od klientów WiFi szukających sieci.</p>
-                    <p><strong>Zastosowanie:</strong> Wykrywanie aktywnych urządzeń w pobliżu, analiza wzorców połączeń.</p>
-                    <p><strong>CLI:</strong> <code>sniffprobe</code></p>
-                </div>
-
-                <div class="feature-card">
-                    <h4><span class="badge badge-wifi">WiFi</span> Beacon Sniff</h4>
-                    <p><strong>Opis:</strong> Przechwytuje ramki beacon wysyłane przez punkty dostępowe.</p>
-                    <p><strong>Zastosowanie:</strong> Mapowanie sieci WiFi w okolicy.</p>
-                    <p><strong>CLI:</strong> <code>sniffbeacon</code></p>
-                </div>
-
-                <h3>Zaawansowane Sniffery</h3>
-
-                <div class="feature-card">
-                    <h4><span class="badge badge-wifi">WiFi</span> EAPOL PMKID Scan</h4>
-                    <p><strong>Opis:</strong> Przechwytuje ramki EAPOL zawierające PMKID do testowania bezpieczeństwa WPA2.</p>
-                    <p><strong>Wymagania:</strong> Karta SD</p>
-                    <p><strong>Jak używać:</strong></p>
-                    <ol>
-                        <li><code>WiFi → Sniffers → EAPOL PMKID Scan</code></li>
-                        <li>Urządzenie nasłuchuje wymiany kluczy</li>
-                        <li>PMKID zapisywane są na kartę SD jako PCAP</li>
-                        <li>Transfer pliku do komputera</li>
-                        <li>Użyj hashcat do crackowania:</li>
-                    </ol>
-                    <pre><code>hcxpcapngtool -o pmkid.hc22000 marauder_pmkid.pcap
-hashcat -m 22000 pmkid.hc22000 wordlist.txt</code></pre>
-                    <p><strong>CLI:</strong> <code>sniffpmkid</code></p>
-                </div>
-
-                <div class="feature-card">
-                    <h4><span class="badge badge-wifi">WiFi</span> Packet Monitor</h4>
-                    <p><strong>Opis:</strong> Zaawansowane monitorowanie ruchu WiFi z wyświetlaniem szczegółów pakietów.</p>
-                    <p><strong>Zastosowanie:</strong> Szczegółowa analiza ruchu sieciowego, wymaga Wireshark do analizy PCAP.</p>
-                </div>
-
-                <div class="feature-card">
-                    <h4><span class="badge badge-gps">GPS</span> Wardrive</h4>
-                    <p><strong>Opis:</strong> Gromadzi dane GPS i informacje o sieciach WiFi podczas poruszania się.</p>
-                    <p><strong>Wymagania:</strong> Moduł GPS + karta SD</p>
-                    <p><strong>Jak używać:</strong></p>
-                    <ol>
-                        <li>Podłącz moduł GPS (jeśli dostępny)</li>
-                        <li><code>WiFi → Sniffers → Wardrive</code></li>
-                        <li>Poruszaj się po obszarze</li>
-                        <li>Dane zapisywane automatycznie w formacie CSV</li>
-                        <li>Import do WiGLE lub Google Earth</li>
-                    </ol>
-                    <p><strong>CLI:</strong> <code>wardrive</code></p>
-                </div>
-            </section>
-
-            <section id="wifi-attacks" class="content-section">
-                <h2>⚔️ Ataki WiFi</h2>
-
-                <div class="alert alert-danger">
-                    <strong>⛔ OSTRZEŻENIE PRAWNE:</strong> Atakowanie sieci bez autoryzacji jest NIELEGALNE. Grożą kary więzienia do 5+ lat i wysokie grzywny. Używaj TYLKO na własnych sieciach!
-                </div>
-
-                <div class="feature-card">
-                    <h4><span class="badge badge-warning">Atak</span> Deauth Flood</h4>
-                    <p><strong>Opis:</strong> Atak deautoryzacji - rozłącza klientów z punktu dostępowego.</p>
-                    <p><strong>Jak używać:</strong></p>
-                    <ol>
-                        <li>Wykonaj <code>Scan APs</code></li>
-                        <li><code>WiFi → General → Select APs</code></li>
-                        <li>Opcjonalnie: <code>Scan Stations</code> i <code>Select Stations</code></li>
-                        <li><code>WiFi → Attacks → Deauth Flood</code></li>
-                    </ol>
-                    <p><strong>Uwaga:</strong> Nie działa przeciwko sieciom z 802.11w (PMF)</p>
-                    <p><strong>CLI:</strong> <code>attack -t deauth</code></p>
-                </div>
-
-                <div class="feature-card">
-                    <h4><span class="badge badge-warning">Atak</span> Evil Portal</h4>
-                    <p><strong>Opis:</strong> Tworzy fałszywy punkt dostępowy z captive portal do testowania phishingu.</p>
-                    <p><strong>Wymagania:</strong> Karta SD z plikiem index.html</p>
-                    <p><strong>Jak używać:</strong></p>
-                    <ol>
-                        <li>Stwórz plik HTML na karcie SD:</li>
-                    </ol>
-                    <pre><code>&lt;!DOCTYPE html&gt;
+                </ul>
+            </li>
+            <li><strong>Zapisz wyniki</strong>
+                <ul>
+                    <li>Włóż kartę SD</li>
+                    <li>WiFi → General → Save APs</li>
+                    <li>Plik zapisany!</li>
+                </ul>
+            </li>
+        </ol>
+        
+        <div class="section-divider"></div>
+        
+        <h2 id="scanery">Scanery Sieciowe (Dodatkowe - wymagają połączenia WiFi)</h2>
+        
+        <h4>ARP Scan</h4>
+        <p><strong>Opis:</strong> Skanuje sieć używając protokołu ARP.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Połącz się z siecią: WiFi → General → Join WiFi</li>
+            <li>Przejdź do: WiFi → Scanners → ARP Scan</li>
+            <li>Wprowadź zakres IP</li>
+            <li>Wykryte hosty wyświetlane są z adresami MAC</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Mapowanie urządzeń w sieci lokalnej.</p>
+        
+        <h4>Port Scan All</h4>
+        <p><strong>Opis:</strong> Skanuje popularne porty na hostach w sieci.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Połącz się z siecią</li>
+            <li>Przejdź do: WiFi → Scanners → Port Scan All</li>
+            <li>Wprowadź docelowy IP lub zakres</li>
+            <li>Urządzenie skanuje powszechne porty (22, 80, 443, itp.)</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Wstępne rozpoznanie usług sieciowych.</p>
+        
+        <h4>SSH Scan</h4>
+        <p><strong>Opis:</strong> Skanuje w poszukiwaniu otwartych usług SSH.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Połącz się z siecią</li>
+            <li>Przejdź do: WiFi → Scanners → SSH Scan</li>
+            <li>Wykrywa hosty z otwartym portem 22</li>
+            <li>Próbuje zidentyfikować wersję SSH</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Identyfikacja serwerów SSH.</p>
+        
+        <h4>Telnet Scan</h4>
+        <p><strong>Opis:</strong> Skanuje w poszukiwaniu otwartych usług Telnet.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Połącz się z siecią</li>
+            <li>Przejdź do: WiFi → Scanners → Telnet Scan</li>
+            <li>Wykrywa hosty z otwartym portem 23</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Identyfikacja niezabezpieczonych usług telnet.</p>
+        
+        <div class="section-divider"></div>
+        
+        <h2 id="badusb">Dodatkowe Funkcje</h2>
+        
+        <h3>BadUSB (Jeśli obsługiwane)</h3>
+        <p><strong>Opis:</strong> Emulacja klawiatury USB do wykonywania skryptów Ducky.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Przygotuj skrypt Ducky (.txt) na karcie SD w katalogu /badusb/</li>
+            <li>Przejdź do: Device → BadUSB → Run Ducky Script</li>
+            <li>Wybierz skrypt z listy</li>
+            <li>Podłącz Marauder jako USB do komputera</li>
+            <li>Skrypt zostanie wykonany jako wejście z klawiatury</li>
+        </ol>
+        
+        <p><strong>Format skryptu:</strong></p>
+        <div class="code-block">
+REM To jest komentarz
+DELAY 1000
+GUI r
+DELAY 500
+STRING notepad.exe
+ENTER
+DELAY 1000
+STRING Hello World!
+        </div>
+        
+        <p><strong>Dostępne komendy:</strong></p>
+        <ul>
+            <li>REM - Komentarz</li>
+            <li>DELAY [ms] - Opóźnienie w milisekundach</li>
+            <li>STRING [tekst] - Wpisuje tekst</li>
+            <li>ENTER - Klawisz Enter</li>
+            <li>GUI / WINDOWS - Klawisz Windows</li>
+            <li>ALT - Klawisz Alt</li>
+            <li>CTRL / CONTROL - Klawisz Ctrl</li>
+            <li>SHIFT - Klawisz Shift</li>
+            <li>TAB - Klawisz Tab</li>
+            <li>ESCAPE / ESC - Klawisz Escape</li>
+            <li>SPACE - Spacja</li>
+            <li>UP / DOWN / LEFT / RIGHT - Strzałki</li>
+            <li>F1 - F12 - Klawisze funkcyjne</li>
+            <li>HOME / END / PAGEUP / PAGEDOWN</li>
+        </ul>
+        <p><strong>Zastosowanie:</strong> Automatyzacja, testy bezpieczeństwa fizycznego, penetration testing.</p>
+        
+        <h4>Test BadUSB</h4>
+        <p><strong>Opis:</strong> Testuje funkcjonalność BadUSB bez wykonywania skryptu.</p>
+        <p><strong>Jak używać:</strong></p>
+        <ol>
+            <li>Device → BadUSB → Test BadUSB</li>
+            <li>Urządzenie wpisze testowy tekst do podłączonego komputera</li>
+        </ol>
+        <p><strong>Zastosowanie:</strong> Weryfikacja działania BadUSB.</p>
+        
+        <div class="section-divider"></div>
+        
+        <h2 id="cli">Komendy CLI (Command Line Interface)</h2>
+        <p>Dla użytkowników bez ekranu lub preferujących terminal, ESP32 Marauder oferuje pełną obsługę przez serial. Połącz się przez USB i użyj terminala (PuTTY, Arduino Serial Monitor, screen, itp.) z prędkością 115200 baud.</p>
+        
+        <h3>Podstawowe komendy:</h3>
+        
+        <h4>Ogólne</h4>
+        <ul>
+            <li><code>help</code> - Wyświetla listę wszystkich komend</li>
+            <li><code>info</code> - Informacje o urządzeniu</li>
+            <li><code>reboot</code> - Restart urządzenia</li>
+            <li><code>update -w</code> - Web update firmware</li>
+            <li><code>settings</code> - Wyświetla/zmienia ustawienia</li>
+        </ul>
+        
+        <h4>Skanowanie WiFi</h4>
+        <ul>
+            <li><code>scanap</code> - Skanuje punkty dostępowe</li>
+            <li><code>scansta</code> - Skanuje stacje (klienty)</li>
+            <li><code>channel -s [1-14]</code> - Ustawia kanał WiFi</li>
+            <li><code>stopscan</code> - Zatrzymuje skanowanie</li>
+        </ul>
+        
+        <h4>Selekcja celów</h4>
+        <ul>
+            <li><code>select -a [indeks]</code> - Wybiera AP (np. select -a 0,1,2)</li>
+            <li><code>select -c [indeks]</code> - Wybiera klienta</li>
+            <li><code>list -a</code> - Wyświetla listę AP</li>
+            <li><code>list -c</code> - Wyświetla listę klientów</li>
+            <li><code>clearlist -a</code> - Czyści listę AP</li>
+            <li><code>clearlist -c</code> - Czyści listę klientów</li>
+            <li><code>clearlist -s</code> - Czyści listę SSID</li>
+        </ul>
+        
+        <h4>Zarządzanie SSID</h4>
+        <ul>
+            <li><code>ssid -a -n "[nazwa]"</code> - Dodaje SSID do listy</li>
+            <li><code>ssid -g [liczba]</code> - Generuje losowe SSID</li>
+            <li><code>list -s</code> - Wyświetla listę SSID</li>
+        </ul>
+        
+        <h4>Ataki WiFi</h4>
+        <ul>
+            <li><code>attack -t deauth</code> - Atak deautoryzacji</li>
+            <li><code>attack -t beacon</code> - Beacon spam (lista)</li>
+            <li><code>attack -t beaconrandom</code> - Beacon spam (losowy)</li>
+            <li><code>attack -t probe</code> - Probe request flood</li>
+            <li><code>attack -t rickroll</code> - Rick roll beacon</li>
+            <li><code>attack -t apclone</code> - AP clone spam</li>
+        </ul>
+        
+        <h4>Sniffery WiFi</h4>
+        <ul>
+            <li><code>sniffbeacon</code> - Przechwytuje beacony</li>
+            <li><code>sniffdeauth</code> - Przechwytuje pakiety deauth</li>
+            <li><code>sniffpmkid</code> - Przechwytuje PMKID</li>
+            <li><code>sniffpwn</code> - Wykrywa Pwnagotchi</li>
+            <li><code>sniffesp</code> - Wykrywa ESP devices</li>
+            <li><code>sniffraw</code> - Raw packet capture</li>
+        </ul>
+        
+        <h4>Bluetooth</h4>
+        <ul>
+            <li><code>sniffbt</code> - Bluetooth sniffer</li>
+            <li><code>btwardrive</code> - Bluetooth wardrive</li>
+            <li><code>btspamall</code> - BT spam all devices</li>
+        </ul>
+        
+        <h4>Ataki Bluetooth</h4>
+        <ul>
+            <li><code>sourapple</code> - Sour Apple attack</li>
+            <li><code>swiftpair</code> - Swiftpair spam</li>
+            <li><code>samsungblespam</code> - Samsung BLE spam</li>
+            <li><code>flipperblespam</code> - Flipper BLE spam</li>
+            <li><code>spoofat</code> - Spoof AirTag</li>
+        </ul>
+        
+        <h4>GPS</h4>
+        <ul>
+            <li><code>gpsdata</code> - Wyświetla dane GPS</li>
+            <li><code>wardrive</code> - Rozpoczyna wardrive WiFi</li>
+        </ul>
+        
+        <h4>Sieć</h4>
+        <ul>
+            <li><code>join -s "[ssid]" -p "[hasło]"</code> - Łączy z siecią WiFi</li>
+            <li><code>pingscan</code> - Skanuje ping w sieci</li>
+        </ul>
+        
+        <h4>LED i System</h4>
+        <ul>
+            <li><code>led -s [on/off]</code> - Włącza/wyłącza LED</li>
+            <li><code>led -r [0-255]</code> - Ustawia czerwony</li>
+            <li><code>led -g [0-255]</code> - Ustawia zielony</li>
+            <li><code>led -b [0-255]</code> - Ustawia niebieski</li>
+        </ul>
+        
+        <h4>Evil Portal</h4>
+        <ul>
+            <li><code>evilportal -s [ssid]</code> - Uruchamia Evil Portal</li>
+            <li><code>evilportal -c</code> - Przechwytuje dane z portalu</li>
+        </ul>
+        
+        <h4>BadUSB</h4>
+        <ul>
+            <li><code>badusb -l</code> - Lista skryptów</li>
+            <li><code>badusb -r [nazwa]</code> - Uruchamia skrypt</li>
+        </ul>
+        
+        <h4>Zapisywanie/Ładowanie</h4>
+        <ul>
+            <li><code>save -a [nazwa]</code> - Zapisuje listę AP</li>
+            <li><code>load -a [nazwa]</code> - Ładuje listę AP</li>
+            <li><code>save -s [nazwa]</code> - Zapisuje listę SSID</li>
+            <li><code>load -s [nazwa]</code> - Ładuje listę SSID</li>
+        </ul>
+        
+        <h3>Przykłady użycia CLI:</h3>
+        
+        <h4>1. Deauth attack workflow:</h4>
+        <div class="code-block">
+scanap                    # Skanuj AP
+select -a 0               # Wybierz pierwszy AP
+scansta                   # Skanuj klientów
+select -c 0,1,2          # Wybierz klientów 0, 1, 2
+attack -t deauth          # Rozpocznij atak deauth
+        </div>
+        
+        <h4>2. Beacon spam workflow:</h4>
+        <div class="code-block">
+ssid -g 50               # Wygeneruj 50 losowych SSID
+list -s                  # Wyświetl listę
+attack -t beacon -l      # Rozpocznij beacon spam z listy
+        </div>
+        
+        <h4>3. PMKID capture:</h4>
+        <div class="code-block">
+scanap                   # Skanuj AP
+select -a 0              # Wybierz cel
+sniffpmkid              # Rozpocznij przechwytywanie PMKID
+# Plik zapisany na karcie SD
+        </div>
+        
+        <h4>4. Evil Portal setup:</h4>
+        <div class="code-block">
+ssid -a -n "Free WiFi"             # Dodaj SSID
+evilportal -s "Free WiFi"          # Uruchom Evil Portal
+# Monitor połączeń w serial
+        </div>
+        
+        <h4>5. Signal monitoring:</h4>
+        <div class="code-block">
+scanap                   # Skanuj AP
+select -a 0              # Wybierz AP
+sigmon                   # Monitor sygnału
+        </div>
+        
+        <h4>6. Wardrive session:</h4>
+        <div class="code-block">
+gpsdata                  # Sprawdź GPS
+wardrive                 # Rozpocznij wardrive
+# Poruszaj się, dane zapisują się automatycznie
+stopscan                 # Zatrzymaj
+        </div>
+        
+        <h3>Pierwsze użycie CLI</h3>
+        <ol>
+            <li>Podłącz USB do komputera</li>
+            <li>Otwórz terminal serial (115200 baud)</li>
+            <li>Wpisz: <code>help</code> - zobacz komendy</li>
+            <li>Wpisz: <code>scanap</code> - skanuj sieci</li>
+            <li>Wpisz: <code>list -a</code> - zobacz wyniki</li>
+        </ol>
+        
+        <h3>Pierwszy Evil Portal</h3>
+        <ol>
+            <li>Stwórz index.html na karcie SD:
+                <div class="code-block">
+&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;body&gt;
 &lt;h1&gt;WiFi Login&lt;/h1&gt;
 &lt;form action="/post" method="POST"&gt;
-&lt;input name="user" placeholder="Username"&gt;
-&lt;input name="pass" type="password" placeholder="Password"&gt;
+&lt;input name="user" placeholder="Username"&gt;&lt;br&gt;
+&lt;input name="pass" type="password" placeholder="Password"&gt;&lt;br&gt;
 &lt;button&gt;Login&lt;/button&gt;
 &lt;/form&gt;
 &lt;/body&gt;
-&lt;/html&gt;</code></pre>
-                    <ol start="2">
-                        <li><code>WiFi → General → Add SSID</code> - dodaj SSID</li>
-                        <li><code>WiFi → General → Select EP HTML File</code></li>
-                        <li><code>WiFi → Attacks → Evil Portal</code></li>
-                        <li>Klienci zostaną przekierowani na fałszywą stronę</li>
-                    </ol>
-                    <p><strong>CLI:</strong> <code>evilportal -s "Free WiFi"</code></p>
+&lt;/html&gt;
                 </div>
-
-                <div class="feature-card">
-                    <h4><span class="badge badge-warning">Atak</span> Beacon Spam</h4>
-                    <p><strong>Opis:</strong> Transmituje wiele fałszywych punktów dostępowych.</p>
-                    <p><strong>Warianty:</strong></p>
-                    <ul>
-                        <li><strong>Beacon Spam List:</strong> Z przygotowanej listy SSID</li>
-                        <li><strong>Beacon Spam Random:</strong> Losowe nazwy sieci</li>
-                        <li><strong>Rick Roll Beacon:</strong> Tekst piosenki jako SSID 😄</li>
-                    </ul>
-                    <p><strong>Zastosowanie:</strong> Test odporności urządzeń na spam WiFi</p>
-                    <p><strong>CLI:</strong> <code>attack -t beacon</code> lub <code>attack -t beaconrandom</code></p>
-                </div>
-
-                <div class="feature-card">
-                    <h4><span class="badge badge-warning">Atak</span> Karma Attack</h4>
-                    <p><strong>Opis:</strong> Odpowiada na wszystkie probe requesty, podszywając się pod szukane sieci.</p>
-                    <p><strong>Zastosowanie:</strong> Testowanie automatycznego łączenia się urządzeń z niezaufanymi sieciami.</p>
-                    <p><strong>CLI:</strong> <code>attack -t karma</code></p>
-                </div>
-            </section>
-
-            <section id="wifi-general" class="content-section">
-                <h2>🔧 WiFi - Funkcje Ogólne</h2>
-
-                <div class="feature-card">
-                    <h4>Join WiFi</h4>
-                    <p>Łączy urządzenie z wybraną siecią WiFi (wymagane do skanów sieciowych)</p>
-                    <p><strong>CLI:</strong> <code>join -s "SSID" -p "hasło"</code></p>
-                </div>
-
-                <div class="feature-card">
-                    <h4>Select APs / Stations</h4>
-                    <p>Wybiera cele do dalszych operacji (ataki, monitoring)</p>
-                    <p><strong>CLI:</strong> <code>select -a 0,1,2</code> lub <code>select -c 0</code></p>
-                </div>
-
-                <div class="feature-card">
-                    <h4>Save / Load Lists</h4>
-                    <p>Zapisuje i wczytuje listy SSID, APs i Stations z karty SD</p>
-                    <p><strong>CLI:</strong> <code>save -a nazwa</code>, <code>load -s nazwa</code></p>
-                </div>
-
-                <div class="feature-card">
-                    <h4>Generate SSIDs</h4>
-                    <p>Automatyczne generowanie losowych SSID do beacon spam</p>
-                    <p><strong>CLI:</strong> <code>ssid -g 50</code> (wygeneruj 50 SSID)</p>
-                </div>
-            </section>
-
-            <section id="bt-sniffers" class="content-section">
-                <h2>📲 Bluetooth Sniffers</h2>
-
-                <div class="feature-card">
-                    <h4><span class="badge badge-bluetooth">BLE</span> Bluetooth Analyzer</h4>
-                    <p><strong>Opis:</strong> Analizuje ruch Bluetooth w pobliżu.</p>
-                    <p><strong>Wyświetla:</strong> MAC, RSSI, typ urządzenia, producent</p>
-                    <p><strong>Zastosowanie:</strong> Mapowanie urządzeń Bluetooth, wykrywanie IoT</p>
-                    <p><strong>CLI:</strong> <code>sniffbt</code></p>
-                </div>
-
-                <div class="feature-card">
-                    <h4><span class="badge badge-bluetooth">BLE</span> AirTag Sniff</h4>
-                    <p><strong>Opis:</strong> Wykrywa Apple AirTagi w pobliżu.</p>
-                    <p><strong>Zastosowanie:</strong> Wykrywanie śledzących urządzeń, ochrona przed stalkingiem</p>
-                </div>
-
-                <div class="feature-card">
-                    <h4><span class="badge badge-bluetooth">BLE</span> Detect Card Skimmers</h4>
-                    <p><strong>Opis:</strong> Wykrywa potencjalne skimmery kart Bluetooth.</p>
-                    <p><strong>Zastosowanie:</strong> Bezpieczeństwo płatności przy bankomacie</p>
-                </div>
-
-                <div class="feature-card">
-                    <h4><span class="badge badge-gps">GPS</span> Bluetooth Wardrive</h4>
-                    <p><strong>Opis:</strong> Gromadzi dane o urządzeniach Bluetooth z lokalizacją GPS.</p>
-                    <p><strong>Wymagania:</strong> Moduł GPS + karta SD</p>
-                    <p><strong>CLI:</strong> <code>btwardrive</code></p>
-                </div>
-            </section>
-
-            <section id="bt-attacks" class="content-section">
-                <h2>⚡ Ataki Bluetooth</h2>
-
-                <div class="feature-card">
-                    <h4><span class="badge badge-warning">BLE</span> Sour Apple</h4>
-                    <p><strong>Opis:</strong> Atak na urządzenia Apple - wysyła fałszywe BLE advertisementy.</p>
-                    <p><strong>Efekt:</strong> Powiadomienia o parowaniu na urządzeniach iOS</p>
-                    <p><strong>CLI:</strong> <code>sourapple</code></p>
-                </div>
-
-                <div class="feature-card">
-                    <h4><span class="badge badge-warning">BLE</span> BT Spam All</h4>
-                    <p><strong>Opis:</strong> Uniwersalny spam BLE dla wszystkich typów urządzeń (Apple, Samsung, Windows, Google)</p>
-                    <p><strong>Efekt:</strong> Maksymalny chaos powiadomień parowania</p>
-                    <p><strong>CLI:</strong> <code>btspamall</code></p>
-                </div>
-
-                <div class="feature-card">
-                    <h4><span class="badge badge-warning">BLE</span> SwiftPair Spam</h4>
-                    <p><strong>Opis:</strong> Spam parowania Windows SwiftPair</p>
-                    <p><strong>CLI:</strong> <code>swiftpair</code></p>
-                </div>
-
-                <div class="feature-card">
-                    <h4><span class="badge badge-warning">BLE</span> Spoof AirTag</h4>
-                    <p><strong>Opis:</strong> Podszywanie się pod AirTag</p>
-                    <p><strong>Zastosowanie:</strong> Testowanie mechanizmów anti-tracking Apple</p>
-                    <p><strong>CLI:</strong> <code>spoofat</code></p>
-                </div>
-            </section>
-
-            <section id="gps" class="content-section">
-                <h2>🛰️ GPS</h2>
-
-                <div class="alert alert-info">
-                    <strong>📍 Uwaga:</strong> GPS wymaga modułu GPS (NEO-6M/7M/8M) i bezpośredniej widoczności nieba. Nie działa w budynkach!
-                </div>
-
-                <div class="feature-card">
-                    <h4>GPS Data</h4>
-                    <p><strong>Wyświetla:</strong></p>
-                    <ul>
-                        <li>Współrzędne (szerokość/długość geograficzna)</li>
-                        <li>Wysokość</li>
-                        <li>Liczba satelitów</li>
-                        <li>Dokładność pozycji</li>
-                    </ul>
-                    <p><strong>CLI:</strong> <code>gpsdata</code></p>
-                </div>
-
-                <div class="feature-card">
-                    <h4>GPS Tracker</h4>
-                    <p><strong>Opis:</strong> Śledzi trasę i zapisuje ją na kartę SD w formacie GPX/KML</p>
-                    <p><strong>Zastosowanie:</strong> Rejestracja trasy, analiza w Google Earth</p>
-                </div>
-
-                <div class="feature-card">
-                    <h4>Wardrive z GPS</h4>
-                    <p><strong>Format danych CSV:</strong></p>
-                    <pre><code>MAC,SSID,Channel,RSSI,Encryption,Latitude,Longitude,Altitude,Time</code></pre>
-                    <p><strong>Gdzie importować:</strong></p>
-                    <ul>
-                        <li>🌐 WiGLE: <code>https://wigle.net</code></li>
-                        <li>🗺️ Google Earth (konwersja do KML)</li>
-                        <li>📊 Excel / Python pandas</li>
-                    </ul>
-                </div>
-            </section>
-
-            <section id="cli" class="content-section">
-                <h2>💻 Komendy CLI</h2>
-
-                <div class="alert alert-info">
-                    <strong>⚙️ Połączenie:</strong> Połącz przez USB, otwórz terminal (115200 baud), wpisz <code>help</code>
-                </div>
-
-                <h3>Podstawowe komendy</h3>
-                <table>
-                    <tr>
-                        <th>Komenda</th>
-                        <th>Opis</th>
-                    </tr>
-                    <tr>
-                        <td><code>help</code></td>
-                        <td>Lista wszystkich komend</td>
-                    </tr>
-                    <tr>
-                        <td><code>info</code></td>
-                        <td>Informacje o urządzeniu</td>
-                    </tr>
-                    <tr>
-                        <td><code>reboot</code></td>
-                        <td>Restart urządzenia</td>
-                    </tr>
-                    <tr>
-                        <td><code>update -w</code></td>
-                        <td>Web update firmware</td>
-                    </tr>
-                </table>
-
-                <h3>WiFi</h3>
-                <table>
-                    <tr>
-                        <th>Komenda</th>
-                        <th>Opis</th>
-                    </tr>
-                    <tr>
-                        <td><code>scanap</code></td>
-                        <td>Skanuj punkty dostępowe</td>
-                    </tr>
-                    <tr>
-                        <td><code>scansta</code></td>
-                        <td>Skanuj stacje (klienty)</td>
-                    </tr>
-                    <tr>
-                        <td><code>select -a 0,1,2</code></td>
-                        <td>Wybierz APs</td>
-                    </tr>
-                    <tr>
-                        <td><code>list -a</code></td>
-                        <td>Wyświetl listę AP</td>
-                    </tr>
-                    <tr>
-                        <td><code>attack -t deauth</code></td>
-                        <td>Atak deauth</td>
-                    </tr>
-                    <tr>
-                        <td><code>attack -t beacon</code></td>
-                        <td>Beacon spam</td>
-                    </tr>
-                    <tr>
-                        <td><code>sniffpmkid</code></td>
-                        <td>Przechwytuj PMKID</td>
-                    </tr>
-                </table>
-
-                <h3>Bluetooth</h3>
-                <table>
-                    <tr>
-                        <th>Komenda</th>
-                        <th>Opis</th>
-                    </tr>
-                    <tr>
-                        <td><code>sniffbt</code></td>
-                        <td>Bluetooth sniffer</td>
-                    </tr>
-                    <tr>
-                        <td><code>btwardrive</code></td>
-                        <td>Bluetooth wardrive</td>
-                    </tr>
-                    <tr>
-                        <td><code>btspamall</code></td>
-                        <td>BT spam all</td>
-                    </tr>
-                    <tr>
-                        <td><code>sourapple</code></td>
-                        <td>Sour Apple attack</td>
-                    </tr>
-                </table>
-            </section>
-
-            <section id="troubleshooting" class="content-section">
-                <h2>🔧 Rozwiązywanie Problemów</h2>
-
-                <div class="feature-card">
-                    <h4>❌ Nie wykrywa sieci WiFi</h4>
-                    <p><strong>Objawy:</strong> Scan APs nie znajduje żadnych sieci</p>
-                    <p><strong>Rozwiązania:</strong></p>
-                    <ol>
-                        <li>Sprawdź czy antenna jest podłączona</li>
-                        <li>Wykonaj restart: <code>Reboot</code></li>
-                        <li>Zmień kanał i spróbuj ponownie</li>
-                        <li>Sprawdź czy WiFi nie jest wyłączone</li>
-                        <li>Test z zewnętrzną anteną (5dBi/9dBi)</li>
-                    </ol>
-                </div>
-
-                <div class="feature-card">
-                    <h4>🛰️ GPS nie działa / brak fixu</h4>
-                    <p><strong>Objawy:</strong> "No GPS fix", "0 satellites"</p>
-                    <p><strong>Rozwiązania:</strong></p>
-                    <ol>
-                        <li>Wyjdź na zewnątrz (GPS nie działa w budynkach!)</li>
-                        <li>Poczekaj 2-5 minut na cold start</li>
-                        <li>Sprawdź połączenia: GPS TX → ESP32 RX</li>
-                        <li>Sprawdź baudrate w ustawieniach (9600 lub 115200)</li>
-                        <li>Test NMEA Stream - powinny pojawić się dane</li>
-                    </ol>
-                </div>
-
-                <div class="feature-card">
-                    <h4>💾 Karta SD nie jest rozpoznawana</h4>
-                    <p><strong>Rozwiązania:</strong></p>
-                    <ol>
-                        <li>Formatuj jako FAT32 (nie exFAT, nie NTFS)</li>
-                        <li>Użyj karty SDHC (do 32GB), klasa 10</li>
-                        <li>Sprawdź czy karta jest całkowicie włożona</li>
-                        <li>Włącz autodetekcję w ustawieniach</li>
-                        <li>Restart urządzenia</li>
-                    </ol>
-                </div>
-
-                <div class="feature-card">
-                    <h4>⚠️ Deauth attack nie działa</h4>
-                    <p><strong>Powody:</strong></p>
-                    <ul>
-                        <li><strong>802.11w (PMF):</strong> Nowoczesne sieci są odporne na deauth</li>
-                        <li><strong>Zasięg:</strong> Musisz być blisko AP i klientów</li>
-                        <li><strong>Kanał:</strong> Upewnij się że jesteś na właściwym kanale</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <h4>🔄 Urządzenie się zawiesza/resetuje</h4>
-                    <p><strong>Rozwiązania:</strong></p>
-                    <ol>
-                        <li>Użyj lepszego zasilania (5V 2A minimum)</li>
-                        <li>Daj urządzeniu ochłonąć (przegrzanie)</li>
-                        <li>Zaktualizuj firmware do stabilnej wersji</li>
-                        <li>Usuń kartę SD i test bez niej</li>
-                    </ol>
-                </div>
-            </section>
-
-            <section id="faq" class="content-section">
-                <h2>❓ FAQ - Często Zadawane Pytania</h2>
-
-                <div class="feature-card">
-                    <h4>Co to jest ESP32 Marauder?</h4>
-                    <p>ESP32 Marauder to przenośne narzędzie do testowania bezpieczeństwa sieci WiFi i Bluetooth, zbudowane na platformie ESP32. Oferuje funkcje sniffing, analizy i testowania penetracyjnego.</p>
-                </div>
-
-                <div class="feature-card">
-                    <h4>Czy ESP32 Marauder jest legalny?</h4>
-                    <p>Samo urządzenie jest legalne, ale użycie większości jego funkcji bez zgody właściciela sieci jest <strong>NIELEGALNE</strong>. Używaj tylko do testowania własnych systemów lub z pisemną autoryzacją.</p>
-                </div>
-
-                <div class="feature-card">
-                    <h4>Czy mogę łamać hasła WiFi?</h4>
-                    <p>Marauder może przechwycić handshake/PMKID, ale cracking hasła odbywa się offline na komputerze przy użyciu narzędzi jak hashcat lub aircrack-ng.</p>
-                </div>
-
-                <div class="feature-card">
-                    <h4>Czy deauth działa na wszystkich sieciach?</h4>
-                    <p>Nie. Nowoczesne sieci z 802.11w (PMF - Protected Management Frames) są odporne na ataki deauth. Działa tylko na starszych sieciach WPA2 bez PMF.</p>
-                </div>
-
-                <div class="feature-card">
-                    <h4>Jak daleko działa Marauder?</h4>
-                    <ul>
-                        <li>Wbudowana antena: 10-50 metrów</li>
-                        <li>Zewnętrzna antena (5-9dBi): 100-300 metrów</li>
-                        <li>Zależy od otoczenia i przeszkód</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <h4>Czy działa z 5GHz WiFi?</h4>
-                    <p>Nie. ESP32 obsługuje tylko 2.4GHz (802.11 b/g/n). Nie ma obsługi 5GHz ani WiFi 6.</p>
-                </div>
-
-                <div class="feature-card">
-                    <h4>Czy potrzebuję karty SD?</h4>
-                    <p>Nie jest wymagana do podstawowych funkcji, ale zalecana dla:</p>
-                    <ul>
-                        <li>Zapisywania PCAP (packet capture)</li>
-                        <li>Evil Portal HTML</li>
-                        <li>Wardrive</li>
-                        <li>Firmware updates (SD Update)</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <h4>Gdzie znaleźć więcej informacji?</h4>
-                    <p><strong>Oficjalne źródła:</strong></p>
-                    <ul>
-                        <li>🌐 GitHub: <code>github.com/justcallmekoko/ESP32Marauder</code></li>
-                        <li>📚 Wiki: GitHub Wiki</li>
-                        <li>💬 Discord: ESP32 Marauder Community</li>
-                        <li>🐦 Twitter: @jcmkoko</li>
-                    </ul>
-                </div>
-            </section>
-
-            <section id="legal" class="content-section">
-                <h2>⚖️ Bezpieczeństwo i Legalność</h2>
-
-                <div class="alert alert-danger">
-                    <strong>⚠️ WAŻNE OSTRZEŻENIE PRAWNE - PRZECZYTAJ PRZED UŻYCIEM</strong>
-                </div>
-
-                <h3>🚫 Działania NIELEGALNE bez autoryzacji</h3>
-                <ul>
-                    <li>❌ Ataki deautoryzacji na cudze sieci</li>
-                    <li>❌ Evil Portal i phishing</li>
-                    <li>❌ Przechwytywanie ruchu sieciowego cudzych sieci</li>
-                    <li>❌ BLE spam przeciwko cudzym urządzeniom</li>
-                    <li>❌ Łamanie haseł WiFi bez zgody</li>
-                    <li>❌ Nieuprawniony dostęp do sieci</li>
+            </li>
+            <li>WiFi → General → Add SSID - "Free WiFi"</li>
+            <li>WiFi → General → Select EP HTML File - wybierz HTML</li>
+            <li>WiFi → Attacks → Evil Portal</li>
+            <li>Połącz się swoim telefonem i test</li>
+        </ol>
         
-                </ul>
-
-                <h3>✅ Legalne zastosowania</h3>
-                <ul>
-                    <li>✅ Testy własnych sieci i urządzeń</li>
-                    <li>✅ Badania edukacyjne w kontrolowanych środowiskach</li>
-                    <li>✅ Autoryzowane testy penetracyjne (z pisemną zgodą)</li>
-                    <li>✅ Badania akademickie za zgodą uczelni</li>
-                    <li>✅ Certyfikowane audyty bezpieczeństwa</li>
-                </ul>
-
-                <h3>⚖️ Konsekwencje prawne</h3>
-                <div class="feature-card">
-                    <h4>Możliwe kary za nielegalne użycie:</h4>
-                    <ul>
-                        <li>💰 <strong>Grzywny:</strong> Od kilku tysięcy do setek tysięcy PLN/USD</li>
-                        <li>🔒 <strong>Kary więzienia:</strong> Do 5 lat lub więcej</li>
-                        <li>⚖️ <strong>Odpowiedzialność cywilna:</strong> Odszkodowania</li>
-                        <li>📋 <strong>Wpis do akt karnych</strong></li>
-                        <li>🚫 <strong>Konfiskata sprzętu</strong></li>
-                    </ul>
+        <div class="section-divider"></div>
+        
+        <h2 id="workflow">Workflow Examples (Przykłady Przepływów Pracy)</h2>
+        
+        <h3>1. Captive Portal Phishing Test</h3>
+        <p><strong>Cel:</strong> Test świadomości użytkowników na fałszywe captive portale.</p>
+        <p><strong>Kroki:</strong></p>
+        <ol>
+            <li>Stwórz plik index.html z formularzem logowania na karcie SD</li>
+            <li>Przykład prostego formularza:
+                <div class="code-block">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Free WiFi Login&lt;/title&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Free WiFi&lt;/h1&gt;
+    &lt;form action="/post" method="POST"&gt;
+        &lt;input type="text" name="email" placeholder="Email"&gt;
+        &lt;input type="password" name="password" placeholder="Password"&gt;
+        &lt;button type="submit"&gt;Connect&lt;/button&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
                 </div>
+            </li>
+            <li>Umieść plik w katalogu głównym karty SD</li>
+            <li>Przez menu: WiFi → General → Add SSID - dodaj SSID (np. "Free WiFi")</li>
+            <li>WiFi → General → Select EP HTML File - wybierz index.html</li>
+            <li>WiFi → Attacks → Evil Portal - uruchom portal</li>
+            <li>Przez CLI: <code>evilportal -s "Free WiFi"</code></li>
+            <li>Monitor wyników na ekranie serial - wprowadzone dane będą wyświetlane</li>
+        </ol>
+        <div class="warning">
+            <strong>Ostrzeżenie:</strong> Tylko na własnych urządzeniach lub z pisemną zgodą!
+        </div>
+        
+        <h3>2. PMKID Capture dla WPA2 Testing</h3>
+        <p><strong>Cel:</strong> Przechwycenie PMKID do offline cracking haseł WPA2.</p>
+        <p><strong>Kroki:</strong></p>
+        <ol>
+            <li>WiFi → Sniffers → Scan APs (lub CLI: <code>scanap</code>)</li>
+            <li>WiFi → General → Select APs - wybierz cel (lub CLI: <code>select -a 0</code>)</li>
+            <li>WiFi → Sniffers → EAPOL PMKID Scan (lub CLI: <code>sniffpmkid</code>)</li>
+            <li>Poczekaj na przechwycenie - PMKID zapisany zostanie na kartę SD</li>
+            <li>Transfer pliku PCAP do komputera</li>
+            <li>Konwersja i cracking na komputerze:
+                <div class="code-block">
+# Konwersja PCAP do hashcat format
+hcxpcapngtool -o pmkid.hc22000 marauder_pmkid.pcap
 
-                <h3>📜 Przykładowe ustawy</h3>
-                <ul>
-                    <li><strong>Polska:</strong> Art. 267-269a Kodeksu Karnego</li>
-                    <li><strong>USA:</strong> Computer Fraud and Abuse Act (CFAA)</li>
-                    <li><strong>UE:</strong> Dyrektywa 2013/40/EU</li>
-                </ul>
-
-                <h3>🛡️ Zasady etycznego użycia</h3>
-                <ol>
-                    <li><strong>Zgoda:</strong> Zawsze uzyskaj pisemną zgodę przed testami</li>
-                    <li><strong>Prywatność:</strong> Szanuj prywatność innych</li>
-                    <li><strong>Transparentność:</strong> Ujawnij podatności odpowiedzialnie</li>
-                    <li><strong>Edukacja:</strong> Używaj do nauki, nie do szkodzenia</li>
-                    <li><strong>Odpowiedzialność:</strong> Rozumiej konsekwencje swoich działań</li>
-                </ol>
-
-                <div class="alert alert-warning">
-                    <strong>⚠️ Zrzeczenie się odpowiedzialności:</strong><br>
-                    Twórcy, kontrybutorzy i dystrybutorzy NIE PONOSZĄ ODPOWIEDZIALNOŚCI za nielegalne użycie, szkody, naruszenia prywatności lub konsekwencje prawne użytkownika. Kupując lub używając ESP32 Marauder, przyjmujesz PEŁNĄ ODPOWIEDZIALNOŚĆ za swoje działania.
+# Cracking z hashcat
+hashcat -m 22000 pmkid.hc22000 wordlist.txt
                 </div>
-            </section>
-        </main>
+            </li>
+        </ol>
+        <div class="info-box">
+            <strong>Uwaga:</strong> Wymaga karty SD. Proces może zająć kilka minut.
+        </div>
+        
+        <h3>3. Deauth Attack → Handshake Capture</h3>
+        <p><strong>Cel:</strong> Wymuszenie reconnect klientów w celu przechwycenia WPA handshake.</p>
+        <p><strong>Przygotowanie:</strong></p>
+        <ol>
+            <li>Komputer z Kali Linux i Wireshark/airodump-ng</li>
+            <li>Karta WiFi w trybie monitor</li>
+        </ol>
+        <p><strong>Kroki:</strong></p>
+        <ol>
+            <li>Na komputerze uruchom przechwytywanie:
+                <div class="code-block">
+airmon-ng start wlan0
+airodump-ng -c [kanał] --bssid [BSSID] -w capture wlan0mon
+                </div>
+            </li>
+            <li>Na Marauder:
+                <ul>
+                    <li>WiFi → Sniffers → Scan APs (znajdź cel)</li>
+                    <li>WiFi → General → Select APs (wybierz)</li>
+                    <li>WiFi → Sniffers → Scan Stations (znajdź klientów)</li>
+                    <li>WiFi → General → Select Stations (wybierz)</li>
+                    <li>WiFi → Attacks → Deauth Flood (5-10 sekund wystarczy)</li>
+                </ul>
+            </li>
+            <li>Wireshark/airodump powinien przechwycić handshake (sprawdź "WPA handshake" w górnym rogu)</li>
+            <li>Cracking na komputerze:
+                <div class="code-block">
+aircrack-ng -w wordlist.txt -b [BSSID] capture-01.cap
+                </div>
+            </li>
+        </ol>
+        
+        <h3>4. WiFi Wardrive Session</h3>
+        <p><strong>Cel:</strong> Zmapowanie wszystkich sieci WiFi w okolicy z koordynatami GPS.</p>
+        <p><strong>Wymagania:</strong> Moduł GPS</p>
+        <p><strong>Kroki:</strong></p>
+        <ol>
+            <li>Sprawdź GPS: GPS → GPS Data (poczekaj na fix satelitarny - min. 4 satelity)</li>
+            <li>WiFi → Sniffers → Wardrive (lub CLI: <code>wardrive</code>)</li>
+            <li>Poruszaj się po obszarze (pieszo, rowerem, samochodem)</li>
+            <li>Zatrzymaj gdy skończysz</li>
+            <li>Plik CSV zostanie zapisany na karcie SD w formacie:
+                <div class="code-block">
+MAC,SSID,Channel,RSSI,Encryption,Latitude,Longitude,Altitude,Time
+                </div>
+            </li>
+            <li>Import danych:
+                <ul>
+                    <li>WiGLE: Załaduj na https://wigle.net (wymaga konta)</li>
+                    <li>Google Earth: Konwertuj CSV do KML</li>
+                    <li>Własna analiza: Excel, Python pandas</li>
+                </ul>
+            </li>
+        </ol>
+        
+        <h3>5. Bluetooth Device Discovery & Mapping</h3>
+        <p><strong>Cel:</strong> Znalezienie wszystkich urządzeń BLE w budynku.</p>
+        <p><strong>Kroki:</strong></p>
+        <ol>
+            <li>Bluetooth → Sniffers → Bluetooth Analyzer</li>
+            <li>Spacer po obszarze systematycznie</li>
+            <li>Zapisz wyniki: przekieruj serial output do pliku lub użyj karty SD</li>
+            <li>Analiza wyników:
+                <ul>
+                    <li>Identyfikacja urządzeń po MAC/Vendor</li>
+                    <li>Mapowanie RSSI (siła sygnału) = przybliżona odległość</li>
+                    <li>Wykrycie nieautoryzowanych urządzeń BLE</li>
+                </ul>
+            </li>
+        </ol>
+        <p><strong>Zastosowania:</strong></p>
+        <ul>
+            <li>Audyt bezpieczeństwa (wykrycie skimmerów, trackerów)</li>
+            <li>Inventory urządzeń IoT</li>
+            <li>Detekcja AirTagów / trackerów</li>
+        </ul>
+        
+        <h3>6. Karma Attack Test</h3>
+        <p><strong>Cel:</strong> Test automatycznego łączenia się urządzeń z niezaufanymi sieciami.</p>
+        <p><strong>Kroki:</strong></p>
+        <ol>
+            <li>WiFi → Attacks → Karma (lub CLI: <code>karma</code>)</li>
+            <li>Urządzenie odpowiada na WSZYSTKIE probe requests</li>
+            <li>Monitor połączeń w czasie rzeczywistym</li>
+            <li>Urządzenia z włączonym auto-connect będą próbowały się łączyć</li>
+            <li>Dokumentuj które urządzenia są podatne</li>
+        </ol>
+        <p><strong>Edukacja użytkowników:</strong></p>
+        <ul>
+            <li>Wyłącz auto-connect do sieci WiFi</li>
+            <li>Zapomnij stare/nieużywane sieci</li>
+            <li>Nie łącz się z niezabezpieczonymi sieciami</li>
+        </ul>
+        
+        <h3>7. AP Clone + Evil Portal (Evil Twin Attack)</h3>
+        <p><strong>Cel:</strong> Sklonowanie prawdziwej sieci i przekierowanie użytkowników na phishing portal.</p>
+        <p><strong>Kroki:</strong></p>
+        <ol>
+            <li>WiFi → Sniffers → Scan APs - znajdź sieć docelową</li>
+            <li>WiFi → General → Select APs - wybierz sieć do sklonowania</li>
+            <li>Przygotuj Evil Portal HTML (np. klon prawdziwej strony logowania)</li>
+            <li>WiFi → General → Select EP HTML File - załaduj HTML</li>
+            <li>Opcjonalnie: WiFi → Attacks → Deauth Flood na prawdziwy AP (aby zmusić do reconnect)</li>
+            <li>WiFi → Attacks → Evil Portal - uruchom sklonowany AP</li>
+            <li>Klienci mogą połączyć się z fałszywym AP</li>
+            <li>Monitor wprowadzonych danych</li>
+        </ol>
+        <div class="legal-warning">
+            <strong>Uwaga:</strong> To zaawansowany atak, wymaga dokładnego planowania i BEZWZGLĘDNIE autoryzacji!
+        </div>
+        
+        <h3>8. Network Reconnaissance (Po połączeniu do sieci)</h3>
+        <p><strong>Cel:</strong> Rozpoznanie wewnętrznej sieci po uzyskaniu dostępu.</p>
+        <p><strong>Kroki:</strong></p>
+        <ol>
+            <li>WiFi → General → Join WiFi - połącz się z siecią</li>
+            <li>WiFi → Sniffers → Ping Scan - znajdź aktywne hosty</li>
+            <li>WiFi → Scanners → ARP Scan - identyfikacja MAC vendors</li>
+            <li>WiFi → Scanners → Port Scan All - identyfikacja usług</li>
+            <li>WiFi → Scanners → SSH Scan - znajdź serwery SSH</li>
+            <li>Dokumentuj wyniki dla raportu</li>
+        </ol>
+        <p><strong>Narzędzia uzupełniające (na komputerze):</strong></p>
+        <ul>
+            <li>Nmap dla szczegółowego skanowania</li>
+            <li>Metasploit dla exploitów</li>
+            <li>Burp Suite dla aplikacji webowych</li>
+        </ul>
+        
+        <div class="section-divider"></div>
+        
+        <h2 id="troubleshooting">Troubleshooting (Rozwiązywanie Problemów)</h2>
+        
+        <h3>Problem: Nie wykrywa sieci WiFi</h3>
+        <p><strong>Objawy:</strong> Scan APs nie znajduje żadnych sieci</p>
+        <p><strong>Rozwiązania:</strong></p>
+        <ol>
+            <li>Sprawdź czy antenna jest podłączona (jeśli zewnętrzna)</li>
+            <li>Wykonaj restart: Reboot</li>
+            <li>Zmień kanał: WiFi → Settings lub CLI: <code>channel -s 6</code></li>
+            <li>Sprawdź czy WiFi nie jest wyłączone</li>
+            <li>Wykonaj stopscan i spróbuj ponownie</li>
+            <li>Sprawdź czy ESP32 działa prawidłowo: Device → Device Info</li>
+            <li>Jeśli masz zewnętrzną antenę: sprawdź połączenie U.FL/SMA</li>
+        </ol>
+        
+        <h3>Problem: GPS nie działa / brak fixu</h3>
+        <p><strong>Objawy:</strong> "No GPS fix", "0 satellites"</p>
+        <p><strong>Rozwiązania:</strong></p>
+        <ol>
+            <li><strong>Podstawowe:</strong>
+                <ul>
+                    <li>Wyjdź na zewnątrz (GPS nie działa w budynkach)</li>
+                    <li>Sprawdź czy moduł GPS jest podłączony</li>
+                    <li>Poczekaj 2-5 minut na cold start</li>
+                </ul>
+            </li>
+            <li><strong>Połączenia:</strong> Sprawdź pinning:
+                <ul>
+                    <li>GPS TX → ESP32 RX</li>
+                    <li>GPS RX → ESP32 TX</li>
+                    <li>VCC → 3.3V lub 5V (sprawdź specyfikację GPS)</li>
+                    <li>GND → GND</li>
+                </ul>
+            </li>
+            <li><strong>Ustawienia:</strong>
+                <ul>
+                    <li>Device → Settings → GPS Settings</li>
+                    <li>Sprawdź baudrate (zazwyczaj 9600 lub 115200)</li>
+                    <li>Sprawdź pin assignment</li>
+                </ul>
+            </li>
+            <li><strong>Diagnostyka:</strong>
+                <ul>
+                    <li>GPS → NMEA Stream - powinny pojawić się dane NMEA</li>
+                    <li>Jeśli brak danych: problem z połączeniem</li>
+                    <li>Jeśli dane pojawiają się ale brak fixu: problem z widocznością satelitów</li>
+                </ul>
+            </li>
+        </ol>
+        
+        <h3>Problem: Karta SD nie jest rozpoznawana</h3>
+        <p><strong>Objawy:</strong> "SD Card not found", nie można zapisać danych</p>
+        <p><strong>Rozwiązania:</strong></p>
+        <ol>
+            <li><strong>Formatowanie:</strong>
+                <ul>
+                    <li>Formatuj jako FAT32 (nie exFAT, nie NTFS)</li>
+                    <li>Użyj narzędzia SD Card Formatter (oficjalne)</li>
+                </ul>
+            </li>
+            <li><strong>Kompatybilność:</strong>
+                <ul>
+                    <li>Użyj karty SDHC (do 32GB)</li>
+                    <li>Unikaj SDXC (>32GB) - często problemy</li>
+                    <li>Klasa 10 lub UHS-1 zalecana</li>
+                </ul>
+            </li>
+            <li><strong>Fizyczne:</strong>
+                <ul>
+                    <li>Sprawdź czy karta jest całkowicie włożona</li>
+                    <li>Sprawdź złącze SD na płytce</li>
+                    <li>Wyczyść kontakty karty (miękka ściereczka)</li>
+                </ul>
+            </li>
+            <li><strong>Software:</strong>
+                <ul>
+                    <li>Device → Settings → SD Settings - włącz autodetekcję</li>
+                    <li>Restart urządzenia</li>
+                    <li>Spróbuj innej karty SD</li>
+                </ul>
+            </li>
+        </ol>
+        
+        <h3>Problem: Ekran nie reaguje na dotyk</h3>
+        <p><strong>Objawy:</strong> Touch nie działa, muszę używać przycisków</p>
+        <p><strong>Rozwiązania:</strong></p>
+        <ol>
+            <li>Device → Settings → Touch Settings - sprawdź czy nie jest wyłączony</li>
+            <li>Restart urządzenia</li>
+            <li>Kalibracja dotyku (jeśli dostępna w ustawieniach)</li>
+            <li>Sprawdź czy ekran nie jest brudny/mokry</li>
+            <li>Jeśli problem utrzymuje się: używaj joystick/przyciski</li>
+            <li>Może być problem hardware - kontakt ze wsparciem</li>
+        </ol>
+        
+        <h3>Problem: Słaby zasięg WiFi</h3>
+        <p><strong>Objawy:</strong> Nie wykrywa słabszych sieci, krótki zasięg ataków</p>
+        <p><strong>Rozwiązania:</strong></p>
+        <ol>
+            <li><strong>Antenna:</strong>
+                <ul>
+                    <li>Zainstaluj zewnętrzną antenę (5dBi, 9dBi)</li>
+                    <li>Sprawdź czy antenna jest odpowiednia dla 2.4GHz</li>
+                    <li>U.FL connector często się luzuje - sprawdź połączenie</li>
+                </ul>
+            </li>
+            <li><strong>Moc TX:</strong>
+                <ul>
+                    <li>Device → Settings → WiFi Settings → TX Power</li>
+                    <li>Ustaw max (zazwyczaj 20dBm)</li>
+                    <li>Uwaga: Wyższa moc = krótszy czas baterii</li>
+                </ul>
+            </li>
+            <li><strong>Pozycja:</strong>
+                <ul>
+                    <li>Trzymaj urządzenie pionowo (antenna pattern)</li>
+                    <li>Unikaj metalowych powierzchni w pobliżu</li>
+                </ul>
+            </li>
+            <li><strong>Firmware:</strong>
+                <ul>
+                    <li>Upewnij się że masz najnowszą wersję</li>
+                    <li>Starsze wersje mogły mieć problemy z mocą TX</li>
+                </ul>
+            </li>
+        </ol>
+        
+        <h3>Problem: Firmware update się nie udaje</h3>
+        <p><strong>Objawy:</strong> Update fails, urządzenie się resetuje podczas update</p>
+        <p><strong>Rozwiązania:</strong></p>
+        <ol>
+            <li><strong>Web Update:</strong>
+                <ul>
+                    <li>Sprawdź połączenie internetowe (join)</li>
+                    <li>Spróbuj na innej sieci WiFi</li>
+                    <li>Firewall może blokować - użyj hotspot telefonu</li>
+                </ul>
+            </li>
+            <li><strong>SD Update:</strong>
+                <ul>
+                    <li>Sprawdź czy plik .bin jest prawidłowy (pobierz ponownie)</li>
+                    <li>Plik musi być w głównym katalogu lub /updates/</li>
+                    <li>Nazwa pliku bez polskich znaków/spacji</li>
+                </ul>
+            </li>
+            <li><strong>Bateria:</strong>
+                <ul>
+                    <li>Upewnij się że bateria >50% lub podłącz zasilanie</li>
+                    <li>Update wymaga stabilnego zasilania</li>
+                </ul>
+            </li>
+            <li><strong>USB Update (awaryjny):</strong>
+                <ul>
+                    <li>Pobierz ESP Flash Download Tool</li>
+                    <li>Połącz przez USB</li>
+                    <li>Ręczne flashowanie firmware .bin</li>
+                    <li>Instrukcje na GitHub wiki</li>
+                </ul>
+            </li>
+        </ol>
+        
+        <h3>Problem: Deauth attack nie działa</h3>
+        <p><strong>Objawy:</strong> Klienci nie są rozłączani</p>
+        <p><strong>Rozwiązania:</strong></p>
+        <ol>
+            <li><strong>802.11w (PMF):</strong>
+                <ul>
+                    <li>Nowoczesne sieci używają Protected Management Frames</li>
+                    <li>Deauth nie działa przeciwko PMF</li>
+                    <li>Rozpoznanie: Sprawdź encryption w scan (RSN with PMF)</li>
+                </ul>
+            </li>
+            <li><strong>Zasięg:</strong>
+                <ul>
+                    <li>Muszisz być wystarczająco blisko AP i klientów</li>
+                    <li>Sprawdź RSSI w skanowaniu</li>
+                </ul>
+            </li>
+            <li><strong>Kanał:</strong>
+                <ul>
+                    <li>Upewnij się że jesteś na właściwym kanale</li>
+                    <li><code>channel -s [numer]</code></li>
+                </ul>
+            </li>
+            <li><strong>Selekcja:</strong>
+                <ul>
+                    <li>Sprawdź czy wybrałeś właściwy AP/klientów</li>
+                    <li><code>list -a</code> i <code>list -c</code> aby zweryfikować</li>
+                </ul>
+            </li>
+        </ol>
+        
+        <h3>Problem: Evil Portal nie przekierowuje klientów</h3>
+        <p><strong>Objawy:</strong> Klienci łączą się ale nie widzą portalu</p>
+        <p><strong>Rozwiązania:</strong></p>
+        <ol>
+            <li><strong>Plik HTML:</strong>
+                <ul>
+                    <li>Sprawdź czy index.html istnieje na SD</li>
+                    <li>Sprawdź czy wybrałeś plik: Select EP HTML File</li>
+                    <li>Test pliku w przeglądarce (otwórz lokalnie)</li>
+                </ul>
+            </li>
+            <li><strong>DNS:</strong>
+                <ul>
+                    <li>Evil Portal używa DNS spoofing</li>
+                    <li>Niektóre urządzenia używają hardcoded DNS (8.8.8.8)</li>
+                    <li>Android/iOS czasami wymaga specjalnych nagłówków</li>
+                </ul>
+            </li>
+            <li><strong>SSID:</strong>
+                <ul>
+                    <li>Użyj wiarygodnej nazwy sieci</li>
+                    <li>Sieć powinna być otwarta (no password) dla najlepszych wyników</li>
+                </ul>
+            </li>
+            <li><strong>Monitor:</strong>
+                <ul>
+                    <li>Sprawdź serial output aby zobaczyć requesty</li>
+                    <li>DEBUG mode jeśli dostępny</li>
+                </ul>
+            </li>
+        </ol>
+        
+        <h3>Problem: Urządzenie się zawiesza/resetuje</h3>
+        <p><strong>Objawy:</strong> Losowe restarty, zawieszenia</p>
+        <p><strong>Rozwiązania:</strong></p>
+        <ol>
+            <li><strong>Zasilanie:</strong>
+                <ul>
+                    <li>Słaba bateria/power bank</li>
+                    <li>Użyj jakości zasilania 5V 2A min</li>
+                </ul>
+            </li>
+            <li><strong>Przegrzanie:</strong>
+                <ul>
+                    <li>ESP32 może się przegrzewać podczas intensywnych operacji</li>
+                    <li>Daj urządzeniu ochłonąć</li>
+                    <li>Rozważ radiator lub wentylację</li>
+                </ul>
+            </li>
+            <li><strong>Firmware:</strong>
+                <ul>
+                    <li>Bug w firmware - sprawdź GitHub issues</li>
+                    <li>Downgrade do stabilnej wersji</li>
+                    <li>Zgłoś problem z logami</li>
+                </ul>
+            </li>
+            <li><strong>SD Karta:</strong>
+                <ul>
+                    <li>Problematyczna karta SD może powodować crashes</li>
+                    <li>Usuń kartę i test bez niej</li>
+                </ul>
+            </li>
+            <li><strong>Factory Reset:</strong>
+                <ul>
+                    <li>Ostateczność: kompletne przeprogramowanie ESP32</li>
+                </ul>
+            </li>
+        </ol>
+        
+        <h3>Problem: BadUSB nie działa</h3>
+        <p><strong>Objawy:</strong> Komputer nie rozpoznaje jako klawiatura</p>
+        <p><strong>Rozwiązania:</strong></p>
+        <ol>
+            <li><strong>Hardware:</strong>
+                <ul>
+                    <li>Nie wszystkie wersje Marauder mają BadUSB</li>
+                    <li>Sprawdź specyfikację swojego modelu</li>
+                </ul>
+            </li>
+            <li><strong>USB Data:</strong>
+                <ul>
+                    <li>Używasz kabla DATA USB (nie tylko power)</li>
+                    <li>Niektóre cable są tylko do ładowania</li>
+                </ul>
+            </li>
+            <li><strong>Skrypt:</strong>
+                <ul>
+                    <li>Sprawdź składnię skryptu</li>
+                    <li>Test z prostym skryptem najpierw</li>
+                </ul>
+            </li>
+            <li><strong>System:</strong>
+                <ul>
+                    <li>Windows może wymagać instalacji sterowników</li>
+                    <li>Linux/Mac zazwyczaj działa od razu</li>
+                </ul>
+            </li>
+        </ol>
+        
+        <div class="section-divider"></div>
+        
+        <h2 id="faq">Często Zadawane Pytania (FAQ)</h2>
+        
+        <h3>Ogólne</h3>
+        <p><strong>Q: Co to jest ESP32 Marauder?</strong></p>
+        <p>A: ESP32 Marauder to przenośne narzędzie do testowania bezpieczeństwa sieci WiFi i Bluetooth, zbudowane na platformie ESP32. Oferuje funkcje sniffing, analizy i testowania penetracyjnego.</p>
+        
+        <p><strong>Q: Czy ESP32 Marauder jest legalny?</strong></p>
+        <p>A: Samo urządzenie jest legalne, ale użycie większości jego funkcji bez zgody właściciela sieci jest nielegalne. Używaj tylko do testowania własnych systemów lub z pisemną autoryzacją.</p>
+        
+        <p><strong>Q: Czy mogę używać Marauder na Flipper Zero?</strong></p>
+        <p>A: Tak, istnieje oficjalna kompilacja firmware dla Flipper Zero WiFi Dev Board i WiFi Devboard Pro.</p>
+        
+        <h3>Hardware</h3>
+        <p><strong>Q: Jakie wersje ESP32 Marauder istnieją?</strong></p>
+        <p>A: Główne wersje to:</p>
+        <ul>
+            <li>ESP32 Marauder Kit (DIY)</li>
+            <li>Marauder Mini</li>
+            <li>BFFB (Better Flipper Friendly Board)</li>
+            <li>Marauder Dev Board Pro</li>
+            <li>Custom builds na różnych płytkach ESP32</li>
+        </ul>
+        
+        <p><strong>Q: Czy bateria jest wbudowana?</strong></p>
+        <p>A: Zależy od wersji. Niektóre modele (BFFB, Kit) wymagają zewnętrznego power banku. Dev Board Pro ma wbudowaną baterię LiPo.</p>
+        
+        <p><strong>Q: Jak długo działa na baterii?</strong></p>
+        <p>A: 2-6 godzin w zależności od modelu, pojemności baterii i typu aktywności. Intensywne ataki i transmisje zużywają więcej energii.</p>
+        
+        <p><strong>Q: Czy mogę podłączyć zewnętrzną antenę?</strong></p>
+        <p>A: Tak, większość wersji ma złącze U.FL lub SMA. Zewnętrzna antena znacząco zwiększa zasięg (do 300m z dobrą anteną).</p>
+        
+        <p><strong>Q: Czy potrzebuję karty SD?</strong></p>
+        <p>A: Nie jest wymagana do podstawowych funkcji, ale zdecydowanie zalecana dla:</p>
+        <ul>
+            <li>Zapisywania PCAP</li>
+            <li>Evil Portal HTML</li>
+            <li>Wardrive</li>
+            <li>BadUSB scripts</li>
+            <li>Firmware updates (SD Update)</li>
+        </ul>
+        
+        <h3>WiFi</h3>
+        <p><strong>Q: Czy mogę łamać hasła WiFi za pomocą Marauder?</strong></p>
+        <p>A: Marauder może przechwycić handshake/PMKID, ale cracking hasła odbywa się offline na komputerze przy użyciu narzędzi jak hashcat lub aircrack-ng.</p>
+        
+        <p><strong>Q: Czy deauth attack działa na wszystkich sieciach?</strong></p>
+        <p>A: Nie. Nowoczesne sieci z 802.11w (PMF - Protected Management Frames) są odporne na ataki deauth. Starsze sieci (WPA2 bez PMF) są podatne.</p>
+        
+        <p><strong>Q: Jak daleko działa Marauder?</strong></p>
+        <p>A:</p>
+        <ul>
+            <li>Wbudowana antena: 10-50 metrów</li>
+            <li>Zewnętrzna antena (5-9dBi): 100-300 metrów</li>
+            <li>Zależy od otoczenia, przeszkód i mocy TX</li>
+        </ul>
+        
+        <p><strong>Q: Czy Marauder działa z 5GHz WiFi?</strong></p>
+        <p>A: Nie. ESP32 obsługuje tylko 2.4GHz (802.11 b/g/n). Nie ma obsługi 5GHz ani WiFi 6.</p>
+        
+        <p><strong>Q: Czy Evil Portal wymaga internetu?</strong></p>
+        <p>A: Nie. Evil Portal tworzy lokalny captive portal. Klienci są przekierowywani na urządzenie Marauder, które serwuje HTML lokalnie.</p>
+        
+        <h3>Bluetooth</h3>
+        <p><strong>Q: Co to jest BLE spam?</strong></p>
+        <p>A: Wysyłanie fałszywych advertisementów Bluetooth Low Energy, które powodują powiadomienia o parowaniu na urządzeniach (iOS, Android, Windows).</p>
+        
+        <p><strong>Q: Czy mogę wykryć AirTagi śledzące mnie?</strong></p>
+        <p>A: Tak. Użyj Airtag Sniff lub Airtag Monitor aby wykryć AirTagi w pobliżu.</p>
+        
+        <p><strong>Q: Czy BT Spam All szkodzi urządzeniom?</strong></p>
+        <p>A: Nie powoduje trwałych szkód, ale może być irytujące. To demonstracja słabości protokołów pairing.</p>
+        
+        <h3>GPS</h3>
+        <p><strong>Q: Czy GPS działa w budynkach?</strong></p>
+        <p>A: Nie. GPS wymaga bezpośredniej widoczności satelitów. Musisz być na zewnątrz. Fix satelitarny może zająć 2-5 minut przy pierwszym użyciu.</p>
+        
+        <p><strong>Q: Jaki moduł GPS powinienem kupić?</strong></p>
+        <p>A: Popularne opcje:</p>
+        <ul>
+            <li>NEO-6M (tani, popularny)</li>
+            <li>NEO-7M (lepszy)</li>
+            <li>NEO-8M (najlepszy dla Marauder)</li>
+            <li>Beitian BN-220 (mały, wydajny)</li>
+        </ul>
+        
+        <h3>Software</h3>
+        <p><strong>Q: Jak zaktualizować firmware?</strong></p>
+        <p>A: Trzy metody:</p>
+        <ol>
+            <li>Web Update: WiFi → Join network → Device → Update → Web Update</li>
+            <li>SD Update: Pobierz .bin na SD → Device → Update → SD Update</li>
+            <li>USB Flash: ESP Flash Download Tool</li>
+        </ol>
+        
+        <p><strong>Q: Czy mogę używać Marauder bez ekranu?</strong></p>
+        <p>A: Tak. Marauder w pełni obsługuje CLI przez serial (115200 baud). Wszystkie funkcje dostępne przez komendy tekstowe.</p>
+        
+        <p><strong>Q: Gdzie są zapisywane pliki?</strong></p>
+        <p>A: Na karcie SD w odpowiednich katalogach:</p>
+        <ul>
+            <li>/logs/ - PCAP files, scan results</li>
+            <li>/evilportal/ - HTML files</li>
+            <li>/badusb/ - Ducky scripts</li>
+            <li>/wardrive/ - Wardrive CSV</li>
+        </ul>
+        
+        <p><strong>Q: Czy mogę dodać własne funkcje?</strong></p>
+        <p>A: Tak! Projekt jest open source. Możesz:</p>
+        <ul>
+            <li>Modyfikować kod źródłowy</li>
+            <li>Kompilować własne firmware</li>
+            <li>Dodawać custom funkcje</li>
+            <li>Kontrybutować na GitHub</li>
+        </ul>
+        
+        <h3>Troubleshooting</h3>
+        <p><strong>Q: Marauder się resetuje podczas użycia. Co robić?</strong></p>
+        <p>A: Najczęstsze przyczyny:</p>
+        <ul>
+            <li>Słabe zasilanie - użyj lepszego power banku</li>
+            <li>Przegrzanie - daj ochłonąć</li>
+            <li>Bug firmware - sprawdź GitHub issues</li>
+            <li>Problematyczna karta SD - usuń i test</li>
+        </ul>
+        
+        <p><strong>Q: Nie widzę żadnych sieci WiFi. Dlaczego?</strong></p>
+        <p>A:</p>
+        <ul>
+            <li>Sprawdź czy antenna jest podłączona</li>
+            <li>Restart urządzenia</li>
+            <li>Zmień kanał scanning</li>
+            <li>Sprawdź czy WiFi nie jest wyłączone</li>
+        </ul>
+        
+        <p><strong>Q: Evil Portal nie działa. Co jest nie tak?</strong></p>
+        <p>A: Sprawdź:</p>
+        <ul>
+            <li>Czy masz index.html na karcie SD?</li>
+            <li>Czy wybrałeś plik HTML przed uruchomieniem?</li>
+            <li>Czy SSID jest wiarygodne?</li>
+            <li>Serial output aby zobaczyć co się dzieje</li>
+        </ul>
+        
+        <h3>Bezpieczeństwo</h3>
+        <p><strong>Q: Czy używanie Marauder jest bezpieczne dla moich urządzeń?</strong></p>
+        <p>A: Tak, Marauder nie szkodzi twoim własnym urządzeniom. Jednak używanie go przeciwko cudzym systemom bez zgody jest nielegalne.</p>
+        
+        <p><strong>Q: Czy mogę iść do więzienia za używanie Marauder?</strong></p>
+        <p>A: Tak, jeśli użyjesz go nielegalnie. Nieuprawnione ataki na sieci mogą skutkować:</p>
+        <ul>
+            <li>Karami więzienia (do 5+ lat)</li>
+            <li>Wysokimi grzywnami</li>
+            <li>Wpisem do akt karnych</li>
+        </ul>
+        
+        <p><strong>Q: Jak mogę legalnie używać Marauder?</strong></p>
+        <p>A:</p>
+        <ul>
+            <li>Testuj tylko własne sieci</li>
+            <li>Uzyskaj pisemną zgodę przed testami klientów</li>
+            <li>Używaj w kontrolowanych środowiskach edukacyjnych</li>
+            <li>Przestrzegaj lokalnych przepisów</li>
+        </ul>
+        
+        <div class="section-divider"></div>
+        
+        <h2 id="zasoby">Dodatkowe Zasoby</h2>
+        
+        <h3>Oficjalne źródła</h3>
+        <p><strong>Projekt ESP32 Marauder:</strong></p>
+        <ul>
+            <li>🌐 GitHub: https://github.com/justcallmekoko/ESP32Marauder</li>
+            <li>📚 Wiki: https://github.com/justcallmekoko/ESP32Marauder/wiki</li>
+            <li>💬 Discord: https://discord.gg/esp32marauder</li>
+            <li>🐦 Twitter: @jcmkoko</li>
+        </ul>
+        
+        <p><strong>Firmware i narzędzia:</strong></p>
+        <ul>
+            <li>📦 Releases: https://github.com/justcallmekoko/ESP32Marauder/releases</li>
+            <li>🌐 Web Flasher: https://esp32marauder.com</li>
+            <li>🔧 ESP Flash Tool: https://www.espressif.com/en/support/download/other-tools</li>
+        </ul>
+        
+        <h3>Społeczność</h3>
+        <p><strong>Fora i grupy:</strong></p>
+        <ul>
+            <li>💬 Reddit: r/esp32marauder</li>
+            <li>📱 Telegram: ESP32 Marauder Community</li>
+            <li>🎮 Discord: Serwer oficjalny</li>
+        </ul>
+        
+        <p><strong>Video tutoriale:</strong></p>
+        <ul>
+            <li>🎥 YouTube: "ESP32 Marauder tutorials"</li>
+            <li>📺 Kanały:
+                <ul>
+                    <li>NetworkChuck</li>
+                    <li>David Bombal</li>
+                    <li>Seytonic</li>
+                    <li>Talking Sasquach</li>
+                </ul>
+            </li>
+        </ul>
+        
+        <h3>Dodatkowe narzędzia</h3>
+        <p><strong>Evil Portal templates:</strong></p>
+        <ul>
+            <li>https://github.com/bigbrodude6119/flipper-zero-evil-portal</li>
+            <li>https://github.com/RogueMaster/awesome-flipperzero-withModules</li>
+        </ul>
+        
+        <p><strong>WiFi cracking:</strong></p>
+        <ul>
+            <li>Hashcat: https://hashcat.net/hashcat</li>
+            <li>Aircrack-ng: https://www.aircrack-ng.org</li>
+            <li>Wireshark: https://www.wireshark.org</li>
+        </ul>
+        
+        <p><strong>Wardrive:</strong></p>
+        <ul>
+            <li>WiGLE: https://wigle.net</li>
+            <li>Kismet: https://www.kismetwireless.net</li>
+        </ul>
+        
+        <h3>Dokumentacja techniczna</h3>
+        <p><strong>ESP32:</strong></p>
+        <ul>
+            <li>ESP32 Technical Reference: https://www.espressif.com/en/support/documents/technical-documents</li>
+            <li>ESP-IDF Documentation: https://docs.espressif.com/projects/esp-idf/en/latest/</li>
+        </ul>
+        
+        <p><strong>WiFi Security:</strong></p>
+        <ul>
+            <li>802.11 Standards: https://standards.ieee.org/</li>
+            <li>WiFi Alliance: https://www.wi-fi.org/</li>
+        </ul>
+        
+        <p><strong>Bluetooth:</strong></p>
+        <ul>
+            <li>Bluetooth SIG: https://www.bluetooth.com/</li>
+            <li>BLE Security: https://www.bluetooth.com/learn-about-bluetooth/key-attributes/bluetooth-security/</li>
+        </ul>
+        
+        <h3>Kursy i certyfikacje</h3>
+        <p><strong>Pentesting WiFi:</strong></p>
+        <ul>
+            <li>Offensive Security Wireless Professional (OSWP)</li>
+            <li>WiFi Security Megaprimer (SecurityTube)</li>
+            <li>Practical Ethical Hacking (TCM Security)</li>
+        </ul>
+        
+        <p><strong>General Security:</strong></p>
+        <ul>
+            <li>CEH (Certified Ethical Hacker)</li>
+            <li>OSCP (Offensive Security Certified Professional)</li>
+            <li>CompTIA Security+</li>
+        </ul>
+        
+        <div class="section-divider"></div>
+        
+        <h2 id="changelog">Changelog i Historia Wersji</h2>
+        
+        <h3>Najważniejsze wersje</h3>
+        <p><strong>v0.13.x (Aktualna stabilna)</strong></p>
+        <ul>
+            <li>Pełna obsługa Evil Portal</li>
+            <li>Rozbudowane BLE attacks</li>
+            <li>Improved wardrive</li>
+            <li>Better hardware support</li>
+            <li>Bugfixes</li>
+        </ul>
+        
+        <p><strong>v0.10.x</strong></p>
+        <ul>
+            <li>Dodano BadUSB</li>
+            <li>GPS wardrive</li>
+            <li>Bluetooth sniffers</li>
+            <li>Channel analyzer improvements</li>
+        </ul>
+        
+        <p><strong>v0.5.x</strong></p>
+        <ul>
+            <li>Evil Portal beta</li>
+            <li>Karma attack</li>
+            <li>BLE spam funkcje</li>
+            <li>SD card support</li>
+        </ul>
+        
+        <p><strong>v0.1.x (Początek)</strong></p>
+        <ul>
+            <li>Podstawowe skanowanie WiFi</li>
+            <li>Deauth attacks</li>
+            <li>Beacon spam</li>
+        </ul>
+        
+        <p><strong>Planowane funkcje (v1.0.0+)</strong></p>
+        <ul>
+            <li>🔮 Improved PMKID capture</li>
+            <li>🔮 WPA3 testing capabilities</li>
+            <li>🔮 Enhanced GPS tracking</li>
+            <li>🔮 More BLE attack vectors</li>
+            <li>🔮 Web interface improvements</li>
+            <li>🔮 Custom plugin support</li>
+        </ul>
+        <p>Sprawdź najnowsze zmiany: https://github.com/justcallmekoko/ESP32Marauder/releases</p>
+        
+        <div class="section-divider"></div>
+        
+        <h2 id="glossary">Glossary (Słowniczek)</h2>
+        
+        <h3>Terminy WiFi</h3>
+        <ul>
+            <li><strong>AP (Access Point)</strong> - Punkt dostępowy WiFi (router)</li>
+            <li><strong>SSID (Service Set Identifier)</strong> - Nazwa sieci WiFi</li>
+            <li><strong>BSSID (Basic Service Set Identifier)</strong> - MAC address punktu dostępowego</li>
+            <li><strong>Beacon Frame</strong> - Pakiet rozgłoszeniowy wysyłany przez AP</li>
+            <li><strong>Probe Request</strong> - Żądanie urządzenia szukającego sieci</li>
+            <li><strong>Deauth (Deauthentication)</strong> - Pakiet rozłączający klienta od AP</li>
+            <li><strong>Handshake</strong> - Wymiana kluczy przy łączeniu z WPA/WPA2</li>
+            <li><strong>PMKID</strong> - Pairwise Master Key Identifier używany w WPA2</li>
+            <li><strong>EAPOL</strong> - Extensible Authentication Protocol over LAN</li>
+            <li><strong>PMF (Protected Management Frames)</strong> - 802.11w - ochrona przed deauth</li>
+            <li><strong>Wardrive</strong> - Zbieranie danych o sieciach WiFi z GPS</li>
+            <li><strong>Evil Twin</strong> - Fałszywy AP podszywający się pod prawdziwy</li>
+            <li><strong>Captive Portal</strong> - Strona logowania przy łączeniu z WiFi</li>
+            <li><strong>Karma Attack</strong> - Odpowiadanie na wszystkie probe requests</li>
+            <li><strong>PCAP</strong> - Packet Capture - format pliku z pakietami</li>
+        </ul>
+        
+        <h3>Terminy Bluetooth</h3>
+        <ul>
+            <li><strong>BLE (Bluetooth Low Energy)</strong> - Bluetooth o niskim zużyciu energii</li>
+            <li><strong>GATT</strong> - Generic Attribute Profile</li>
+            <li><strong>Advertisement</strong> - Rozgłaszanie obecności urządzenia BLE</li>
+            <li><strong>MAC Address</strong> - Media Access Control - unikalny adres urządzenia</li>
+            <li><strong>RSSI</strong> - Received Signal Strength Indicator - siła sygnału</li>
+            <li><strong>Pairing</strong> - Parowanie urządzeń Bluetooth</li>
+            <li><strong>UUID</strong> - Universally Unique Identifier</li>
+            <li><strong>Vendor</strong> - Producent urządzenia (identyfikowany po MAC)</li>
+            <li><strong>Skimmer</strong> - Nielegalne urządzenie przechwytujące dane kart</li>
+            <li><strong>AirTag</strong> - Tracker firmy Apple używający BLE</li>
+        </ul>
+        
+        <h3>Terminy techniczne</h3>
+        <ul>
+            <li><strong>ESP32</strong> - Mikrokontroler z WiFi i Bluetooth</li>
+            <li><strong>Firmware</strong> - Oprogramowanie wbudowane w urządzenie</li>
+            <li><strong>OTA (Over The Air)</strong> - Aktualizacja przez WiFi</li>
+            <li><strong>Serial</strong> - Połączenie szeregowe (USB)</li>
+            <li><strong>CLI (Command Line Interface)</strong> - Interfejs wiersza poleceń</li>
+            <li><strong>GUI (Graphical User Interface)</strong> - Interfejs graficzny</li>
+            <li><strong>PCAP</strong> - Packet Capture format</li>
+            <li><strong>CSV</strong> - Comma-Separated Values - format danych</li>
+            <li><strong>GPX</strong> - GPS Exchange Format</li>
+            <li><strong>KML</strong> - Keyhole Markup Language (Google Earth)</li>
+            <li><strong>BadUSB</strong> - Atak emulujący klawiaturę przez USB</li>
+            <li><strong>Ducky Script</strong> - Język skryptowy dla BadUSB</li>
+            <li><strong>Power Bank</strong> - Przenośna bateria</li>
+            <li><strong>Antenna</strong> - U.FL/SMA - typy złączy antenowych</li>
+        </ul>
+        
+        <div class="section-divider"></div>
+        
+        <h2 id="wsparcie">Wsparcie i Pomoc</h2>
+        
+        <h3>Potrzebujesz pomocy?</h3>
+        <ol>
+            <li><strong>Przeczytaj dokumentację</strong>
+                <ul>
+                    <li>Ta instrukcja</li>
+                    <li>GitHub Wiki</li>
+                    <li>FAQ section</li>
+                </ul>
+            </li>
+            <li><strong>Sprawdź GitHub Issues</strong>
+                <ul>
+                    <li>Szukaj podobnych problemów</li>
+                    <li>https://github.com/justcallmekoko/ESP32Marauder/issues</li>
+                </ul>
+            </li>
+            <li><strong>Społeczność</strong>
+                <ul>
+                    <li>Discord server</li>
+                    <li>Reddit r/esp32marauder</li>
+                    <li>Telegram group</li>
+                </ul>
+            </li>
+            <li><strong>Zgłoś bug</strong>
+                <ul>
+                    <li>GitHub Issues (preferowane)</li>
+                    <li>Dołącz logi serial</li>
+                    <li>Opisz dokładnie problem</li>
+                    <li>Podaj wersję firmware</li>
+                </ul>
+            </li>
+            <li><strong>Prośby o nowe funkcje</strong>
+                <ul>
+                    <li>GitHub Feature Requests</li>
+                    <li>Opisz przypadek użycia</li>
+                    <li>Uzasadnij potrzebę</li>
+                </ul>
+            </li>
+        </ol>
+        
+        <div class="warning">
+            <strong>Nie zgłaszaj:</strong>
+            <ul>
+                <li>❌ Próśb o pomoc w nielegalnych działaniach</li>
+                <li>❌ Pytań "jak zhackować sąsiada"</li>
+                <li>❌ Próśb o gotowe exploity</li>
+                <li>❌ Ogólnych pytań o hacking bez kontekstu edukacyjnego</li>
+            </ul>
+        </div>
+        
+        <div class="section-divider"></div>
+        
+        <h2>Podziękowania</h2>
+        
+        <h3>Autor</h3>
+        <p>JustCallMeKoko - Główny twórca i maintainer projektu ESP32 Marauder</p>
+        
+        <h3>Kontrybutorzy</h3>
+        <p>Dziękujemy wszystkim, którzy przyczynili się do rozwoju projektu:</p>
+        <ul>
+            <li>Developers na GitHub</li>
+            <li>Beta testers</li>
+            <li>Community moderators</li>
+            <li>Documentation contributors</li>
+            <li>Hardware designers</li>
+        </ul>
+        
+        <h3>Inspiracje i podobne projekty</h3>
+        <ul>
+            <li>Pwnagotchi - AI-powered WiFi cracking</li>
+            <li>WiFi Pineapple - Pentest platform</li>
+            <li>HackRF - SDR platform</li>
+            <li>Flipper Zero - Multi-tool for pentesters</li>
+            <li>ESP8266 Deauther - Poprzednik na ESP8266</li>
+        </ul>
+        
+        <h3>Społeczność</h3>
+        <p>Ogromne podziękowania dla społeczności ESP32 Marauder za:</p>
+        <ul>
+            <li>Wsparcie techniczne</li>
+            <li>Testowanie firmware</li>
+            <li>Zgłaszanie bugów</li>
+            <li>Tworzenie tutoriali</li>
+            <li>Dzielenie się wiedzą</li>
+        </ul>
+        
+        <div class="section-divider"></div>
+        
+        <footer style="margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(0, 255, 136, 0.2); text-align: center; color: #888;">
+            <p><strong>ESP32 Marauder - Pełna Instrukcja Obsługi</strong></p>
+            <p>📡 Happy Ethical Hacking! 📡</p>
+            <p style="margin-top: 15px; font-size: 0.9em;">Pamiętaj: Z wielką mocą przychodzi wielka odpowiedzialność. Używaj mądrze, etycznie i legalnie.</p>
+            <p style="margin-top: 10px; font-size: 0.8em;">Wersja dokumentu: 1.0 | Data: Grudzień 2024</p>
+        </footer>
     </div>
-
-    <footer class="footer">
-        <p>📡 ESP32 Marauder Documentation by MarauTech</p>
-        <p>Projekt open-source by <strong>JustCallMeKoko</strong></p>
-        <p style="margin-top: 1rem; font-size: 0.9rem;">
-            <a href="https://github.com/justcallmekoko/ESP32Marauder" style="color: var(--accent-yellow); text-decoration: none;">GitHub</a> • 
-            <a href="https://discord.gg/HkevXzkv3J" style="color: var(--accent-yellow); text-decoration: none;">Discord</a> • 
-                   </p>
-        <p style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.85rem;">
-            ⚠️ Używaj odpowiedzialnie i etycznie • Dokumentacja v1.0 • Grudzień 2024
-        </p>
-    </footer>
-
+    
     <script>
-        const navLinks = document.querySelectorAll('.nav-link');
-        const sections = document.querySelectorAll('.content-section');
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const sectionId = link.getAttribute('data-section');
-                showSection(sectionId);
-                
-                if (window.innerWidth <= 768) {
-                    toggleMenu();
-                }
-            });
-        });
-
-        function showSection(sectionId) {
-            sections.forEach(section => section.classList.remove('active'));
-            navLinks.forEach(link => link.classList.remove('active'));
-            
-            const targetSection = document.getElementById(sectionId);
-            const targetLink = document.querySelector(`[data-section="${sectionId}"]`);
-            
-            if (targetSection) {
-                targetSection.classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-            
-            if (targetLink) {
-                targetLink.classList.add('active');
-            }
-        }
-
-        function toggleMenu() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        
+        function toggleSidebar() {
             sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
+            sidebarOverlay.classList.toggle('active');
         }
-
-        const searchInput = document.getElementById('searchInput');
-        let searchTimeout;
-
-        searchInput.addEventListener('input', (e) => {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                performSearch(e.target.value);
-            }, 300);
-        });
-
-        function performSearch(query) {
-            if (query.length < 2) {
-                sections.forEach(section => {
-                    section.style.display = '';
-                });
-                return;
-            }
-
-            const lowerQuery = query.toLowerCase();
-            let foundAny = false;
-
-            sections.forEach(section => {
-                const text = section.textContent.toLowerCase();
-                if (text.includes(lowerQuery)) {
-                    section.style.display = '';
-                    foundAny = true;
-                    
-                    if (!section.classList.contains('active')) {
-                        showSection(section.id);
-                    }
-                } else {
-                    if (section.classList.contains('active') && !foundAny) {
-                        section.style.display = '';
-                    }
-                }
-            });
-        }
-
-        document.querySelectorAll('.quick-card').forEach(card => {
-            card.style.cursor = 'pointer';
-        });
-
+        
+        menuToggle.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
+        
         document.addEventListener('click', (e) => {
-            const sidebar = document.getElementById('sidebar');
-            const menuToggle = document.querySelector('.menu-toggle');
-            
             if (sidebar.classList.contains('active') && 
                 !sidebar.contains(e.target) && 
                 !menuToggle.contains(e.target)) {
-                toggleMenu();
+                toggleSidebar();
             }
         });
-
+        
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+        
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        if (currentTheme === 'light') {
+            body.classList.add('light-mode');
+            darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        } else {
+            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+        
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            const theme = body.classList.contains('light-mode') ? 'light' : 'dark';
+            localStorage.setItem('theme', theme);
+            darkModeToggle.innerHTML = theme === 'dark' 
+                ? '<i class="fas fa-sun"></i>' 
+                : '<i class="fas fa-moon"></i>';
+        });
+        
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        const readingProgress = document.getElementById('readingProgress');
+        function updateReadingProgress() {
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight - windowHeight;
+            const scrolled = window.pageYOffset;
+            const progress = (scrolled / documentHeight) * 100;
+            readingProgress.style.width = progress + '%';
+        }
+        
+        window.addEventListener('scroll', updateReadingProgress);
+        window.addEventListener('resize', updateReadingProgress);
+        
+        function generateTOC() {
+            const tocList = document.getElementById('toc-list');
+            const headings = document.querySelectorAll('h2[id]');
+            
+            headings.forEach(heading => {
+                const li = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = `#${heading.id}`;
+                link.textContent = heading.textContent.replace(/^\d+\.\s*/, '');
+                li.appendChild(link);
+                tocList.appendChild(li);
+            });
+        }
+        
+        generateTOC();
+        
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    const offset = 80;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                    if (sidebar.classList.contains('active')) {
+                        toggleSidebar();
+                    }
                 }
             });
         });
-
-        document.querySelectorAll('pre code').forEach(block => {
-            const button = document.createElement('button');
-            button.textContent = '📋 Kopiuj';
-            button.style.cssText = `
-                position: absolute;
-                top: 0.5rem;
-                right: 0.5rem;
-                padding: 0.25rem 0.75rem;
-                background: var(--accent-yellow);
-                color: var(--bg-primary);
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 0.85rem;
-                opacity: 0;
-                transition: opacity 0.3s;
-            `;
+        
+        const searchBox = document.getElementById('searchBox');
+        let searchTimeout;
+        
+        function performSearch(term) {
+            removeHighlights();
             
-            const pre = block.parentElement;
-            pre.style.position = 'relative';
-            pre.appendChild(button);
+            if (!term) return;
             
-            pre.addEventListener('mouseenter', () => button.style.opacity = '1');
-            pre.addEventListener('mouseleave', () => button.style.opacity = '0');
+            const container = document.querySelector('.container');
+            const regex = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            const walker = document.createTreeWalker(
+                container,
+                NodeFilter.SHOW_TEXT,
+                {
+                    acceptNode: function(node) {
+                        const parent = node.parentElement;
+                        if (parent && (
+                            parent.tagName === 'SCRIPT' || 
+                            parent.tagName === 'STYLE' ||
+                            parent.classList.contains('search-highlight') ||
+                            parent.closest('.code-block')
+                        )) {
+                            return NodeFilter.FILTER_REJECT;
+                        }
+                        return NodeFilter.FILTER_ACCEPT;
+                    }
+                },
+                false
+            );
             
-            button.addEventListener('click', () => {
-                navigator.clipboard.writeText(block.textContent);
-                button.textContent = '✅ Skopiowano!';
-                setTimeout(() => button.textContent = '📋 Kopiuj', 2000);
+            const textNodes = [];
+            let node;
+            while (node = walker.nextNode()) {
+                if (node.textContent.trim() && regex.test(node.textContent)) {
+                    textNodes.push(node);
+                }
+            }
+            
+            if (textNodes.length === 0) return;
+            
+            const firstMatch = textNodes[0];
+            firstMatch.parentElement.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
             });
+            
+            textNodes.forEach(textNode => {
+                const text = textNode.textContent;
+                const highlightedText = text.replace(regex, '<span class="search-highlight">$1</span>');
+                
+                if (highlightedText !== text) {
+                    const temp = document.createElement('div');
+                    temp.innerHTML = highlightedText;
+                    
+                    const fragment = document.createDocumentFragment();
+                    while (temp.firstChild) {
+                        fragment.appendChild(temp.firstChild);
+                    }
+                    
+                    textNode.parentNode.replaceChild(fragment, textNode);
+                }
+            });
+        }
+        
+        function removeHighlights() {
+            const highlights = document.querySelectorAll('.search-highlight');
+            highlights.forEach(highlight => {
+                const parent = highlight.parentNode;
+                if (parent) {
+                    parent.replaceChild(document.createTextNode(highlight.textContent), highlight);
+                    parent.normalize();
+                }
+            });
+        }
+        
+        searchBox.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            const searchTerm = e.target.value.toLowerCase().trim();
+            
+            if (searchTerm.length < 2) {
+                removeHighlights();
+                return;
+            }
+            
+            searchTimeout = setTimeout(() => {
+                performSearch(searchTerm);
+            }, 300);
         });
-
+        
         document.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
                 e.preventDefault();
-                searchInput.focus();
+                searchBox.focus();
             }
             
             if (e.key === 'Escape') {
-                const sidebar = document.getElementById('sidebar');
-                if (sidebar.classList.contains('active')) {
-                    toggleMenu();
-                }
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
             }
         });
-
+        
         const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+            rootMargin: '-20% 0px -70% 0px',
+            threshold: 0
         };
-
+        
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
+                    const id = entry.target.id;
+                    document.querySelectorAll('#toc-list a').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
                 }
             });
         }, observerOptions);
-
-        document.querySelectorAll('.feature-card, .quick-card').forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'opacity 0.5s, transform 0.5s';
-            observer.observe(card);
-        });
-
-        window.addEventListener('beforeprint', () => {
-            sections.forEach(section => {
-                section.classList.add('active');
-            });
-        });
-
-        window.addEventListener('afterprint', () => {
-            sections.forEach(section => {
-                if (section.id !== 'intro') {
-                    section.classList.remove('active');
-                }
-            });
-        });
-
-        let scrollPosition = 0;
-        window.addEventListener('scroll', () => {
-            scrollPosition = window.scrollY;
-        });
-
-        window.addEventListener('popstate', () => {
-            window.scrollTo(0, scrollPosition);
+        
+        document.querySelectorAll('h2[id]').forEach(heading => {
+            observer.observe(heading);
         });
     </script>
 </body>
 </html>
+
