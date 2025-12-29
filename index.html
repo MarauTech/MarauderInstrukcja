@@ -2267,9 +2267,6 @@ MAC,SSID,Channel,RSSI,Encryption,Latitude,Longitude,Altitude,Time
         <ol>
             <li>Sprawdź czy antenna jest podłączona (jeśli zewnętrzna)</li>
             <li>Wykonaj restart: Reboot</li>
-            <li>Zmień kanał: WiFi → Settings lub CLI: <code>channel -s 6</code></li>
-            <li>Sprawdź czy WiFi nie jest wyłączone</li>
-            <li>Wykonaj stopscan i spróbuj ponownie</li>
             <li>Sprawdź czy ESP32 działa prawidłowo: Device → Device Info</li>
             <li>Jeśli masz zewnętrzną antenę: sprawdź połączenie U.FL/SMA</li>
         </ol>
@@ -2296,17 +2293,9 @@ MAC,SSID,Channel,RSSI,Encryption,Latitude,Longitude,Altitude,Time
             <li><strong>Ustawienia:</strong>
                 <ul>
                     <li>Device → Settings → GPS Settings</li>
-                    <li>Sprawdź baudrate (zazwyczaj 9600 lub 115200)</li>
-                    <li>Sprawdź pin assignment</li>
                 </ul>
             </li>
-            <li><strong>Diagnostyka:</strong>
-                <ul>
-                    <li>GPS → NMEA Stream - powinny pojawić się dane NMEA</li>
-                    <li>Jeśli brak danych: problem z połączeniem</li>
-                    <li>Jeśli dane pojawiają się ale brak fixu: problem z widocznością satelitów</li>
-                </ul>
-            </li>
+            
         </ol>
         
         <h3>Problem: Karta SD nie jest rozpoznawana</h3>
@@ -2321,8 +2310,8 @@ MAC,SSID,Channel,RSSI,Encryption,Latitude,Longitude,Altitude,Time
             </li>
             <li><strong>Kompatybilność:</strong>
                 <ul>
-                    <li>Użyj karty SDHC (do 32GB)</li>
-                    <li>Unikaj SDXC (>32GB) - często problemy</li>
+                    <li>Użyj karty SDHC (do 16GB)</li>
+                    <li>Unikaj SDXC (>16GB) - często problemy</li>
                     <li>Klasa 10 lub UHS-1 zalecana</li>
                 </ul>
             </li>
@@ -2338,84 +2327,6 @@ MAC,SSID,Channel,RSSI,Encryption,Latitude,Longitude,Altitude,Time
                     <li>Device → Settings → SD Settings - włącz autodetekcję</li>
                     <li>Restart urządzenia</li>
                     <li>Spróbuj innej karty SD</li>
-                </ul>
-            </li>
-        </ol>
-        
-        <h3>Problem: Ekran nie reaguje na dotyk</h3>
-        <p><strong>Objawy:</strong> Touch nie działa, muszę używać przycisków</p>
-        <p><strong>Rozwiązania:</strong></p>
-        <ol>
-            <li>Device → Settings → Touch Settings - sprawdź czy nie jest wyłączony</li>
-            <li>Restart urządzenia</li>
-            <li>Kalibracja dotyku (jeśli dostępna w ustawieniach)</li>
-            <li>Sprawdź czy ekran nie jest brudny/mokry</li>
-            <li>Jeśli problem utrzymuje się: używaj joystick/przyciski</li>
-            <li>Może być problem hardware - kontakt ze wsparciem</li>
-        </ol>
-        
-        <h3>Problem: Słaby zasięg WiFi</h3>
-        <p><strong>Objawy:</strong> Nie wykrywa słabszych sieci, krótki zasięg ataków</p>
-        <p><strong>Rozwiązania:</strong></p>
-        <ol>
-            <li><strong>Antenna:</strong>
-                <ul>
-                    <li>Zainstaluj zewnętrzną antenę (5dBi, 9dBi)</li>
-                    <li>Sprawdź czy antenna jest odpowiednia dla 2.4GHz</li>
-                    <li>U.FL connector często się luzuje - sprawdź połączenie</li>
-                </ul>
-            </li>
-            <li><strong>Moc TX:</strong>
-                <ul>
-                    <li>Device → Settings → WiFi Settings → TX Power</li>
-                    <li>Ustaw max (zazwyczaj 20dBm)</li>
-                    <li>Uwaga: Wyższa moc = krótszy czas baterii</li>
-                </ul>
-            </li>
-            <li><strong>Pozycja:</strong>
-                <ul>
-                    <li>Trzymaj urządzenie pionowo (antenna pattern)</li>
-                    <li>Unikaj metalowych powierzchni w pobliżu</li>
-                </ul>
-            </li>
-            <li><strong>Firmware:</strong>
-                <ul>
-                    <li>Upewnij się że masz najnowszą wersję</li>
-                    <li>Starsze wersje mogły mieć problemy z mocą TX</li>
-                </ul>
-            </li>
-        </ol>
-        
-        <h3>Problem: Firmware update się nie udaje</h3>
-        <p><strong>Objawy:</strong> Update fails, urządzenie się resetuje podczas update</p>
-        <p><strong>Rozwiązania:</strong></p>
-        <ol>
-            <li><strong>Web Update:</strong>
-                <ul>
-                    <li>Sprawdź połączenie internetowe (join)</li>
-                    <li>Spróbuj na innej sieci WiFi</li>
-                    <li>Firewall może blokować - użyj hotspot telefonu</li>
-                </ul>
-            </li>
-            <li><strong>SD Update:</strong>
-                <ul>
-                    <li>Sprawdź czy plik .bin jest prawidłowy (pobierz ponownie)</li>
-                    <li>Plik musi być w głównym katalogu lub /updates/</li>
-                    <li>Nazwa pliku bez polskich znaków/spacji</li>
-                </ul>
-            </li>
-            <li><strong>Bateria:</strong>
-                <ul>
-                    <li>Upewnij się że bateria >50% lub podłącz zasilanie</li>
-                    <li>Update wymaga stabilnego zasilania</li>
-                </ul>
-            </li>
-            <li><strong>USB Update (awaryjny):</strong>
-                <ul>
-                    <li>Pobierz ESP Flash Download Tool</li>
-                    <li>Połącz przez USB</li>
-                    <li>Ręczne flashowanie firmware .bin</li>
-                    <li>Instrukcje na GitHub wiki</li>
                 </ul>
             </li>
         </ol>
@@ -2451,37 +2362,6 @@ MAC,SSID,Channel,RSSI,Encryption,Latitude,Longitude,Altitude,Time
             </li>
         </ol>
         
-        <h3>Problem: Evil Portal nie przekierowuje klientów</h3>
-        <p><strong>Objawy:</strong> Klienci łączą się ale nie widzą portalu</p>
-        <p><strong>Rozwiązania:</strong></p>
-        <ol>
-            <li><strong>Plik HTML:</strong>
-                <ul>
-                    <li>Sprawdź czy index.html istnieje na SD</li>
-                    <li>Sprawdź czy wybrałeś plik: Select EP HTML File</li>
-                    <li>Test pliku w przeglądarce (otwórz lokalnie)</li>
-                </ul>
-            </li>
-            <li><strong>DNS:</strong>
-                <ul>
-                    <li>Evil Portal używa DNS spoofing</li>
-                    <li>Niektóre urządzenia używają hardcoded DNS (8.8.8.8)</li>
-                    <li>Android/iOS czasami wymaga specjalnych nagłówków</li>
-                </ul>
-            </li>
-            <li><strong>SSID:</strong>
-                <ul>
-                    <li>Użyj wiarygodnej nazwy sieci</li>
-                    <li>Sieć powinna być otwarta (no password) dla najlepszych wyników</li>
-                </ul>
-            </li>
-            <li><strong>Monitor:</strong>
-                <ul>
-                    <li>Sprawdź serial output aby zobaczyć requesty</li>
-                    <li>DEBUG mode jeśli dostępny</li>
-                </ul>
-            </li>
-        </ol>
         
         <h3>Problem: Urządzenie się zawiesza/resetuje</h3>
         <p><strong>Objawy:</strong> Losowe restarty, zawieszenia</p>
@@ -2497,15 +2377,10 @@ MAC,SSID,Channel,RSSI,Encryption,Latitude,Longitude,Altitude,Time
                 <ul>
                     <li>ESP32 może się przegrzewać podczas intensywnych operacji</li>
                     <li>Daj urządzeniu ochłonąć</li>
-                    <li>Rozważ radiator lub wentylację</li>
+                
                 </ul>
             </li>
-            <li><strong>Firmware:</strong>
-                <ul>
-                    <li>Bug w firmware - sprawdź GitHub issues</li>
-                    <li>Downgrade do stabilnej wersji</li>
-                    <li>Zgłoś problem z logami</li>
-                </ul>
+
             </li>
             <li><strong>SD Karta:</strong>
                 <ul>
@@ -2513,42 +2388,9 @@ MAC,SSID,Channel,RSSI,Encryption,Latitude,Longitude,Altitude,Time
                     <li>Usuń kartę i test bez niej</li>
                 </ul>
             </li>
-            <li><strong>Factory Reset:</strong>
-                <ul>
-                    <li>Ostateczność: kompletne przeprogramowanie ESP32</li>
-                </ul>
-            </li>
+          
         </ol>
         
-        <h3>Problem: BadUSB nie działa</h3>
-        <p><strong>Objawy:</strong> Komputer nie rozpoznaje jako klawiatura</p>
-        <p><strong>Rozwiązania:</strong></p>
-        <ol>
-            <li><strong>Hardware:</strong>
-                <ul>
-                    <li>Nie wszystkie wersje Marauder mają BadUSB</li>
-                    <li>Sprawdź specyfikację swojego modelu</li>
-                </ul>
-            </li>
-            <li><strong>USB Data:</strong>
-                <ul>
-                    <li>Używasz kabla DATA USB (nie tylko power)</li>
-                    <li>Niektóre cable są tylko do ładowania</li>
-                </ul>
-            </li>
-            <li><strong>Skrypt:</strong>
-                <ul>
-                    <li>Sprawdź składnię skryptu</li>
-                    <li>Test z prostym skryptem najpierw</li>
-                </ul>
-            </li>
-            <li><strong>System:</strong>
-                <ul>
-                    <li>Windows może wymagać instalacji sterowników</li>
-                    <li>Linux/Mac zazwyczaj działa od razu</li>
-                </ul>
-            </li>
-        </ol>
         
         <div class="section-divider"></div>
         
@@ -2558,39 +2400,13 @@ MAC,SSID,Channel,RSSI,Encryption,Latitude,Longitude,Altitude,Time
         <p><strong>Q: Co to jest ESP32 Marauder?</strong></p>
         <p>A: ESP32 Marauder to przenośne narzędzie do testowania bezpieczeństwa sieci WiFi i Bluetooth, zbudowane na platformie ESP32. Oferuje funkcje sniffing, analizy i testowania penetracyjnego.</p>
         
-        <p><strong>Q: Czy ESP32 Marauder jest legalny?</strong></p>
-        <p>A: Samo urządzenie jest legalne, ale użycie większości jego funkcji bez zgody właściciela sieci jest nielegalne. Używaj tylko do testowania własnych systemów lub z pisemną autoryzacją.</p>
-        
-        <p><strong>Q: Czy mogę używać Marauder na Flipper Zero?</strong></p>
-        <p>A: Tak, istnieje oficjalna kompilacja firmware dla Flipper Zero WiFi Dev Board i WiFi Devboard Pro.</p>
-        
-        <h3>Hardware</h3>
-        <p><strong>Q: Jakie wersje ESP32 Marauder istnieją?</strong></p>
-        <p>A: Główne wersje to:</p>
-        <ul>
-            <li>ESP32 Marauder Kit (DIY)</li>
-            <li>Marauder Mini</li>
-            <li>BFFB (Better Flipper Friendly Board)</li>
-            <li>Marauder Dev Board Pro</li>
-            <li>Custom builds na różnych płytkach ESP32</li>
-        </ul>
-        
-        <p><strong>Q: Czy bateria jest wbudowana?</strong></p>
-        <p>A: Zależy od wersji. Niektóre modele (BFFB, Kit) wymagają zewnętrznego power banku. Dev Board Pro ma wbudowaną baterię LiPo.</p>
-        
-        <p><strong>Q: Jak długo działa na baterii?</strong></p>
-        <p>A: 2-6 godzin w zależności od modelu, pojemności baterii i typu aktywności. Intensywne ataki i transmisje zużywają więcej energii.</p>
-        
-        <p><strong>Q: Czy mogę podłączyć zewnętrzną antenę?</strong></p>
-        <p>A: Tak, większość wersji ma złącze U.FL lub SMA. Zewnętrzna antena znacząco zwiększa zasięg (do 300m z dobrą anteną).</p>
-        
+    
         <p><strong>Q: Czy potrzebuję karty SD?</strong></p>
         <p>A: Nie jest wymagana do podstawowych funkcji, ale zdecydowanie zalecana dla:</p>
         <ul>
             <li>Zapisywania PCAP</li>
             <li>Evil Portal HTML</li>
             <li>Wardrive</li>
-            <li>BadUSB scripts</li>
             <li>Firmware updates (SD Update)</li>
         </ul>
         
@@ -2604,8 +2420,8 @@ MAC,SSID,Channel,RSSI,Encryption,Latitude,Longitude,Altitude,Time
         <p><strong>Q: Jak daleko działa Marauder?</strong></p>
         <p>A:</p>
         <ul>
-            <li>Wbudowana antena: 10-50 metrów</li>
-            <li>Zewnętrzna antena (5-9dBi): 100-300 metrów</li>
+            <li>Wbudowana antena: 10-20 metrów</li>
+            <li>Zewnętrzna antena (5-9dBi): 50-100 metrów</li>
             <li>Zależy od otoczenia, przeszkód i mocy TX</li>
         </ul>
         
@@ -2635,7 +2451,6 @@ MAC,SSID,Channel,RSSI,Encryption,Latitude,Longitude,Altitude,Time
             <li>NEO-6M (tani, popularny)</li>
             <li>NEO-7M (lepszy)</li>
             <li>NEO-8M (najlepszy dla Marauder)</li>
-            <li>Beitian BN-220 (mały, wydajny)</li>
         </ul>
         
         <h3>Software</h3>
@@ -2644,7 +2459,7 @@ MAC,SSID,Channel,RSSI,Encryption,Latitude,Longitude,Altitude,Time
         <ol>
             <li>Web Update: WiFi → Join network → Device → Update → Web Update</li>
             <li>SD Update: Pobierz .bin na SD → Device → Update → SD Update</li>
-            <li>USB Flash: ESP Flash Download Tool</li>
+            <li>USB Flash: <a href="https://marautech.github.io/ESP32-Cyd-Marauder-WebFlasher/">Flasher</a></li>
         </ol>
         
         <p><strong>Q: Czy mogę używać Marauder bez ekranu?</strong></p>
@@ -2659,14 +2474,6 @@ MAC,SSID,Channel,RSSI,Encryption,Latitude,Longitude,Altitude,Time
             <li>/wardrive/ - Wardrive CSV</li>
         </ul>
         
-        <p><strong>Q: Czy mogę dodać własne funkcje?</strong></p>
-        <p>A: Tak! Projekt jest open source. Możesz:</p>
-        <ul>
-            <li>Modyfikować kod źródłowy</li>
-            <li>Kompilować własne firmware</li>
-            <li>Dodawać custom funkcje</li>
-            <li>Kontrybutować na GitHub</li>
-        </ul>
         
         <h3>Troubleshooting</h3>
         <p><strong>Q: Marauder się resetuje podczas użycia. Co robić?</strong></p>
@@ -2674,17 +2481,14 @@ MAC,SSID,Channel,RSSI,Encryption,Latitude,Longitude,Altitude,Time
         <ul>
             <li>Słabe zasilanie - użyj lepszego power banku</li>
             <li>Przegrzanie - daj ochłonąć</li>
-            <li>Bug firmware - sprawdź GitHub issues</li>
             <li>Problematyczna karta SD - usuń i test</li>
         </ul>
         
         <p><strong>Q: Nie widzę żadnych sieci WiFi. Dlaczego?</strong></p>
         <p>A:</p>
         <ul>
-            <li>Sprawdź czy antenna jest podłączona</li>
             <li>Restart urządzenia</li>
             <li>Zmień kanał scanning</li>
-            <li>Sprawdź czy WiFi nie jest wyłączone</li>
         </ul>
         
         <p><strong>Q: Evil Portal nie działa. Co jest nie tak?</strong></p>
@@ -2693,325 +2497,16 @@ MAC,SSID,Channel,RSSI,Encryption,Latitude,Longitude,Altitude,Time
             <li>Czy masz index.html na karcie SD?</li>
             <li>Czy wybrałeś plik HTML przed uruchomieniem?</li>
             <li>Czy SSID jest wiarygodne?</li>
-            <li>Serial output aby zobaczyć co się dzieje</li>
         </ul>
         
-        <h3>Bezpieczeństwo</h3>
-        <p><strong>Q: Czy używanie Marauder jest bezpieczne dla moich urządzeń?</strong></p>
-        <p>A: Tak, Marauder nie szkodzi twoim własnym urządzeniom. Jednak używanie go przeciwko cudzym systemom bez zgody jest nielegalne.</p>
-        
-        <p><strong>Q: Czy mogę iść do więzienia za używanie Marauder?</strong></p>
-        <p>A: Tak, jeśli użyjesz go nielegalnie. Nieuprawnione ataki na sieci mogą skutkować:</p>
-        <ul>
-            <li>Karami więzienia (do 5+ lat)</li>
-            <li>Wysokimi grzywnami</li>
-            <li>Wpisem do akt karnych</li>
-        </ul>
-        
-        <p><strong>Q: Jak mogę legalnie używać Marauder?</strong></p>
-        <p>A:</p>
-        <ul>
-            <li>Testuj tylko własne sieci</li>
-            <li>Uzyskaj pisemną zgodę przed testami klientów</li>
-            <li>Używaj w kontrolowanych środowiskach edukacyjnych</li>
-            <li>Przestrzegaj lokalnych przepisów</li>
-        </ul>
-        
-        <div class="section-divider"></div>
-        
-        <h2 id="zasoby">Dodatkowe Zasoby</h2>
-        
-        <h3>Oficjalne źródła</h3>
-        <p><strong>Projekt ESP32 Marauder:</strong></p>
-        <ul>
-            <li>🌐 GitHub: https://github.com/justcallmekoko/ESP32Marauder</li>
-            <li>📚 Wiki: https://github.com/justcallmekoko/ESP32Marauder/wiki</li>
-            <li>💬 Discord: https://discord.gg/esp32marauder</li>
-            <li>🐦 Twitter: @jcmkoko</li>
-        </ul>
-        
-        <p><strong>Firmware i narzędzia:</strong></p>
-        <ul>
-            <li>📦 Releases: https://github.com/justcallmekoko/ESP32Marauder/releases</li>
-            <li>🌐 Web Flasher: https://esp32marauder.com</li>
-            <li>🔧 ESP Flash Tool: https://www.espressif.com/en/support/download/other-tools</li>
-        </ul>
-        
-        <h3>Społeczność</h3>
-        <p><strong>Fora i grupy:</strong></p>
-        <ul>
-            <li>💬 Reddit: r/esp32marauder</li>
-            <li>📱 Telegram: ESP32 Marauder Community</li>
-            <li>🎮 Discord: Serwer oficjalny</li>
-        </ul>
-        
-        <p><strong>Video tutoriale:</strong></p>
-        <ul>
-            <li>🎥 YouTube: "ESP32 Marauder tutorials"</li>
-            <li>📺 Kanały:
-                <ul>
-                    <li>NetworkChuck</li>
-                    <li>David Bombal</li>
-                    <li>Seytonic</li>
-                    <li>Talking Sasquach</li>
-                </ul>
-            </li>
-        </ul>
-        
-        <h3>Dodatkowe narzędzia</h3>
-        <p><strong>Evil Portal templates:</strong></p>
-        <ul>
-            <li>https://github.com/bigbrodude6119/flipper-zero-evil-portal</li>
-            <li>https://github.com/RogueMaster/awesome-flipperzero-withModules</li>
-        </ul>
-        
-        <p><strong>WiFi cracking:</strong></p>
-        <ul>
-            <li>Hashcat: https://hashcat.net/hashcat</li>
-            <li>Aircrack-ng: https://www.aircrack-ng.org</li>
-            <li>Wireshark: https://www.wireshark.org</li>
-        </ul>
-        
-        <p><strong>Wardrive:</strong></p>
-        <ul>
-            <li>WiGLE: https://wigle.net</li>
-            <li>Kismet: https://www.kismetwireless.net</li>
-        </ul>
-        
-        <h3>Dokumentacja techniczna</h3>
-        <p><strong>ESP32:</strong></p>
-        <ul>
-            <li>ESP32 Technical Reference: https://www.espressif.com/en/support/documents/technical-documents</li>
-            <li>ESP-IDF Documentation: https://docs.espressif.com/projects/esp-idf/en/latest/</li>
-        </ul>
-        
-        <p><strong>WiFi Security:</strong></p>
-        <ul>
-            <li>802.11 Standards: https://standards.ieee.org/</li>
-            <li>WiFi Alliance: https://www.wi-fi.org/</li>
-        </ul>
-        
-        <p><strong>Bluetooth:</strong></p>
-        <ul>
-            <li>Bluetooth SIG: https://www.bluetooth.com/</li>
-            <li>BLE Security: https://www.bluetooth.com/learn-about-bluetooth/key-attributes/bluetooth-security/</li>
-        </ul>
-        
-        <h3>Kursy i certyfikacje</h3>
-        <p><strong>Pentesting WiFi:</strong></p>
-        <ul>
-            <li>Offensive Security Wireless Professional (OSWP)</li>
-            <li>WiFi Security Megaprimer (SecurityTube)</li>
-            <li>Practical Ethical Hacking (TCM Security)</li>
-        </ul>
-        
-        <p><strong>General Security:</strong></p>
-        <ul>
-            <li>CEH (Certified Ethical Hacker)</li>
-            <li>OSCP (Offensive Security Certified Professional)</li>
-            <li>CompTIA Security+</li>
-        </ul>
-        
-        <div class="section-divider"></div>
-        
-        <h2 id="changelog">Changelog i Historia Wersji</h2>
-        
-        <h3>Najważniejsze wersje</h3>
-        <p><strong>v0.13.x (Aktualna stabilna)</strong></p>
-        <ul>
-            <li>Pełna obsługa Evil Portal</li>
-            <li>Rozbudowane BLE attacks</li>
-            <li>Improved wardrive</li>
-            <li>Better hardware support</li>
-            <li>Bugfixes</li>
-        </ul>
-        
-        <p><strong>v0.10.x</strong></p>
-        <ul>
-            <li>Dodano BadUSB</li>
-            <li>GPS wardrive</li>
-            <li>Bluetooth sniffers</li>
-            <li>Channel analyzer improvements</li>
-        </ul>
-        
-        <p><strong>v0.5.x</strong></p>
-        <ul>
-            <li>Evil Portal beta</li>
-            <li>Karma attack</li>
-            <li>BLE spam funkcje</li>
-            <li>SD card support</li>
-        </ul>
-        
-        <p><strong>v0.1.x (Początek)</strong></p>
-        <ul>
-            <li>Podstawowe skanowanie WiFi</li>
-            <li>Deauth attacks</li>
-            <li>Beacon spam</li>
-        </ul>
-        
-        <p><strong>Planowane funkcje (v1.0.0+)</strong></p>
-        <ul>
-            <li>🔮 Improved PMKID capture</li>
-            <li>🔮 WPA3 testing capabilities</li>
-            <li>🔮 Enhanced GPS tracking</li>
-            <li>🔮 More BLE attack vectors</li>
-            <li>🔮 Web interface improvements</li>
-            <li>🔮 Custom plugin support</li>
-        </ul>
-        <p>Sprawdź najnowsze zmiany: https://github.com/justcallmekoko/ESP32Marauder/releases</p>
-        
-        <div class="section-divider"></div>
-        
-        <h2 id="glossary">Glossary (Słowniczek)</h2>
-        
-        <h3>Terminy WiFi</h3>
-        <ul>
-            <li><strong>AP (Access Point)</strong> - Punkt dostępowy WiFi (router)</li>
-            <li><strong>SSID (Service Set Identifier)</strong> - Nazwa sieci WiFi</li>
-            <li><strong>BSSID (Basic Service Set Identifier)</strong> - MAC address punktu dostępowego</li>
-            <li><strong>Beacon Frame</strong> - Pakiet rozgłoszeniowy wysyłany przez AP</li>
-            <li><strong>Probe Request</strong> - Żądanie urządzenia szukającego sieci</li>
-            <li><strong>Deauth (Deauthentication)</strong> - Pakiet rozłączający klienta od AP</li>
-            <li><strong>Handshake</strong> - Wymiana kluczy przy łączeniu z WPA/WPA2</li>
-            <li><strong>PMKID</strong> - Pairwise Master Key Identifier używany w WPA2</li>
-            <li><strong>EAPOL</strong> - Extensible Authentication Protocol over LAN</li>
-            <li><strong>PMF (Protected Management Frames)</strong> - 802.11w - ochrona przed deauth</li>
-            <li><strong>Wardrive</strong> - Zbieranie danych o sieciach WiFi z GPS</li>
-            <li><strong>Evil Twin</strong> - Fałszywy AP podszywający się pod prawdziwy</li>
-            <li><strong>Captive Portal</strong> - Strona logowania przy łączeniu z WiFi</li>
-            <li><strong>Karma Attack</strong> - Odpowiadanie na wszystkie probe requests</li>
-            <li><strong>PCAP</strong> - Packet Capture - format pliku z pakietami</li>
-        </ul>
-        
-        <h3>Terminy Bluetooth</h3>
-        <ul>
-            <li><strong>BLE (Bluetooth Low Energy)</strong> - Bluetooth o niskim zużyciu energii</li>
-            <li><strong>GATT</strong> - Generic Attribute Profile</li>
-            <li><strong>Advertisement</strong> - Rozgłaszanie obecności urządzenia BLE</li>
-            <li><strong>MAC Address</strong> - Media Access Control - unikalny adres urządzenia</li>
-            <li><strong>RSSI</strong> - Received Signal Strength Indicator - siła sygnału</li>
-            <li><strong>Pairing</strong> - Parowanie urządzeń Bluetooth</li>
-            <li><strong>UUID</strong> - Universally Unique Identifier</li>
-            <li><strong>Vendor</strong> - Producent urządzenia (identyfikowany po MAC)</li>
-            <li><strong>Skimmer</strong> - Nielegalne urządzenie przechwytujące dane kart</li>
-            <li><strong>AirTag</strong> - Tracker firmy Apple używający BLE</li>
-        </ul>
-        
-        <h3>Terminy techniczne</h3>
-        <ul>
-            <li><strong>ESP32</strong> - Mikrokontroler z WiFi i Bluetooth</li>
-            <li><strong>Firmware</strong> - Oprogramowanie wbudowane w urządzenie</li>
-            <li><strong>OTA (Over The Air)</strong> - Aktualizacja przez WiFi</li>
-            <li><strong>Serial</strong> - Połączenie szeregowe (USB)</li>
-            <li><strong>CLI (Command Line Interface)</strong> - Interfejs wiersza poleceń</li>
-            <li><strong>GUI (Graphical User Interface)</strong> - Interfejs graficzny</li>
-            <li><strong>PCAP</strong> - Packet Capture format</li>
-            <li><strong>CSV</strong> - Comma-Separated Values - format danych</li>
-            <li><strong>GPX</strong> - GPS Exchange Format</li>
-            <li><strong>KML</strong> - Keyhole Markup Language (Google Earth)</li>
-            <li><strong>BadUSB</strong> - Atak emulujący klawiaturę przez USB</li>
-            <li><strong>Ducky Script</strong> - Język skryptowy dla BadUSB</li>
-            <li><strong>Power Bank</strong> - Przenośna bateria</li>
-            <li><strong>Antenna</strong> - U.FL/SMA - typy złączy antenowych</li>
-        </ul>
-        
-        <div class="section-divider"></div>
-        
-        <h2 id="wsparcie">Wsparcie i Pomoc</h2>
-        
-        <h3>Potrzebujesz pomocy?</h3>
-        <ol>
-            <li><strong>Przeczytaj dokumentację</strong>
-                <ul>
-                    <li>Ta instrukcja</li>
-                    <li>GitHub Wiki</li>
-                    <li>FAQ section</li>
-                </ul>
-            </li>
-            <li><strong>Sprawdź GitHub Issues</strong>
-                <ul>
-                    <li>Szukaj podobnych problemów</li>
-                    <li>https://github.com/justcallmekoko/ESP32Marauder/issues</li>
-                </ul>
-            </li>
-            <li><strong>Społeczność</strong>
-                <ul>
-                    <li>Discord server</li>
-                    <li>Reddit r/esp32marauder</li>
-                    <li>Telegram group</li>
-                </ul>
-            </li>
-            <li><strong>Zgłoś bug</strong>
-                <ul>
-                    <li>GitHub Issues (preferowane)</li>
-                    <li>Dołącz logi serial</li>
-                    <li>Opisz dokładnie problem</li>
-                    <li>Podaj wersję firmware</li>
-                </ul>
-            </li>
-            <li><strong>Prośby o nowe funkcje</strong>
-                <ul>
-                    <li>GitHub Feature Requests</li>
-                    <li>Opisz przypadek użycia</li>
-                    <li>Uzasadnij potrzebę</li>
-                </ul>
-            </li>
-        </ol>
-        
-        <div class="warning">
-            <strong>Nie zgłaszaj:</strong>
-            <ul>
-                <li>❌ Próśb o pomoc w nielegalnych działaniach</li>
-                <li>❌ Pytań "jak zhackować sąsiada"</li>
-                <li>❌ Próśb o gotowe exploity</li>
-                <li>❌ Ogólnych pytań o hacking bez kontekstu edukacyjnego</li>
-            </ul>
-        </div>
-        
-        <div class="section-divider"></div>
-        
-        <h2>Podziękowania</h2>
-        
-        <h3>Autor</h3>
-        <p>JustCallMeKoko - Główny twórca i maintainer projektu ESP32 Marauder</p>
-        
-        <h3>Kontrybutorzy</h3>
-        <p>Dziękujemy wszystkim, którzy przyczynili się do rozwoju projektu:</p>
-        <ul>
-            <li>Developers na GitHub</li>
-            <li>Beta testers</li>
-            <li>Community moderators</li>
-            <li>Documentation contributors</li>
-            <li>Hardware designers</li>
-        </ul>
-        
-        <h3>Inspiracje i podobne projekty</h3>
-        <ul>
-            <li>Pwnagotchi - AI-powered WiFi cracking</li>
-            <li>WiFi Pineapple - Pentest platform</li>
-            <li>HackRF - SDR platform</li>
-            <li>Flipper Zero - Multi-tool for pentesters</li>
-            <li>ESP8266 Deauther - Poprzednik na ESP8266</li>
-        </ul>
-        
-        <h3>Społeczność</h3>
-        <p>Ogromne podziękowania dla społeczności ESP32 Marauder za:</p>
-        <ul>
-            <li>Wsparcie techniczne</li>
-            <li>Testowanie firmware</li>
-            <li>Zgłaszanie bugów</li>
-            <li>Tworzenie tutoriali</li>
-            <li>Dzielenie się wiedzą</li>
-        </ul>
-        
-        <div class="section-divider"></div>
         
         <footer style="margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(0, 255, 136, 0.2); text-align: center; color: #888;">
             <p><strong>ESP32 Marauder - Pełna Instrukcja Obsługi</strong></p>
             <p>📡 Happy Ethical Hacking! 📡</p>
             <p style="margin-top: 15px; font-size: 0.9em;">Pamiętaj: Z wielką mocą przychodzi wielka odpowiedzialność. Używaj mądrze, etycznie i legalnie.</p>
             <p style="margin-top: 10px; font-size: 0.8em;">Wersja dokumentu: 1.0 | Data: Grudzień 2025</p>
-             <p style="margin-top: 10px; font-size: 0.8em;">By Wisnia | MarauTech</p>
+            <p style="margin-top: 10px; font-size: 0.8em;">By Wiisnia | MarauTech</p>
+
         </footer>
     </div>
     
