@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
@@ -7,728 +6,608 @@
 <title>ESP32 Marauder v1.11.0 – Instrukcja Obsługi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#0a0c10;--bg2:#0f1218;--bg3:#141920;--surface:#1a2130;
-  --border:rgba(0,255,136,.15);--border2:rgba(0,255,136,.07);
-  --green:#00ff88;--green-dim:#00cc6a;--green-glow:#00ff8820;
-  --amber:#ffb000;--red:#ff4455;--blue:#4488ff;
-  --text:#c8d8e8;--text-dim:#6a7a8a;--text-head:#e8f4ff;
-  --mono:'Space Mono',monospace;--sans:'Syne',sans-serif;
-  --r:6px;--nav-h:56px;
-}
-html{scroll-behavior:smooth;scroll-padding-top:calc(var(--nav-h) + 8px)}
-body{background:var(--bg);color:var(--text);font-family:var(--mono);font-size:14px;line-height:1.75;min-height:100vh;overflow-x:hidden}
-
-/* TOP NAV */
-#topnav{
-position:fixed;top:0;left:0;right:0;height:var(–nav-h);
-background:rgba(10,12,16,.95);backdrop-filter:blur(12px);
-border-bottom:1px solid var(–border);
-display:flex;align-items:center;gap:0;
-z-index:1000;
-}
-.nav-brand{
-display:flex;align-items:center;gap:10px;
-padding:0 20px;border-right:1px solid var(–border2);
-height:100%;flex-shrink:0;
-}
-.nav-brand-name{font-family:var(–sans);font-weight:800;font-size:14px;color:var(–text-head);white-space:nowrap}
-.nav-brand-ver{font-size:10px;padding:1px 6px;background:var(–green-glow);border:1px solid var(–green);border-radius:3px;color:var(–green);margin-left:4px}
-.nav-links{display:flex;align-items:center;height:100%;overflow-x:auto;scrollbar-width:none;flex:1}
-.nav-links::-webkit-scrollbar{display:none}
-.nav-link{
-display:flex;align-items:center;height:100%;
-padding:0 14px;color:var(–text-dim);
-text-decoration:none;font-size:11px;white-space:nowrap;
-border-bottom:2px solid transparent;
-transition:color .15s,border-color .15s;
-flex-shrink:0;
-}
-.nav-link:hover{color:var(–text);border-bottom-color:var(–border)}
-.nav-link.active{color:var(–green);border-bottom-color:var(–green)}
-
-/* MOBILE NAV TOGGLE */
-.nav-toggle{
-display:none;align-items:center;justify-content:center;
-width:44px;height:var(–nav-h);flex-shrink:0;
-background:none;border:none;cursor:pointer;padding:0;
-border-left:1px solid var(–border2);
-}
-.nav-toggle span{display:block;width:18px;height:2px;background:var(–green);border-radius:2px;transition:all .2s}
-.nav-toggle span+span{margin-top:4px}
-
-/* MOBILE DRAWER */
-#navdrawer{
-display:none;position:fixed;top:var(–nav-h);left:0;right:0;
-background:rgba(10,12,16,.98);border-bottom:1px solid var(–border);
-z-index:999;max-height:calc(100vh - var(–nav-h));overflow-y:auto;
-padding:8px 0 16px;
-}
-#navdrawer.open{display:block}
-.drawer-section{padding:12px 20px 4px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(–text-dim);font-family:var(–sans);font-weight:700}
-.drawer-link{display:block;padding:10px 20px;color:var(–text-dim);text-decoration:none;font-size:13px;border-left:2px solid transparent;transition:all .15s}
-.drawer-link:hover,.drawer-link.active{color:var(–green);border-left-color:var(–green);background:var(–green-glow)}
-.drawer-link.sub{padding-left:36px;font-size:12px}
-
-/* LAYOUT */
-#wrap{margin-top:var(–nav-h)}
-
-/* SCREEN INSTRUCTION BAR */
-.screen-bar{
-background:linear-gradient(135deg,rgba(0,255,136,.05),rgba(68,136,255,.05));
-border-bottom:1px solid var(–border);
-padding:0 40px;
-}
-.screen-inner{display:grid;grid-template-columns:200px 1fr;align-items:stretch}
-.screen-label{
-padding:20px 24px 20px 0;border-right:1px solid var(–border2);
-display:flex;flex-direction:column;justify-content:center;
-}
-.screen-eyebrow{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(–green);opacity:.7;margin-bottom:5px;font-family:var(–sans)}
-.screen-title{font-family:var(–sans);font-weight:800;font-size:14px;color:var(–text-head);line-height:1.3}
-.screen-title span{color:var(–green)}
-.screen-zones{display:grid;grid-template-columns:repeat(3,1fr)}
-.screen-zone{
-padding:18px 20px;border-right:1px solid var(–border2);
-display:flex;align-items:center;gap:12px;
-transition:background .15s;
-}
-.screen-zone:last-child{border-right:none}
-.screen-zone:hover{background:rgba(0,255,136,.02)}
-.zone-display{
-flex-shrink:0;width:32px;height:48px;
-border:2px solid rgba(0,255,136,.3);border-radius:4px;
-background:#000;position:relative;overflow:hidden;
-}
-.zone-hl{position:absolute;left:0;right:0;background:rgba(0,255,136,.3);border:1px solid rgba(0,255,136,.5)}
-.zone-hl.t{top:0;height:33%}
-.zone-hl.m{top:33%;height:34%}
-.zone-hl.b{bottom:0;height:33%}
-.zone-tick{position:absolute;width:4px;height:1px;background:rgba(0,255,136,.5)}
-.zone-tick.tl{left:0}.zone-tick.tr{right:0}
-.zone-tick.r1{top:calc(33% - .5px)}.zone-tick.r2{top:calc(66% - .5px)}
-.zone-info{flex:1;min-width:0}
-.zone-name{font-family:var(–sans);font-weight:700;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px}
-.zone-name.t{color:var(–blue)}.zone-name.m{color:var(–green)}.zone-name.b{color:var(–amber)}
-.zone-action{font-size:11px;color:var(–text);line-height:1.5}
-.zone-icon{font-size:16px;opacity:.5;flex-shrink:0}
-
-/* HERO */
-#hero{padding:56px 40px 44px;border-bottom:1px solid var(–border2);position:relative;overflow:hidden}
-#hero::after{content:’’;position:absolute;top:-80px;right:-80px;width:400px;height:400px;background:radial-gradient(circle,rgba(0,255,136,.05),transparent 70%);pointer-events:none}
-.hero-eye{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(–green);margin-bottom:12px}
-.hero-title{font-family:var(–sans);font-weight:800;font-size:clamp(28px,6vw,52px);color:var(–text-head);line-height:1.1;margin-bottom:14px}
-.hero-title span{color:var(–green)}
-.hero-sub{font-size:13px;color:var(–text-dim);max-width:520px;line-height:1.8;margin-bottom:24px}
-.badges{display:flex;flex-wrap:wrap;gap:8px}
-.badge{padding:4px 10px;border-radius:var(–r);font-size:11px;font-family:var(–mono)}
-.bg{background:var(–green-glow);border:1px solid var(–green);color:var(–green)}
-.ba{background:rgba(255,176,0,.1);border:1px solid rgba(255,176,0,.4);color:var(–amber)}
-.br{background:rgba(255,68,85,.1);border:1px solid rgba(255,68,85,.4);color:var(–red)}
-.bb{background:rgba(68,136,255,.1);border:1px solid rgba(68,136,255,.4);color:var(–blue)}
-
-.warn-bar{margin:20px 40px 0;padding:13px 18px;background:rgba(255,68,85,.07);border:1px solid rgba(255,68,85,.3);border-radius:var(–r);display:flex;align-items:flex-start;gap:10px;color:#ff9999;font-size:12px;line-height:1.65}
-.warn-bar .wi{flex-shrink:0;font-size:16px;margin-top:-1px}
-
-/* CONTENT */
-#content{padding:48px 40px;max-width:960px}
-.section{margin-bottom:64px}
-.sec-hd{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(–border2)}
-.sec-num{font-family:var(–sans);font-size:11px;font-weight:700;color:var(–green);opacity:.6;letter-spacing:1px}
-.sec-title{font-family:var(–sans);font-weight:800;font-size:22px;color:var(–text-head)}
-.sec-icon{font-size:18px;margin-left:auto;opacity:.35}
-
-h3{font-family:var(–sans);font-weight:700;font-size:15px;color:var(–text-head);margin:24px 0 10px;display:flex;align-items:center;gap:8px}
-h3::before{content:’’;display:block;width:3px;height:14px;background:var(–green);border-radius:2px;flex-shrink:0}
-p{color:var(–text);font-size:13px;line-height:1.8;margin-bottom:10px}
-
-/* INFO GRID */
-.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin:12px 0}
-.info-cell{background:var(–bg2);border:1px solid var(–border2);border-radius:var(–r);padding:12px 14px}
-.info-lbl{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(–text-dim);margin-bottom:4px;font-family:var(–sans)}
-.info-val{font-size:12px;color:var(–text-head);font-family:var(–mono)}
-.info-val.g{color:var(–green)}
-
-/* SETTINGS */
-.stbl{border:1px solid var(–border);border-radius:var(–r);overflow:hidden;margin:16px 0}
-.stbl-hd{display:grid;grid-template-columns:140px 60px 80px 1fr;gap:10px;background:var(–surface);padding:9px 14px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(–green);font-family:var(–sans);font-weight:700}
-.stbl-row{display:grid;grid-template-columns:140px 60px 80px 1fr;gap:10px;background:var(–bg2);padding:11px 14px;border-top:1px solid var(–border2);align-items:start;transition:background .15s}
-.stbl-row:hover{background:var(–bg3)}
-.sname{font-family:var(–mono);color:var(–green);font-size:11px;font-weight:700}
-.stype{font-size:10px;color:var(–blue);font-family:var(–mono)}
-.sdef{font-size:10px;font-family:var(–mono)}
-.sdef.t{color:var(–green-dim)}.sdef.f{color:var(–text-dim)}
-.sdesc{font-size:11px;color:var(–text);line-height:1.6}
-
-/* FUNC GRID */
-.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px;margin:12px 0}
-.fcard{background:var(–bg2);border:1px solid var(–border2);border-radius:var(–r);padding:13px 15px;position:relative;overflow:hidden;transition:all .15s}
-.fcard::before{content:’’;position:absolute;left:0;top:0;bottom:0;width:3px;background:var(–green);opacity:0;transition:opacity .15s}
-.fcard:hover{border-color:var(–border);background:var(–bg3)}
-.fcard:hover::before{opacity:1}
-.fcard.atk{border-color:rgba(255,68,85,.15)}.fcard.atk::before{background:var(–red)}
-.fcard.snf{border-color:rgba(68,136,255,.15)}.fcard.snf::before{background:var(–blue)}
-.fcard.gen{border-color:rgba(255,176,0,.12)}.fcard.gen::before{background:var(–amber)}
-.fname{font-family:var(–sans);font-weight:700;font-size:12px;color:var(–text-head);margin-bottom:5px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.ftag{font-size:9px;padding:1px 5px;border-radius:3px;font-family:var(–mono);text-transform:uppercase;letter-spacing:.8px;white-space:nowrap}
-.ts{background:rgba(68,136,255,.15);color:var(–blue);border:1px solid rgba(68,136,255,.3)}
-.ta{background:rgba(255,68,85,.15);color:var(–red);border:1px solid rgba(255,68,85,.3)}
-.tg{background:rgba(255,176,0,.12);color:var(–amber);border:1px solid rgba(255,176,0,.3)}
-.tk{background:rgba(0,255,136,.1);color:var(–green);border:1px solid rgba(0,255,136,.3)}
-.tb{background:rgba(150,100,255,.15);color:#bb88ff;border:1px solid rgba(150,100,255,.3)}
-.fdesc{font-size:11px;color:var(–text-dim);line-height:1.6}
-
-/* SUB LABEL */
-.sublbl{display:inline-flex;align-items:center;gap:8px;margin:24px 0 10px;font-family:var(–sans);font-weight:700;font-size:16px;color:var(–text-head)}
-
-/* WARN BOX */
-.wbox{background:rgba(255,68,85,.06);border:1px solid rgba(255,68,85,.25);border-radius:var(–r);padding:11px 16px;margin:10px 0}
-.wbox p{color:#ff9999;font-size:12px;margin:0}
-
-/* CLI TABLE */
-.clitbl{border:1px solid var(–border);border-radius:var(–r);overflow:hidden;background:var(–bg2);margin-top:16px}
-.clitbl table{width:100%;border-collapse:collapse;font-size:12px}
-.clitbl th{text-align:left;padding:9px 12px;background:var(–surface);color:var(–green);font-family:var(–sans);font-weight:700;font-size:9px;letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid var(–border)}
-.clitbl td{padding:7px 12px;border-bottom:1px solid var(–border2);vertical-align:top}
-.clitbl tr:last-child td{border-bottom:none}
-.clitbl tr:hover td{background:var(–bg3)}
-.cc{font-family:var(–mono);color:var(–green);white-space:nowrap;font-size:11px}
-.dc{color:var(–text-dim);line-height:1.6}
-
-/* WORKFLOW */
-.wfcard{background:var(–bg2);border:1px solid var(–border);border-radius:var(–r);margin-bottom:14px;overflow:hidden}
-.wfhd{display:flex;align-items:center;gap:10px;padding:11px 18px;background:var(–surface);border-bottom:1px solid var(–border2)}
-.wficon{font-size:16px}
-.wftitle{font-family:var(–sans);font-weight:700;font-size:13px;color:var(–text-head)}
-.wfsteps{padding:13px 18px;display:flex;flex-direction:column;gap:9px}
-.wfstep{display:flex;align-items:flex-start;gap:10px}
-.stepn{width:20px;height:20px;border-radius:50%;background:var(–green-glow);border:1px solid var(–green);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(–green);font-weight:700;flex-shrink:0;margin-top:2px}
-.stept{font-size:12px;color:var(–text);line-height:1.6}
-
-/* WARN LIST */
-.wlist{list-style:none;background:var(–bg2);border:1px solid var(–border);border-radius:var(–r);overflow:hidden}
-.wlist li{padding:10px 16px;border-bottom:1px solid var(–border2);font-size:12px;color:var(–text);display:flex;gap:10px;align-items:flex-start}
-.wlist li:last-child{border-bottom:none}
-.wlist li::before{content:‘⚠’;color:var(–amber);flex-shrink:0}
-
-code.i{background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);border-radius:3px;padding:1px 5px;font-family:var(–mono);font-size:10px;color:var(–green)}
-
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-.cur::after{content:‘█’;color:var(–green);animation:blink 1s step-start infinite;font-size:.75em}
-
-footer{border-top:1px solid var(–border2);padding:28px 40px;text-align:center;font-size:11px;color:var(–text-dim);line-height:2.2}
-footer a{color:var(–green);text-decoration:none}
-footer a:hover{text-decoration:underline}
-
-::-webkit-scrollbar{width:6px;height:4px}
-::-webkit-scrollbar-track{background:var(–bg)}
-::-webkit-scrollbar-thumb{background:var(–border);border-radius:3px}
-
-@media(max-width:900px){
-.nav-links{display:none}
-.nav-toggle{display:flex}
-.screen-inner{grid-template-columns:1fr}
-.screen-label{border-right:none;border-bottom:1px solid var(–border2);padding:14px 0}
-.screen-bar{padding:0 20px}
-.screen-zones{grid-template-columns:1fr}
-.screen-zone{border-right:none;border-bottom:1px solid var(–border2)}
-.screen-zone:last-child{border-bottom:none}
-#hero,#content{padding-left:20px;padding-right:20px}
-.warn-bar{margin-left:20px;margin-right:20px}
-.stbl-hd,.stbl-row{grid-template-columns:1fr}
-.fgrid{grid-template-columns:1fr}
-footer{padding:20px}
-}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:#0a0c10; --bg2:#0f1218; --bg3:#141920; --surface:#1a2130;
+    --border:rgba(0,255,136,0.15); --border2:rgba(0,255,136,0.07);
+    --green:#00ff88; --green-dim:#00cc6a; --green-glow:#00ff8833;
+    --amber:#ffb000; --red:#ff4455; --blue:#4488ff;
+    --text:#c8d8e8; --text-dim:#6a7a8a; --text-head:#e8f4ff;
+    --mono:'Space Mono',monospace; --sans:'Syne',sans-serif;
+    --radius:6px; --transition:0.2s ease;
+  }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg); color:var(--text); font-family:var(--mono); font-size:14px; line-height:1.75; min-height:100vh; overflow-x:hidden; }
+  body::before { content:''; position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px); pointer-events:none; z-index:9999; }
+  #sidebar { position:fixed; left:0; top:0; width:260px; height:100vh; background:var(--bg2); border-right:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; z-index:100; transition:transform var(--transition); }
+  .sidebar-logo { padding:24px 20px 18px; border-bottom:1px solid var(--border2); }
+  .sidebar-logo .logo-tag { font-size:10px; color:var(--green); letter-spacing:3px; text-transform:uppercase; opacity:.7; }
+  .sidebar-logo h1 { font-family:var(--sans); font-weight:800; font-size:18px; color:var(--text-head); line-height:1.2; margin-top:4px; }
+  .sidebar-logo .version { display:inline-block; margin-top:8px; padding:2px 8px; background:var(--green-glow); border:1px solid var(--green); border-radius:3px; font-size:11px; color:var(--green); letter-spacing:1px; }
+  .search-wrap { padding:10px 14px; border-bottom:1px solid var(--border2); }
+  .search-input { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius); padding:7px 12px; color:var(--text); font-family:var(--mono); font-size:12px; outline:none; transition:border-color var(--transition); }
+  .search-input::placeholder { color:var(--text-dim); }
+  .search-input:focus { border-color:var(--green); }
+  .sidebar-nav { flex:1; overflow-y:auto; padding:10px 0 20px; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
+  .nav-section-label { padding:12px 20px 4px; font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--text-dim); font-family:var(--sans); font-weight:600; }
+  .nav-item { display:block; padding:7px 20px; color:var(--text-dim); text-decoration:none; font-size:12px; transition:all var(--transition); border-left:2px solid transparent; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .nav-item:hover { color:var(--text); border-left-color:var(--border); background:rgba(255,255,255,.02); }
+  .nav-item.active { color:var(--green); border-left-color:var(--green); background:var(--green-glow); }
+  .nav-item.sub { padding-left:34px; font-size:11px; }
+  #main { margin-left:260px; min-height:100vh; }
+  #hero { padding:72px 60px 52px; border-bottom:1px solid var(--border2); position:relative; overflow:hidden; }
+  #hero::after { content:''; position:absolute; top:-80px; right:-80px; width:480px; height:480px; background:radial-gradient(circle,rgba(0,255,136,.05) 0%,transparent 70%); pointer-events:none; }
+  .hero-eyebrow { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--green); margin-bottom:14px; }
+  .hero-title { font-family:var(--sans); font-weight:800; font-size:clamp(30px,5vw,54px); color:var(--text-head); line-height:1.1; margin-bottom:18px; }
+  .hero-title span { color:var(--green); }
+  .hero-sub { font-size:14px; color:var(--text-dim); max-width:540px; line-height:1.8; margin-bottom:28px; }
+  .hero-badges { display:flex; flex-wrap:wrap; gap:8px; }
+  .badge { padding:4px 12px; border-radius:var(--radius); font-size:11px; font-family:var(--mono); }
+  .badge-green { background:var(--green-glow); border:1px solid var(--green); color:var(--green); }
+  .badge-amber { background:rgba(255,176,0,.1); border:1px solid rgba(255,176,0,.4); color:var(--amber); }
+  .badge-red   { background:rgba(255,68,85,.1); border:1px solid rgba(255,68,85,.4); color:var(--red); }
+  .badge-blue  { background:rgba(68,136,255,.1); border:1px solid rgba(68,136,255,.4); color:var(--blue); }
+  .menu-instruction { margin:0 60px 20px; padding:20px 24px; background:var(--surface); border:1px solid var(--green); border-radius:var(--radius); color:var(--text-head); }
+  .menu-instruction h3 { font-family:var(--sans); font-size:18px; margin-bottom:14px; color:var(--green); }
+  .menu-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; }
+  .menu-zone { background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius); padding:14px; text-align:center; }
+  .zone-top { border-top:4px solid var(--green); }
+  .zone-center { border-top:4px solid var(--blue); }
+  .zone-bottom { border-top:4px solid var(--amber); }
+  .warning-bar { margin:20px 60px 0; padding:14px 20px; background:rgba(255,68,85,.07); border:1px solid rgba(255,68,85,.3); border-radius:var(--radius); display:flex; align-items:flex-start; gap:12px; color:#ff8888; font-size:12px; line-height:1.65; }
+  .warn-icon { font-size:17px; flex-shrink:0; margin-top:-1px; }
+  #content { padding:48px 60px; max-width:980px; }
+  .section { margin-bottom:72px; animation:fadeUp .5s ease both; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  .section:nth-child(n) { animation-delay:calc(0.06s * var(--i, 1)); }
+  .section-header { display:flex; align-items:center; gap:14px; margin-bottom:28px; padding-bottom:14px; border-bottom:1px solid var(--border2); }
+  .section-num { font-family:var(--sans); font-size:12px; font-weight:700; color:var(--green); opacity:.6; letter-spacing:1px; }
+  .section-title { font-family:var(--sans); font-weight:800; font-size:24px; color:var(--text-head); }
+  .section-icon { font-size:20px; margin-left:auto; opacity:.4; }
+  h3 { font-family:var(--sans); font-weight:700; font-size:16px; color:var(--text-head); margin:28px 0 10px; display:flex; align-items:center; gap:10px; }
+  h3::before { content:''; display:block; width:3px; height:15px; background:var(--green); border-radius:2px; flex-shrink:0; }
+  p { color:var(--text); font-size:13.5px; line-height:1.8; margin-bottom:10px; }
+  .settings-grid { display:grid; gap:1px; background:var(--border2); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin:18px 0; }
+  .settings-header { display:grid; grid-template-columns:150px 65px 85px 1fr; background:var(--surface); padding:10px 16px; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--green); font-family:var(--sans); font-weight:700; gap:12px; }
+  .settings-row { display:grid; grid-template-columns:150px 65px 85px 1fr; background:var(--bg2); padding:12px 16px; gap:12px; transition:background var(--transition); align-items:start; }
+  .settings-row:hover { background:var(--bg3); }
+  .setting-name { font-family:var(--mono); color:var(--green); font-size:12px; font-weight:700; }
+  .setting-type { font-size:11px; color:var(--blue); font-family:var(--mono); }
+  .setting-default { font-size:11px; font-family:var(--mono); }
+  .setting-default.true { color:var(--green-dim); }
+  .setting-default.false { color:var(--text-dim); }
+  .setting-desc { font-size:12px; color:var(--text); line-height:1.6; }
+  .func-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(360px,1fr)); gap:10px; margin:14px 0; }
+  .func-card { background:var(--bg2); border:1px solid var(--border2); border-radius:var(--radius); padding:15px 17px; transition:all var(--transition); position:relative; overflow:hidden; }
+  .func-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--green); opacity:0; transition:opacity var(--transition); }
+  .func-card:hover { border-color:var(--border); background:var(--bg3); }
+  .func-card:hover::before { opacity:1; }
+  .func-card.attack  { border-color:rgba(255,68,85,.15); }
+  .func-card.attack::before  { background:var(--red); }
+  .func-card.sniffer { border-color:rgba(68,136,255,.15); }
+  .func-card.sniffer::before { background:var(--blue); }
+  .func-card.general { border-color:rgba(255,176,0,.12); }
+  .func-card.general::before { background:var(--amber); }
+  .func-name { font-family:var(--sans); font-weight:700; font-size:13px; color:var(--text-head); margin-bottom:6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .func-tag { font-size:9px; padding:1px 6px; border-radius:3px; font-family:var(--mono); text-transform:uppercase; letter-spacing:.8px; white-space:nowrap; }
+  .tag-sniffer { background:rgba(68,136,255,.15); color:var(--blue); border:1px solid rgba(68,136,255,.3); }
+  .tag-attack  { background:rgba(255,68,85,.15); color:var(--red); border:1px solid rgba(255,68,85,.3); }
+  .tag-general { background:rgba(255,176,0,.12); color:var(--amber); border:1px solid rgba(255,176,0,.3); }
+  .tag-scanner { background:rgba(0,255,136,.1); color:var(--green); border:1px solid rgba(0,255,136,.3); }
+  .tag-bt      { background:rgba(150,100,255,.15); color:#bb88ff; border:1px solid rgba(150,100,255,.3); }
+  .func-desc { font-size:12px; color:var(--text-dim); line-height:1.65; }
+  .cli-wrap { border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; background:var(--bg2); margin-top:18px; }
+  .cli-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .cli-table th { text-align:left; padding:10px 14px; background:var(--surface); color:var(--green); font-family:var(--sans); font-weight:700; font-size:10px; letter-spacing:2px; text-transform:uppercase; border-bottom:1px solid var(--border); }
+  .cli-table td { padding:8px 14px; border-bottom:1px solid var(--border2); vertical-align:top; }
+  .cli-table tr:last-child td { border-bottom:none; }
+  .cli-table tr:hover td { background:var(--bg3); }
+  .cmd-cell { font-family:var(--mono); color:var(--green); white-space:nowrap; font-size:11.5px; }
+  .desc-cell { color:var(--text-dim); line-height:1.6; }
+  .workflow-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:18px; overflow:hidden; }
+  .workflow-header { display:flex; align-items:center; gap:12px; padding:13px 20px; background:var(--surface); border-bottom:1px solid var(--border2); }
+  .workflow-icon { font-size:18px; }
+  .workflow-title { font-family:var(--sans); font-weight:700; font-size:14px; color:var(--text-head); }
+  .workflow-steps { padding:15px 20px; display:flex; flex-direction:column; gap:10px; }
+  .workflow-step { display:flex; align-items:flex-start; gap:12px; }
+  .step-num { width:21px; height:21px; border-radius:50%; background:var(--green-glow); border:1px solid var(--green); display:flex; align-items:center; justify-content:center; font-size:10px; color:var(--green); font-weight:700; flex-shrink:0; margin-top:2px; }
+  .step-text { font-size:12.5px; color:var(--text); line-height:1.6; }
+  code.inline { background:rgba(0,255,136,.08); border:1px solid rgba(0,255,136,.2); border-radius:3px; padding:1px 6px; font-family:var(--mono); font-size:11px; color:var(--green); }
+  .info-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:10px; margin:14px 0; }
+  .info-cell { background:var(--bg2); border:1px solid var(--border2); border-radius:var(--radius); padding:13px 16px; }
+  .info-label { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-dim); margin-bottom:5px; font-family:var(--sans); }
+  .info-value { font-size:13px; color:var(--text-head); font-family:var(--mono); }
+  .info-value.green { color:var(--green); }
+  .sub-label { display:inline-flex; align-items:center; gap:8px; margin:26px 0 12px; font-family:var(--sans); font-weight:700; font-size:17px; color:var(--text-head); }
+  .warn-box { background:rgba(255,68,85,.06); border:1px solid rgba(255,68,85,.25); border-radius:var(--radius); padding:13px 18px; margin:12px 0; }
+  .warn-box p { color:#ff9999; font-size:12.5px; margin:0; }
+  .warn-list { list-style:none; }
+  .warn-list li { padding:10px 16px; border-bottom:1px solid var(--border2); font-size:12.5px; color:var(--text); display:flex; gap:10px; align-items:flex-start; }
+  .warn-list li:last-child { border-bottom:none; }
+  .warn-list li::before { content:'⚠'; color:var(--amber); flex-shrink:0; }
+  footer { border-top:1px solid var(--border2); padding:30px 60px; text-align:center; font-size:11px; color:var(--text-dim); line-height:2.2; }
+  footer a { color:var(--green); text-decoration:none; }
+  footer a:hover { text-decoration:underline; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+  .cursor::after { content:'█'; color:var(--green); animation:blink 1s step-start infinite; font-size:.8em; }
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+  #menu-toggle { display:none; position:fixed; top:14px; left:14px; z-index:200; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); width:40px; height:40px; cursor:pointer; flex-direction:column; align-items:center; justify-content:center; gap:5px; }
+  #menu-toggle span { display:block; width:20px; height:2px; background:var(--green); border-radius:2px; }
+  @media(max-width:768px){
+  #sidebar{transform:translateX(-100%);}
+  #sidebar.open{transform:translateX(0);}
+  #main{margin-left:0;}
+  #menu-toggle{display:flex;}
+  #hero,#content{padding:60px 20px 20px;}
+  .warning-bar{margin:16px 20px 0;}
+  .menu-instruction{margin:0 20px 16px;}
+  .settings-header,.settings-row{grid-template-columns:1fr;}
+  .func-grid{grid-template-columns:1fr;}
+  footer{padding:24px 20px;}
+  }
 </style>
-
 </head>
 <body>
+<button id="menu-toggle" onclick="toggleMenu()" aria-label="Menu">
+  <span></span><span></span><span></span>
+</button>
 
-<nav id="topnav">
-  <div class="nav-brand">
-    <span class="nav-brand-name">ESP32 Marauder</span>
-    <span class="nav-brand-ver">v1.11.0</span>
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-tag">// dokumentacja</div>
+    <h1>ESP32<br>Marauder</h1>
+    <span class="version">v1.11.0</span>
   </div>
-  <div class="nav-links">
-    <a class="nav-link" href="#intro">Wprowadzenie</a>
-    <a class="nav-link" href="#settings">Ustawienia</a>
-    <a class="nav-link" href="#apps">Aplikacje</a>
-    <a class="nav-link" href="#wifi-sniffers">WiFi</a>
-    <a class="nav-link" href="#bt-sniffers">Bluetooth</a>
-    <a class="nav-link" href="#gps">GPS</a>
-    <a class="nav-link" href="#device">Device</a>
-    <a class="nav-link" href="#cli">CLI</a>
-    <a class="nav-link" href="#workflows">Scenariusze</a>
-    <a class="nav-link" href="#legal">Prawo</a>
+  <div class="search-wrap">
+    <input class="search-input" id="searchInput" placeholder="Szukaj... ( / )" oninput="filterNav(this.value)" autocomplete="off">
   </div>
-  <button class="nav-toggle" id="navToggle" aria-label="Menu" onclick="toggleDrawer()">
-    <span></span><span></span><span></span>
-  </button>
+  <div class="sidebar-nav" id="navList">
+    <div class="nav-section-label">Wstęp</div>
+    <a class="nav-item" href="#intro">Wprowadzenie</a>
+    <a class="nav-item" href="#settings">Ustawienia</a>
+    <a class="nav-item" href="#apps">Przegląd aplikacji</a>
+    <div class="nav-section-label">WiFi</div>
+    <a class="nav-item" href="#wifi-sniffers">Sniffery WiFi</a>
+    <a class="nav-item sub" href="#wifi-scanners">Skanery sieciowe</a>
+    <a class="nav-item sub" href="#wifi-attacks">Ataki WiFi</a>
+    <a class="nav-item sub" href="#wifi-general">Narzędzia ogólne</a>
+    <div class="nav-section-label">Bluetooth</div>
+    <a class="nav-item" href="#bt-sniffers">Sniffery BT</a>
+    <a class="nav-item sub" href="#bt-attacks">Ataki BLE</a>
+    <div class="nav-section-label">Pozostałe</div>
+    <a class="nav-item" href="#gps">GPS</a>
+    <a class="nav-item" href="#device">Device</a>
+    <a class="nav-item" href="#cli">CLI – Komendy</a>
+    <a class="nav-item" href="#workflows">Scenariusze użycia</a>
+    <a class="nav-item" href="#legal">Ostrzeżenia prawne</a>
+  </div>
 </nav>
 
-<div id="navdrawer">
-  <div class="drawer-section">Wstęp</div>
-  <a class="drawer-link" href="#intro" onclick="closeDrawer()">Wprowadzenie</a>
-  <a class="drawer-link" href="#settings" onclick="closeDrawer()">Ustawienia</a>
-  <a class="drawer-link" href="#apps" onclick="closeDrawer()">Przegląd aplikacji</a>
-  <div class="drawer-section">WiFi</div>
-  <a class="drawer-link" href="#wifi-sniffers" onclick="closeDrawer()">Sniffery WiFi</a>
-  <a class="drawer-link sub" href="#wifi-scanners" onclick="closeDrawer()">Skanery sieciowe</a>
-  <a class="drawer-link sub" href="#wifi-attacks" onclick="closeDrawer()">Ataki WiFi</a>
-  <a class="drawer-link sub" href="#wifi-general" onclick="closeDrawer()">Narzędzia ogólne</a>
-  <div class="drawer-section">Bluetooth</div>
-  <a class="drawer-link" href="#bt-sniffers" onclick="closeDrawer()">Sniffery BT</a>
-  <a class="drawer-link sub" href="#bt-attacks" onclick="closeDrawer()">Ataki BLE</a>
-  <div class="drawer-section">Pozostałe</div>
-  <a class="drawer-link" href="#gps" onclick="closeDrawer()">GPS</a>
-  <a class="drawer-link" href="#device" onclick="closeDrawer()">Device</a>
-  <a class="drawer-link" href="#cli" onclick="closeDrawer()">CLI – Komendy</a>
-  <a class="drawer-link" href="#workflows" onclick="closeDrawer()">Scenariusze użycia</a>
-  <a class="drawer-link" href="#legal" onclick="closeDrawer()">Ostrzeżenia prawne</a>
-</div>
-
-<div id="wrap">
-
-<div class="screen-bar">
-  <div class="screen-inner">
-    <div class="screen-label">
-      <div class="screen-eyebrow">// obsługa ekranu</div>
-      <div class="screen-title">Instrukcja poruszania się<br>po <span>menu Maraudera</span></div>
-    </div>
-    <div class="screen-zones">
-      <div class="screen-zone">
-        <div class="zone-display">
-          <div class="zone-hl t"></div>
-          <div class="zone-tick tl r1"></div><div class="zone-tick tr r1"></div>
-          <div class="zone-tick tl r2"></div><div class="zone-tick tr r2"></div>
-        </div>
-        <div class="zone-info">
-          <div class="zone-name t">Górna strefa</div>
-          <div class="zone-action">Przechodzenie <strong>w górę</strong> po menu</div>
-        </div>
-        <div class="zone-icon">▲</div>
-      </div>
-      <div class="screen-zone">
-        <div class="zone-display">
-          <div class="zone-hl m"></div>
-          <div class="zone-tick tl r1"></div><div class="zone-tick tr r1"></div>
-          <div class="zone-tick tl r2"></div><div class="zone-tick tr r2"></div>
-        </div>
-        <div class="zone-info">
-          <div class="zone-name m">Środkowa strefa</div>
-          <div class="zone-action"><strong>Zatwierdzanie</strong> wyboru</div>
-        </div>
-        <div class="zone-icon">✓</div>
-      </div>
-      <div class="screen-zone">
-        <div class="zone-display">
-          <div class="zone-hl b"></div>
-          <div class="zone-tick tl r1"></div><div class="zone-tick tr r1"></div>
-          <div class="zone-tick tl r2"></div><div class="zone-tick tr r2"></div>
-        </div>
-        <div class="zone-info">
-          <div class="zone-name b">Dolna strefa</div>
-          <div class="zone-action">Przechodzenie <strong>w dół</strong> po menu</div>
-        </div>
-        <div class="zone-icon">▼</div>
-      </div>
-    </div>
-  </div>
-</div>
-
+<div id="main">
 <header id="hero">
-  <div class="hero-eye">// instrukcja obsługi</div>
-  <h1 class="hero-title">ESP32 <span>Marauder</span><span class="cur"></span></h1>
+  <div class="hero-eyebrow">// instrukcja obsługi</div>
+  <h1 class="hero-title">ESP32 <span>Marauder</span><span class="cursor"></span></h1>
   <p class="hero-sub">Kompletny przewodnik po funkcjach, aplikacjach i ustawieniach urządzenia do testowania bezpieczeństwa sieci WiFi i Bluetooth.</p>
-  <div class="badges">
-    <span class="badge bg">v1.11.0</span>
-    <span class="badge bb">WiFi 802.11 b/g/n</span>
-    <span class="badge bb">Bluetooth / BLE</span>
-    <span class="badge ba">SD Card Support</span>
-    <span class="badge ba">GPS Ready</span>
-    <span class="badge br">Tylko do legalnych testów</span>
+  <div class="hero-badges">
+    <span class="badge badge-green">v1.11.0</span>
+    <span class="badge badge-blue">WiFi 802.11 b/g/n</span>
+    <span class="badge badge-blue">Bluetooth / BLE</span>
+    <span class="badge badge-amber">SD Card Support</span>
+    <span class="badge badge-amber">GPS Ready</span>
+    <span class="badge badge-red">Tylko do legalnych testów</span>
   </div>
 </header>
 
-<div class="warn-bar">
-  <span class="wi">⚠</span>
+<div class="menu-instruction">
+  <h3>📱 Instrukcja poruszania się po menu Maraudera</h3>
+  <p>Wyświetlacz jest podzielony na trzy strefy oddzielone małymi kreskami widocznymi po bokach ekranu.</p>
+  <div class="menu-grid">
+    <div class="menu-zone zone-top">
+      <strong>Górna strefa</strong><br>
+      Przechodzenie w górę po menu
+    </div>
+    <div class="menu-zone zone-center">
+      <strong>Środkowa strefa</strong><br>
+      Zatwierdzanie wyboru (Select)
+    </div>
+    <div class="menu-zone zone-bottom">
+      <strong>Dolna strefa</strong><br>
+      Przechodzenie w dół po menu
+    </div>
+  </div>
+</div>
+
+<div class="warning-bar">
+  <span class="warn-icon">⚠</span>
   <span>Urządzenie przeznaczone <strong>wyłącznie</strong> do legalnych testów penetracyjnych i badań bezpieczeństwa sieci. Używaj wyłącznie w sieciach i środowiskach, do których posiadasz pisemne upoważnienie. Nieuprawnione użycie jest niezgodne z prawem.</span>
 </div>
 
 <div id="content">
-
-<section class="section" id="intro">
-  <div class="sec-hd">
-    <span class="sec-num">01</span>
-    <h2 class="sec-title">Wprowadzenie</h2>
-    <span class="sec-icon">📡</span>
+<section class="section" id="intro" style="--i:1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Wprowadzenie</h2>
+    <span class="section-icon">📡</span>
   </div>
   <p>ESP32 Marauder to wielofunkcyjne urządzenie do testowania bezpieczeństwa sieci WiFi i Bluetooth, działające na platformie mikrokontrolera ESP32. Oferuje szeroki zestaw narzędzi — od pasywnego nasłuchu i analizy protokołów, po aktywne testy penetracyjne.</p>
   <p>Dostępne jest w wersji z ekranem dotykowym (interfejs GUI) oraz bez ekranu (tryb CLI przez port szeregowy UART).</p>
   <div class="info-grid">
-    <div class="info-cell"><div class="info-lbl">Wersja</div><div class="info-val g">1.11.0</div></div>
-    <div class="info-cell"><div class="info-lbl">Projekt</div><div class="info-val">justcallmekoko</div></div>
-    <div class="info-cell"><div class="info-lbl">Baud rate CLI</div><div class="info-val">115 200</div></div>
-    <div class="info-cell"><div class="info-lbl">Interfejsy</div><div class="info-val">GUI + CLI (UART)</div></div>
-    <div class="info-cell"><div class="info-lbl">Karta SD</div><div class="info-val">Opcjonalna (PCAP, HTML)</div></div>
-    <div class="info-cell"><div class="info-lbl">GPS</div><div class="info-val">Opcjonalny (NEO-6M)</div></div>
+    <div class="info-cell"><div class="info-label">Wersja</div><div class="info-value green">1.11.0</div></div>
+    <div class="info-cell"><div class="info-label">Projekt</div><div class="info-value">justcallmekoko</div></div>
+    <div class="info-cell"><div class="info-label">Baud rate CLI</div><div class="info-value">115 200</div></div>
+    <div class="info-cell"><div class="info-label">Interfejsy</div><div class="info-value">GUI + CLI (UART)</div></div>
+    <div class="info-cell"><div class="info-label">Karta SD</div><div class="info-value">Opcjonalna (PCAP, HTML)</div></div>
+    <div class="info-cell"><div class="info-label">GPS</div><div class="info-value">Opcjonalny (NEO-6M)</div></div>
   </div>
 </section>
 
-<section class="section" id="settings">
-  <div class="sec-hd">
-    <span class="sec-num">02</span>
-    <h2 class="sec-title">Ustawienia Maraudera</h2>
-    <span class="sec-icon">⚙️</span>
+<section class="section" id="settings" style="--i:2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Ustawienia Maraudera</h2>
+    <span class="section-icon">⚙️</span>
   </div>
-  <p>Zachowanie urządzenia można dostosować przez menu <code class="i">Device → Settings</code> (GUI) lub komendę <code class="i">settings</code> (CLI).</p>
-  <div class="stbl">
-    <div class="stbl-hd"><span>Nazwa</span><span>Typ</span><span>Domyślnie</span><span>Opis</span></div>
-    <div class="stbl-row"><span class="sname">ForcePMKID</span><span class="stype">bool</span><span class="sdef f">false</span><span class="sdesc">Automatycznie wysyła ramki <strong>deauth</strong> do wykrytych AP podczas <code class="i">sniffpmkid</code>, wymuszając przechwycenie handshake PMKID bez czekania na naturalne rozłączenie klienta.</span></div>
-    <div class="stbl-row"><span class="sname">ForceProbe</span><span class="stype">bool</span><span class="sdef f">false</span><span class="sdesc">Automatycznie wysyła ramki <strong>deauth</strong> podczas <code class="i">sniffprobe</code>, stymulując urządzenia do ponownego wysyłania probe request.</span></div>
-    <div class="stbl-row"><span class="sname">SavePCAP</span><span class="stype">bool</span><span class="sdef t">true</span><span class="sdesc">Zapisuje przechwycone dane WiFi do plików <strong>.pcap</strong> na karcie SD. Pliki można analizować w Wireshark lub hashcat.</span></div>
-    <div class="stbl-row"><span class="sname">EnableLED</span><span class="stype">bool</span><span class="sdef t">true</span><span class="sdesc">Włącza / wyłącza diodę LED statusu. Wyłączenie przydatne przy operacjach wymagających dyskrecji.</span></div>
-    <div class="stbl-row"><span class="sname">EPDeauth</span><span class="stype">bool</span><span class="sdef f">false</span><span class="sdesc">Wysyła ramki deauth do wybranych AP podczas działania <strong>Evil Portal</strong>, wymuszając rozłączenie klientów i przekierowanie przez fałszywy portal captive.</span></div>
-    <div class="stbl-row"><span class="sname">ChanHop</span><span class="stype">bool</span><span class="sdef f">false</span><span class="sdesc">Automatyczna zmiana kanałów WiFi podczas nasłuchu. Umożliwia przechwytywanie ruchu ze wszystkich kanałów 2.4 GHz jednocześnie.</span></div>
+  <p>Zachowanie urządzenia można dostosować przez menu <code class="inline">Device → Settings</code> (GUI) lub komendę <code class="inline">settings</code> (CLI).</p>
+  <div class="settings-grid">
+    <div class="settings-header"><span>Nazwa</span><span>Typ</span><span>Domyślnie</span><span>Opis</span></div>
+    <div class="settings-row">
+      <span class="setting-name">ForcePMKID</span><span class="setting-type">bool</span><span class="setting-default false">false</span>
+      <span class="setting-desc">Automatycznie wysyła ramki <strong>deauth</strong> do wykrytych AP podczas <code class="inline">sniffpmkid</code>, wymuszając przechwycenie handshake PMKID bez czekania na naturalne rozłączenie klienta.</span>
+    </div>
+    <div class="settings-row">
+      <span class="setting-name">ForceProbe</span><span class="setting-type">bool</span><span class="setting-default false">false</span>
+      <span class="setting-desc">Automatycznie wysyła ramki <strong>deauth</strong> podczas <code class="inline">sniffprobe</code>, stymulując urządzenia do ponownego wysyłania probe request.</span>
+    </div>
+    <div class="settings-row">
+      <span class="setting-name">SavePCAP</span><span class="setting-type">bool</span><span class="setting-default true">true</span>
+      <span class="setting-desc">Zapisuje przechwycone dane WiFi do plików <strong>.pcap</strong> na karcie SD. Pliki można analizować w Wireshark lub hashcat.</span>
+    </div>
+    <div class="settings-row">
+      <span class="setting-name">EnableLED</span><span class="setting-type">bool</span><span class="setting-default true">true</span>
+      <span class="setting-desc">Włącza / wyłącza diodę LED statusu. Wyłączenie przydatne przy operacjach wymagających dyskrecji.</span>
+    </div>
+    <div class="settings-row">
+      <span class="setting-name">EPDeauth</span><span class="setting-type">bool</span><span class="setting-default false">false</span>
+      <span class="setting-desc">Wysyła ramki deauth do wybranych AP podczas działania <strong>Evil Portal</strong>, wymuszając rozłączenie klientów i przekierowanie przez fałszywy portal captive.</span>
+    </div>
+    <div class="settings-row">
+      <span class="setting-name">ChanHop</span><span class="setting-type">bool</span><span class="setting-default false">false</span>
+      <span class="setting-desc">Automatyczna zmiana kanałów WiFi podczas nasłuchu. Umożliwia przechwytywanie ruchu ze wszystkich kanałów 2.4 GHz jednocześnie.</span>
+    </div>
   </div>
 </section>
 
-<section class="section" id="apps">
-  <div class="sec-hd">
-    <span class="sec-num">03</span>
-    <h2 class="sec-title">Przegląd aplikacji</h2>
-    <span class="sec-icon">🗂️</span>
+<section class="section" id="apps" style="--i:3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Przegląd aplikacji</h2>
+    <span class="section-icon">🗂️</span>
   </div>
   <p>Marauder z ekranem posiada menu podzielone na pięć kategorii. Wersja bez ekranu korzysta z tych samych funkcji przez CLI.</p>
-  <div class="fgrid" style="margin-top:14px">
-    <div class="fcard gen"><div class="fname">📶 WiFi</div><div class="fdesc">Sniffery, skanery sieciowe, ataki i narzędzia do zarządzania sieciami 802.11</div></div>
-    <div class="fcard snf"><div class="fname">🔵 Bluetooth</div><div class="fdesc">Skanery i narzędzia testowe dla Bluetooth Classic oraz BLE</div></div>
-    <div class="fcard"><div class="fname">🛰 GPS</div><div class="fdesc">Wyświetlanie danych GPS, śledzenie trasy, wardrive z geolokalizacją</div></div>
-    <div class="fcard"><div class="fname">🔧 Device</div><div class="fdesc">Aktualizacja firmware, informacje systemowe, ustawienia, GPS Tracker</div></div>
-    <div class="fcard"><div class="fname">🔄 Reboot</div><div class="fdesc">Natychmiastowy restart mikrokontrolera ESP32</div></div>
+  <div class="func-grid" style="margin-top:16px;">
+    <div class="func-card general"><div class="func-name">📶 WiFi</div><div class="func-desc">Sniffery, skanery sieciowe, ataki i narzędzia do zarządzania sieciami 802.11</div></div>
+    <div class="func-card sniffer"><div class="func-name">🔵 Bluetooth</div><div class="func-desc">Skanery i narzędzia testowe dla Bluetooth Classic oraz BLE</div></div>
+    <div class="func-card"><div class="func-name">🛰 GPS</div><div class="func-desc">Wyświetlanie danych GPS, śledzenie trasy, wardrive z geolokalizacją</div></div>
+    <div class="func-card"><div class="func-name">🔧 Device</div><div class="func-desc">Aktualizacja firmware, informacje systemowe, ustawienia, GPS Tracker</div></div>
+    <div class="func-card"><div class="func-name">🔄 Reboot</div><div class="func-desc">Natychmiastowy restart mikrokontrolera ESP32</div></div>
   </div>
 </section>
 
-<section class="section" id="wifi-sniffers">
-  <div class="sec-hd">
-    <span class="sec-num">04</span>
-    <h2 class="sec-title">WiFi – Sniffery</h2>
-    <span class="sec-icon">📶</span>
+<section class="section" id="wifi-sniffers" style="--i:4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">WiFi – Sniffery</h2>
+    <span class="section-icon">📶</span>
   </div>
-  <p>Narzędzia do pasywnego i aktywnego przechwytywania ruchu sieciowego 802.11. Większość zapisuje dane PCAP na kartę SD (<code class="i">SavePCAP=true</code>).</p>
-  <div class="fgrid">
-    <div class="fcard snf"><div class="fname">Probe Request Sniff <span class="ftag ts">sniffer</span></div><div class="fdesc">Przechwytuje ramki probe request wysyłane przez urządzenia klienckie. Pokazuje, jakich sieci szukają okoliczne urządzenia.</div></div>
-    <div class="fcard snf"><div class="fname">Beacon Sniff <span class="ftag ts">sniffer</span></div><div class="fdesc">Nasłuchuje ramek beacon rozsyłanych przez pobliskie AP. Tworzy listę sieci WiFi z SSID i adresami MAC.</div></div>
-    <div class="fcard snf"><div class="fname">Channel Analyzer <span class="ftag ts">sniffer</span></div><div class="fdesc">Wyświetla aktywność na poszczególnych kanałach WiFi 2.4 GHz w formie histogramu. Pomaga wybrać najmniej zajęty kanał.</div></div>
-    <div class="fcard snf"><div class="fname">Deauth Sniff <span class="ftag ts">sniffer</span></div><div class="fdesc">Przechwytuje ramki deauthentication. Pozwala wykryć próby ataków deauth przeprowadzanych przez inne urządzenia.</div></div>
-    <div class="fcard snf"><div class="fname">Packet Count <span class="ftag ts">sniffer</span></div><div class="fdesc">Zlicza pakiety WiFi wykryte na bieżącym kanale. Prosty wskaźnik aktywności sieci.</div></div>
-    <div class="fcard snf"><div class="fname">Packet Monitor <span class="ftag ts">sniffer</span></div><div class="fdesc">Wizualizuje natężenie ruchu pakietów WiFi w czasie rzeczywistym na wykresie słupkowym.</div></div>
-    <div class="fcard snf"><div class="fname">EAPOL PMKID Scan <span class="ftag ts">sniffer</span></div><div class="fdesc">Przechwytuje ramki EAPOL/PMKID z handshake'ów WPA2. Pliki PCAP mogą być użyte do offline crackowania haseł. Opcja <code class="i">ForcePMKID</code> przyspiesza przechwycenie.</div></div>
-    <div class="fcard snf"><div class="fname">Raw Sniff <span class="ftag ts">sniffer</span></div><div class="fdesc">Przechwytuje surowe ramki 802.11 i zapisuje bezpośrednio do PCAP bez filtrowania. Wymaga karty SD.</div></div>
-    <div class="fcard snf"><div class="fname">Scan APs <span class="ftag tk">scan</span></div><div class="fdesc">Skanuje pobliskie AP z SSID, kanałem, RSSI i typem szyfrowania.</div></div>
-    <div class="fcard snf"><div class="fname">Scan All <span class="ftag tk">scan</span></div><div class="fdesc">Jednoczesne skanowanie AP i stacji klienckich. Kompletna mapa środowiska WiFi.</div></div>
-    <div class="fcard snf"><div class="fname">Scan Stations <span class="ftag tk">scan</span></div><div class="fdesc">Skanuje stacje klienckie powiązane z wykrytymi AP wraz z adresami MAC.</div></div>
-    <div class="fcard snf"><div class="fname">Signal Monitor <span class="ftag ts">sniffer</span></div><div class="fdesc">Monitoruje siłę sygnału (RSSI) wybranego AP lub stacji w czasie rzeczywistym. Przydatne do lokalizowania urządzeń.</div></div>
-    <div class="fcard snf"><div class="fname">Wardrive <span class="ftag ts">gps</span></div><div class="fdesc">Skanuje AP podczas ruchu i zapisuje je z koordynatami GPS do CSV (kompatybilny z Wigle.net). Wymaga modułu GPS.</div></div>
-    <div class="fcard snf"><div class="fname">Station Wardrive <span class="ftag ts">gps</span></div><div class="fdesc">Jak Wardrive, ale rejestruje też stacje klienckie z lokalizacją GPS.</div></div>
-    <div class="fcard snf"><div class="fname">MAC Track <span class="ftag ts">sniffer</span></div><div class="fdesc">Śledzi konkretne urządzenie po adresie MAC i wyświetla jego aktywność oraz siłę sygnału.</div></div>
-    <div class="fcard snf"><div class="fname">Detect Pwnagotchi <span class="ftag ts">detect</span></div><div class="fdesc">Wykrywa urządzenia Pwnagotchi na podstawie charakterystycznych ramek beacon.</div></div>
-    <div class="fcard snf"><div class="fname">SAE Commit Sniff <span class="ftag ts">sniffer</span></div><div class="fdesc">Przechwytuje ramki SAE Commit (WPA3 Dragonfly handshake). Przydatne przy analizie sieci WPA3.</div></div>
-    <div class="fcard snf"><div class="fname">Ping Scan <span class="ftag tk">scanner</span></div><div class="fdesc">Po połączeniu z siecią WiFi skanuje podsieć w poszukiwaniu aktywnych hostów przez ICMP ping.</div></div>
+  <p>Narzędzia do pasywnego i aktywnego przechwytywania ruchu sieciowego 802.11. Większość zapisuje dane PCAP na kartę SD (<code class="inline">SavePCAP=true</code>).</p>
+  <div class="func-grid">
+    <div class="func-card sniffer"><div class="func-name">Probe Request Sniff <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Przechwytuje ramki probe request wysyłane przez urządzenia klienckie. Pokazuje, jakich sieci szukają okoliczne urządzenia.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Beacon Sniff <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Nasłuchuje ramek beacon rozsyłanych przez pobliskie AP. Tworzy listę sieci WiFi z SSID i adresami MAC.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Channel Analyzer <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Wyświetla aktywność na poszczególnych kanałach WiFi 2.4 GHz w formie histogramu. Pomaga wybrać najmniej zajęty kanał.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Deauth Sniff <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Przechwytuje ramki deauthentication. Pozwala wykryć próby ataków deauth przeprowadzanych przez inne urządzenia.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Packet Count <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Zlicza pakiety WiFi wykryte na bieżącym kanale. Prosty wskaźnik aktywności sieci.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Packet Monitor <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Wizualizuje natężenie ruchu pakietów WiFi w czasie rzeczywistym na wykresie słupkowym.</div></div>
+    <div class="func-card sniffer"><div class="func-name">EAPOL PMKID Scan <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Przechwytuje ramki EAPOL/PMKID z handshake'ów WPA2. Pliki PCAP mogą być użyte do offline crackowania haseł. Opcja <code class="inline">ForcePMKID</code> przyspiesza przechwycenie.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Raw Sniff <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Przechwytuje surowe ramki 802.11 i zapisuje bezpośrednio do PCAP bez filtrowania. Wymaga karty SD.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Scan APs <span class="func-tag tag-sniffer">scan</span></div><div class="func-desc">Skanuje pobliskie AP z SSID, kanałem, RSSI i typem szyfrowania.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Scan All <span class="func-tag tag-sniffer">scan</span></div><div class="func-desc">Jednoczesne skanowanie AP i stacji klienckich. Kompletna mapa środowiska WiFi.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Scan Stations <span class="func-tag tag-sniffer">scan</span></div><div class="func-desc">Skanuje stacje klienckie powiązane z wykrytymi AP wraz z adresami MAC.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Signal Monitor <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Monitoruje siłę sygnału (RSSI) wybranego AP lub stacji w czasie rzeczywistym. Przydatne do lokalizowania urządzeń.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Wardrive <span class="func-tag tag-sniffer">gps</span></div><div class="func-desc">Skanuje AP podczas ruchu i zapisuje je z koordynatami GPS do CSV (kompatybilny z Wigle.net). Wymaga modułu GPS.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Station Wardrive <span class="func-tag tag-sniffer">gps</span></div><div class="func-desc">Jak Wardrive, ale rejestruje też stacje klienckie z lokalizacją GPS.</div></div>
+    <div class="func-card sniffer"><div class="func-name">MAC Track <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Śledzi konkretne urządzenie po adresie MAC i wyświetla jego aktywność oraz siłę sygnału.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Detect Pwnagotchi <span class="func-tag tag-sniffer">detect</span></div><div class="func-desc">Wykrywa urządzenia Pwnagotchi na podstawie charakterystycznych ramek beacon.</div></div>
+    <div class="func-card sniffer"><div class="func-name">SAE Commit Sniff <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Przechwytuje ramki SAE Commit (WPA3 Dragonfly handshake). Przydatne przy analizie sieci WPA3.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Ping Scan <span class="func-tag tag-scanner">scanner</span></div><div class="func-desc">Po połączeniu z siecią WiFi skanuje podsieć w poszukiwaniu aktywnych hostów przez ICMP ping.</div></div>
   </div>
 
   <div id="wifi-scanners">
-    <div class="sublbl">🔍 Skanery sieciowe</div>
-    <p>Wymagają aktywnego połączenia z siecią WiFi (<code class="i">Join WiFi</code>).</p>
-    <div class="fgrid">
-      <div class="fcard"><div class="fname">ARP Scan <span class="ftag tk">scanner</span></div><div class="fdesc">Skanuje sieć lokalną przez zapytania ARP — szybsze od ICMP na sieciach blokujących ping.</div></div>
-      <div class="fcard"><div class="fname">Port Scan All <span class="ftag tk">scanner</span></div><div class="fdesc">Skanuje otwarte porty TCP na wykrytych hostach i identyfikuje uruchomione usługi.</div></div>
-      <div class="fcard"><div class="fname">SSH Scan <span class="ftag tk">scanner</span></div><div class="fdesc">Sprawdza dostępność usługi SSH (port 22) na hostach w sieci lokalnej.</div></div>
-      <div class="fcard"><div class="fname">Telnet Scan <span class="ftag tk">scanner</span></div><div class="fdesc">Sprawdza dostępność usługi Telnet (port 23) na hostach w sieci lokalnej.</div></div>
+    <div class="sub-label">🔍 Skanery sieciowe</div>
+    <p>Wymagają aktywnego połączenia z siecią WiFi (<code class="inline">Join WiFi</code>).</p>
+    <div class="func-grid" style="margin-top:12px;">
+      <div class="func-card"><div class="func-name">ARP Scan <span class="func-tag tag-scanner">scanner</span></div><div class="func-desc">Skanuje sieć lokalną przez zapytania ARP — szybsze od ICMP na sieciach blokujących ping.</div></div>
+      <div class="func-card"><div class="func-name">Port Scan All <span class="func-tag tag-scanner">scanner</span></div><div class="func-desc">Skanuje otwarte porty TCP na wykrytych hostach i identyfikuje uruchomione usługi.</div></div>
+      <div class="func-card"><div class="func-name">SSH Scan <span class="func-tag tag-scanner">scanner</span></div><div class="func-desc">Sprawdza dostępność usługi SSH (port 22) na hostach w sieci lokalnej.</div></div>
+      <div class="func-card"><div class="func-name">Telnet Scan <span class="func-tag tag-scanner">scanner</span></div><div class="func-desc">Sprawdza dostępność usługi Telnet (port 23) na hostach w sieci lokalnej.</div></div>
     </div>
   </div>
 
   <div id="wifi-attacks">
-    <div class="sublbl">⚡ Ataki WiFi</div>
-    <div class="wbox"><p>⚠ Funkcje aktywne — używaj wyłącznie w środowiskach testowych z pisemnym upoważnieniem właściciela sieci.</p></div>
-    <div class="fgrid">
-      <div class="fcard atk"><div class="fname">Beacon Spam List <span class="ftag ta">atak</span></div><div class="fdesc">Rozsyła fałszywe ramki beacon z SSID z załadowanej listy. Tworzy iluzję wielu sieci WiFi.</div></div>
-      <div class="fcard atk"><div class="fname">Beacon Spam Random <span class="ftag ta">atak</span></div><div class="fdesc">Rozsyła ramki beacon z losowo generowanymi SSID. Zapełnia skanery WiFi przypadkowymi sieciami.</div></div>
-      <div class="fcard atk"><div class="fname">Evil Portal <span class="ftag ta">atak</span></div><div class="fdesc">Fałszywa sieć WiFi z portalem captive opartym na pliku HTML z karty SD. Opcja <code class="i">EPDeauth</code> wymusza rozłączenie klientów z prawdziwymi AP.</div></div>
-      <div class="fcard atk"><div class="fname">Deauth Flood <span class="ftag ta">atak</span></div><div class="fdesc">Wysyła ciągłe ramki deauthentication do wybranych AP lub stacji, uniemożliwiając utrzymanie połączenia.</div></div>
-      <div class="fcard atk"><div class="fname">AP Clone Spam <span class="ftag ta">atak</span></div><div class="fdesc">Klonuje wybrane AP (SSID i MAC) i rozsyła fałszywe ramki beacon, tworząc zduplikowane punkty dostępu.</div></div>
-      <div class="fcard atk"><div class="fname">Karma <span class="ftag ta">atak</span></div><div class="fdesc">Odpowiada na probe request urządzeń, udając każdą sieć, której szukają. Urządzenia mogą automatycznie połączyć się z Marauderem.</div></div>
-      <div class="fcard atk"><div class="fname">Probe Request Flood <span class="ftag ta">atak</span></div><div class="fdesc">Zalewa powietrze fałszywymi ramkami probe request, symulując aktywność wielu urządzeń.</div></div>
-      <div class="fcard atk"><div class="fname">Bad Msg <span class="ftag ta">atak</span></div><div class="fdesc">Wysyła zniekształcone ramki zarządzające WiFi do wybranych AP. Może powodować niestabilność routerów.</div></div>
-      <div class="fcard atk"><div class="fname">Sleep Attack <span class="ftag ta">atak</span></div><div class="fdesc">Wysyła association response do stacji, powodując ich "uśpienie" i utratę łączności z prawidłowym AP.</div></div>
-      <div class="fcard atk"><div class="fname">SAE Commit Flood <span class="ftag ta">atak</span></div><div class="fdesc">Zalewa AP fałszywymi ramkami SAE Commit (WPA3), przeciążając proces uwierzytelniania.</div></div>
-      <div class="fcard atk"><div class="fname">Channel Switch <span class="ftag ta">atak</span></div><div class="fdesc">Wysyła ramki Channel Switch Announcement (CSA), nakazując klientom zmianę kanału i powodując tymczasowe zerwanie połączeń.</div></div>
-      <div class="fcard atk"><div class="fname">Quiet Time <span class="ftag ta">atak</span></div><div class="fdesc">Wysyła ramki Quiet Element do AP, nakazując ciszę radiową na wybranym kanale.</div></div>
-      <div class="fcard atk"><div class="fname">Rick Roll Beacon <span class="ftag ta">fun</span></div><div class="fdesc">Rozsyła SSID z tekstem piosenki „Never Gonna Give You Up". Wersja rozrywkowa beacon spam.</div></div>
+    <div class="sub-label">⚡ Ataki WiFi</div>
+    <div class="warn-box"><p>⚠ Funkcje aktywne — używaj wyłącznie w środowiskach testowych z pisemnym upoważnieniem właściciela sieci.</p></div>
+    <div class="func-grid" style="margin-top:12px;">
+      <div class="func-card attack"><div class="func-name">Beacon Spam List <span class="func-tag tag-attack">atak</span></div><div class="func-desc">Rozsyła fałszywe ramki beacon z SSID z załadowanej listy. Tworzy iluzję wielu sieci WiFi.</div></div>
+      <div class="func-card attack"><div class="func-name">Beacon Spam Random <span class="func-tag tag-attack">atak</span></div><div class="func-desc">Rozsyła ramki beacon z losowo generowanymi SSID. Zapełnia skanery WiFi przypadkowymi sieciami.</div></div>
+      <div class="func-card attack"><div class="func-name">Evil Portal <span class="func-tag tag-attack">atak</span></div><div class="func-desc">Fałszywa sieć WiFi z portalem captive opartym na pliku HTML z karty SD. Opcja <code class="inline">EPDeauth</code> wymusza rozłączenie klientów z prawdziwymi AP.</div></div>
+      <div class="func-card attack"><div class="func-name">Deauth Flood <span class="func-tag tag-attack">atak</span></div><div class="func-desc">Wysyła ciągłe ramki deauthentication do wybranych AP lub stacji, uniemożliwiając utrzymanie połączenia.</div></div>
+      <div class="func-card attack"><div class="func-name">AP Clone Spam <span class="func-tag tag-attack">atak</span></div><div class="func-desc">Klonuje wybrane AP (SSID i MAC) i rozsyła fałszywe ramki beacon, tworząc zduplikowane punkty dostępu.</div></div>
+      <div class="func-card attack"><div class="func-name">Karma <span class="func-tag tag-attack">atak</span></div><div class="func-desc">Odpowiada na probe request urządzeń, udając każdą sieć, której szukają. Urządzenia mogą automatycznie połączyć się z Marauderem.</div></div>
+      <div class="func-card attack"><div class="func-name">Probe Request Flood <span class="func-tag tag-attack">atak</span></div><div class="func-desc">Zalewa powietrze fałszywymi ramkami probe request, symulując aktywność wielu urządzeń.</div></div>
+      <div class="func-card attack"><div class="func-name">Bad Msg <span class="func-tag tag-attack">atak</span></div><div class="func-desc">Wysyła zniekształcone ramki zarządzające WiFi do wybranych AP. Może powodować niestabilność routerów.</div></div>
+      <div class="func-card attack"><div class="func-name">Sleep Attack <span class="func-tag tag-attack">atak</span></div><div class="func-desc">Wysyła association response do stacji, powodując ich "uśpienie" i utratę łączności z prawidłowym AP.</div></div>
+      <div class="func-card attack"><div class="func-name">SAE Commit Flood <span class="func-tag tag-attack">atak</span></div><div class="func-desc">Zalewa AP fałszywymi ramkami SAE Commit (WPA3), przeciążając proces uwierzytelniania.</div></div>
+      <div class="func-card attack"><div class="func-name">Channel Switch <span class="func-tag tag-attack">atak</span></div><div class="func-desc">Wysyła ramki Channel Switch Announcement (CSA), nakazując klientom zmianę kanału i powodując tymczasowe zerwanie połączeń.</div></div>
+      <div class="func-card attack"><div class="func-name">Quiet Time <span class="func-tag tag-attack">atak</span></div><div class="func-desc">Wysyła ramki Quiet Element do AP, nakazując ciszę radiową na wybranym kanale.</div></div>
+      <div class="func-card attack"><div class="func-name">Rick Roll Beacon <span class="func-tag tag-attack">fun</span></div><div class="func-desc">Rozsyła SSID z tekstem piosenki „Never Gonna Give You Up". Wersja rozrywkowa beacon spam.</div></div>
     </div>
   </div>
 
   <div id="wifi-general">
-    <div class="sublbl">🛠 Narzędzia ogólne WiFi</div>
-    <div class="fgrid">
-      <div class="fcard gen"><div class="fname">Add SSID <span class="ftag tg">zarządzanie</span></div><div class="fdesc">Ręcznie dodaje nową nazwę SSID do listy w pamięci.</div></div>
-      <div class="fcard gen"><div class="fname">Generate SSIDs <span class="ftag tg">zarządzanie</span></div><div class="fdesc">Automatycznie generuje losowe lub wzorcowe nazwy SSID i dodaje do listy.</div></div>
-      <div class="fcard gen"><div class="fname">Save / Load SSIDs <span class="ftag tg">SD</span></div><div class="fdesc">Zapisuje / wczytuje listę SSID z pliku na karcie SD.</div></div>
-      <div class="fcard gen"><div class="fname">Save / Load APs <span class="ftag tg">SD</span></div><div class="fdesc">Zapisuje / wczytuje listę zeskanowanych AP (SSID, MAC, kanał) z karty SD.</div></div>
-      <div class="fcard gen"><div class="fname">Clear SSIDs / APs <span class="ftag tg">zarządzanie</span></div><div class="fdesc">Czyści listę SSID lub AP z pamięci urządzenia.</div></div>
-      <div class="fcard gen"><div class="fname">Select APs / Stations <span class="ftag tg">zarządzanie</span></div><div class="fdesc">Wybiera konkretne AP lub stacje klienckie do użycia w atakach lub monitorowaniu.</div></div>
-      <div class="fcard gen"><div class="fname">Select EP HTML File <span class="ftag tg">SD</span></div><div class="fdesc">Wybiera plik HTML z karty SD używany jako strona Evil Portal.</div></div>
-      <div class="fcard gen"><div class="fname">View AP Info <span class="ftag tg">info</span></div><div class="fdesc">Wyświetla szczegółowe informacje o wybranym AP: SSID, MAC, kanał, RSSI, szyfrowanie.</div></div>
-      <div class="fcard gen"><div class="fname">Set MACs <span class="ftag tg">zarządzanie</span></div><div class="fdesc">Ustawia adresy MAC używane w atakach (spoofing MAC).</div></div>
-      <div class="fcard gen"><div class="fname">Join WiFi <span class="ftag tg">połączenie</span></div><div class="fdesc">Łączy Maraudera z siecią WiFi — wymagane dla skanerów sieciowych.</div></div>
-      <div class="fcard gen"><div class="fname">Shutdown WiFi <span class="ftag tg">zarządzanie</span></div><div class="fdesc">Zatrzymuje wszystkie aktywne funkcje WiFi i wyłącza radio.</div></div>
+    <div class="sub-label">🛠 Narzędzia ogólne WiFi</div>
+    <div class="func-grid">
+      <div class="func-card general"><div class="func-name">Add SSID <span class="func-tag tag-general">zarządzanie</span></div><div class="func-desc">Ręcznie dodaje nową nazwę SSID do listy w pamięci.</div></div>
+      <div class="func-card general"><div class="func-name">Generate SSIDs <span class="func-tag tag-general">zarządzanie</span></div><div class="func-desc">Automatycznie generuje losowe lub wzorcowe nazwy SSID i dodaje do listy.</div></div>
+      <div class="func-card general"><div class="func-name">Save / Load SSIDs <span class="func-tag tag-general">SD</span></div><div class="func-desc">Zapisuje / wczytuje listę SSID z pliku na karcie SD.</div></div>
+      <div class="func-card general"><div class="func-name">Save / Load APs <span class="func-tag tag-general">SD</span></div><div class="func-desc">Zapisuje / wczytuje listę zeskanowanych AP (SSID, MAC, kanał) z karty SD.</div></div>
+      <div class="func-card general"><div class="func-name">Clear SSIDs / APs <span class="func-tag tag-general">zarządzanie</span></div><div class="func-desc">Czyści listę SSID lub AP z pamięci urządzenia.</div></div>
+      <div class="func-card general"><div class="func-name">Select APs / Stations <span class="func-tag tag-general">zarządzanie</span></div><div class="func-desc">Wybiera konkretne AP lub stacje klienckie do użycia w atakach lub monitorowaniu.</div></div>
+      <div class="func-card general"><div class="func-name">Select EP HTML File <span class="func-tag tag-general">SD</span></div><div class="func-desc">Wybiera plik HTML z karty SD używany jako strona Evil Portal.</div></div>
+      <div class="func-card general"><div class="func-name">View AP Info <span class="func-tag tag-general">info</span></div><div class="func-desc">Wyświetla szczegółowe informacje o wybranym AP: SSID, MAC, kanał, RSSI, szyfrowanie.</div></div>
+      <div class="func-card general"><div class="func-name">Set MACs <span class="func-tag tag-general">zarządzanie</span></div><div class="func-desc">Ustawia adresy MAC używane w atakach (spoofing MAC).</div></div>
+      <div class="func-card general"><div class="func-name">Join WiFi <span class="func-tag tag-general">połączenie</span></div><div class="func-desc">Łączy Maraudera z siecią WiFi — wymagane dla skanerów sieciowych.</div></div>
+      <div class="func-card general"><div class="func-name">Shutdown WiFi <span class="func-tag tag-general">zarządzanie</span></div><div class="func-desc">Zatrzymuje wszystkie aktywne funkcje WiFi i wyłącza radio.</div></div>
     </div>
   </div>
 </section>
 
-<section class="section" id="bt-sniffers">
-  <div class="sec-hd">
-    <span class="sec-num">05</span>
-    <h2 class="sec-title">Bluetooth / BLE – Sniffery</h2>
-    <span class="sec-icon">🔵</span>
+<section class="section" id="bt-sniffers" style="--i:5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Bluetooth / BLE – Sniffery</h2>
+    <span class="section-icon">🔵</span>
   </div>
-  <div class="fgrid">
-    <div class="fcard snf"><div class="fname">Bluetooth Analyzer <span class="ftag tb">bt</span></div><div class="fdesc">Analizuje pobliskie urządzenia BT i BLE: adresy MAC, nazwy, RSSI i typy. Tryb pasywny.</div></div>
-    <div class="fcard snf"><div class="fname">Bluetooth Sniffer <span class="ftag tb">bt</span></div><div class="fdesc">Przechwytuje i rejestruje surowe pakiety BLE Advertisement Packets.</div></div>
-    <div class="fcard snf"><div class="fname">Flipper Sniff <span class="ftag tb">bt</span></div><div class="fdesc">Wykrywa ramki BLE emitowane przez urządzenia Flipper Zero w pobliżu.</div></div>
-    <div class="fcard snf"><div class="fname">Airtag Sniff <span class="ftag tb">bt</span></div><div class="fdesc">Wykrywa i rejestruje ramki BLE emitowane przez Apple AirTag. Pokazuje identyfikator i RSSI tagów.</div></div>
-    <div class="fcard snf"><div class="fname">Airtag Monitor <span class="ftag tb">bt</span></div><div class="fdesc">Ciągły monitoring AirTagów. Wyświetla historię wykryć i zmiany sygnału — przydatne do wykrywania potencjalnych trackerów.</div></div>
-    <div class="fcard snf"><div class="fname">Bluetooth Wardrive <span class="ftag tb">gps</span></div><div class="fdesc">Rejestruje urządzenia BT/BLE z koordynatami GPS podczas ruchu. Wymaga modułu GPS.</div></div>
-    <div class="fcard snf"><div class="fname">BT Wardrive Continuous <span class="ftag tb">gps</span></div><div class="fdesc">Jak Bluetooth Wardrive, ale działa w trybie ciągłym bez przerywania skanowania.</div></div>
-    <div class="fcard snf"><div class="fname">Detect Card Skimmers <span class="ftag tb">detect</span></div><div class="fdesc">Wykrywa podejrzane urządzenia BT typowe dla skimmerów kart bankomatowych i terminali płatniczych.</div></div>
-    <div class="fcard snf"><div class="fname">Flock Sniff <span class="ftag tb">bt</span></div><div class="fdesc">Wykrywa urządzenia BLE pracujące w trybie "Flock" (śledzenie IoT).</div></div>
-    <div class="fcard snf"><div class="fname">Flock Wardrive <span class="ftag tb">gps</span></div><div class="fdesc">Flock Sniff z rejestracją lokalizacji GPS podczas warjazdu.</div></div>
-    <div class="fcard snf"><div class="fname">Meta Detect <span class="ftag tb">detect</span></div><div class="fdesc">Wykrywa urządzenia Meta (Oculus/Quest) na podstawie charakterystycznych ramek BLE.</div></div>
+  <div class="func-grid">
+    <div class="func-card sniffer"><div class="func-name">Bluetooth Analyzer <span class="func-tag tag-bt">bt</span></div><div class="func-desc">Analizuje pobliskie urządzenia BT i BLE: adresy MAC, nazwy, RSSI i typy. Tryb pasywny.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Bluetooth Sniffer <span class="func-tag tag-bt">bt</span></div><div class="func-desc">Przechwytuje i rejestruje surowe pakiety BLE Advertisement Packets.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Flipper Sniff <span class="func-tag tag-bt">bt</span></div><div class="func-desc">Wykrywa ramki BLE emitowane przez urządzenia Flipper Zero w pobliżu.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Airtag Sniff <span class="func-tag tag-bt">bt</span></div><div class="func-desc">Wykrywa i rejestruje ramki BLE emitowane przez Apple AirTag. Pokazuje identyfikator i RSSI tagów.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Airtag Monitor <span class="func-tag tag-bt">bt</span></div><div class="func-desc">Ciągły monitoring AirTagów. Wyświetla historię wykryć i zmiany sygnału — przydatne do wykrywania potencjalnych trackerów.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Bluetooth Wardrive <span class="func-tag tag-bt">gps</span></div><div class="func-desc">Rejestruje urządzenia BT/BLE z koordynatami GPS podczas ruchu. Wymaga modułu GPS.</div></div>
+    <div class="func-card sniffer"><div class="func-name">BT Wardrive Continuous <span class="func-tag tag-bt">gps</span></div><div class="func-desc">Jak Bluetooth Wardrive, ale działa w trybie ciągłym bez przerywania skanowania.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Detect Card Skimmers <span class="func-tag tag-bt">detect</span></div><div class="func-desc">Wykrywa podejrzane urządzenia BT typowe dla skimmerów kart bankomatowych i terminali płatniczych.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Flock Sniff <span class="func-tag tag-bt">bt</span></div><div class="func-desc">Wykrywa urządzenia BLE pracujące w trybie "Flock" (śledzenie IoT).</div></div>
+    <div class="func-card sniffer"><div class="func-name">Flock Wardrive <span class="func-tag tag-bt">gps</span></div><div class="func-desc">Flock Sniff z rejestracją lokalizacji GPS podczas warjazdu.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Meta Detect <span class="func-tag tag-bt">detect</span></div><div class="func-desc">Wykrywa urządzenia Meta (Oculus/Quest) na podstawie charakterystycznych ramek BLE.</div></div>
   </div>
 
   <div id="bt-attacks">
-    <div class="sublbl">⚡ Ataki BLE</div>
-    <div class="wbox"><p>⚠ Ataki BLE spam mogą zakłócać pracę urządzeń medycznych i innej krytycznej infrastruktury. Zachowaj szczególną ostrożność w miejscach publicznych.</p></div>
-    <div class="fgrid">
-      <div class="fcard atk"><div class="fname">Sour Apple <span class="ftag ta">apple</span></div><div class="fdesc">Fałszywe ramki BLE imitujące urządzenia Apple (AirPods, Watch itp.). Powoduje wyświetlanie powiadomień parowania na iOS.</div></div>
-      <div class="fcard atk"><div class="fname">Swiftpair Spam <span class="ftag ta">windows</span></div><div class="fdesc">Fałszywe ramki BLE Microsoft Swift Pair. Powoduje powiadomienia o parowaniu na Windows 10/11.</div></div>
-      <div class="fcard atk"><div class="fname">Samsung BLE Spam <span class="ftag ta">android</span></div><div class="fdesc">Fałszywe ramki BLE Samsung Fast Pair. Powoduje powiadomienia parowania na urządzeniach Samsung Android.</div></div>
-      <div class="fcard atk"><div class="fname">Flipper BLE Spam <span class="ftag ta">bt</span></div><div class="fdesc">Emituje ramki BLE imitujące ataki przeprowadzane przez Flipper Zero.</div></div>
-      <div class="fcard atk"><div class="fname">BT Spam All <span class="ftag ta">all</span></div><div class="fdesc">Uruchamia jednocześnie wszystkie typy BLE spam — Apple, Samsung, Swift Pair i inne. Maksymalne pokrycie ekosystemów.</div></div>
-      <div class="fcard atk"><div class="fname">Spoof Airtag <span class="ftag ta">apple</span></div><div class="fdesc">Emituje ramki BLE imitujące Apple AirTag. Symuluje obecność trackera Apple w obszarze.</div></div>
+    <div class="sub-label">⚡ Ataki BLE</div>
+    <div class="warn-box"><p>⚠ Ataki BLE spam mogą zakłócać pracę urządzeń medycznych i innej krytycznej infrastruktury. Zachowaj szczególną ostrożność w miejscach publicznych.</p></div>
+    <div class="func-grid" style="margin-top:12px;">
+      <div class="func-card attack"><div class="func-name">Sour Apple <span class="func-tag tag-attack">apple</span></div><div class="func-desc">Fałszywe ramki BLE imitujące urządzenia Apple (AirPods, Watch itp.). Powoduje wyświetlanie powiadomień parowania na iOS.</div></div>
+      <div class="func-card attack"><div class="func-name">Swiftpair Spam <span class="func-tag tag-attack">windows</span></div><div class="func-desc">Fałszywe ramki BLE Microsoft Swift Pair. Powoduje powiadomienia o parowaniu na Windows 10/11.</div></div>
+      <div class="func-card attack"><div class="func-name">Samsung BLE Spam <span class="func-tag tag-attack">android</span></div><div class="func-desc">Fałszywe ramki BLE Samsung Fast Pair. Powoduje powiadomienia parowania na urządzeniach Samsung Android.</div></div>
+      <div class="func-card attack"><div class="func-name">Flipper BLE Spam <span class="func-tag tag-attack">bt</span></div><div class="func-desc">Emituje ramki BLE imitujące ataki przeprowadzane przez Flipper Zero.</div></div>
+      <div class="func-card attack"><div class="func-name">BT Spam All <span class="func-tag tag-attack">all</span></div><div class="func-desc">Uruchamia jednocześnie wszystkie typy BLE spam — Apple, Samsung, Swift Pair i inne. Maksymalne pokrycie ekosystemów.</div></div>
+      <div class="func-card attack"><div class="func-name">Spoof Airtag <span class="func-tag tag-attack">apple</span></div><div class="func-desc">Emituje ramki BLE imitujące Apple AirTag. Symuluje obecność trackera Apple w obszarze.</div></div>
     </div>
   </div>
 </section>
 
-<section class="section" id="gps">
-  <div class="sec-hd">
-    <span class="sec-num">06</span>
-    <h2 class="sec-title">GPS</h2>
-    <span class="sec-icon">🛰</span>
+<section class="section" id="gps" style="--i:6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2 class="section-title">GPS</h2>
+    <span class="section-icon">🛰</span>
   </div>
   <p>Wymagają podłączonego modułu GPS (np. NEO-6M przez UART). Dane GPS używane są przez funkcje Wardrive do geolokalizacji wykrytych sieci i urządzeń.</p>
-  <div class="fgrid" style="margin-top:12px">
-    <div class="fcard"><div class="fname">GPS Data</div><div class="fdesc">Wyświetla bieżące dane z modułu: szerokość i długość geograficzną, wysokość, prędkość, kurs, liczbę satelitów. CLI: <code class="i">gpsdata</code>.</div></div>
-    <div class="fcard"><div class="fname">GPS Tracker</div><div class="fdesc">Tryb śledzenia trasy — rejestruje i wyświetla trasę na podstawie danych GPS. Przydatne podczas warjazdu.</div></div>
-    <div class="fcard"><div class="fname">NMEA Stream</div><div class="fdesc">Wyświetla surowe zdania NMEA bezpośrednio z modułu przez CLI. Przydatne do diagnostyki modułu GPS.</div></div>
+  <div class="func-grid" style="margin-top:14px;">
+    <div class="func-card"><div class="func-name">GPS Data</div><div class="func-desc">Wyświetla bieżące dane z modułu: szerokość i długość geograficzną, wysokość, prędkość, kurs, liczbę satelitów. CLI: <code class="inline">gpsdata</code>.</div></div>
+    <div class="func-card"><div class="func-name">GPS Tracker</div><div class="func-desc">Tryb śledzenia trasy — rejestruje i wyświetla trasę na podstawie danych GPS. Przydatne podczas warjazdu.</div></div>
+    <div class="func-card"><div class="func-name">NMEA Stream</div><div class="func-desc">Wyświetla surowe zdania NMEA bezpośrednio z modułu przez CLI. Przydatne do diagnostyki modułu GPS.</div></div>
   </div>
 </section>
 
-<section class="section" id="device">
-  <div class="sec-hd">
-    <span class="sec-num">07</span>
-    <h2 class="sec-title">Device</h2>
-    <span class="sec-icon">🔧</span>
+<section class="section" id="device" style="--i:7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Device</h2>
+    <span class="section-icon">🔧</span>
   </div>
-  <div class="fgrid">
-    <div class="fcard"><div class="fname">Web Update (OTA)</div><div class="fdesc">Pobiera najnowsze firmware przez WiFi. Marauder musi być połączony z internetem przez <code class="i">Join WiFi</code>.</div></div>
-    <div class="fcard"><div class="fname">SD Update</div><div class="fdesc">Aktualizuje firmware z pliku <code class="i">.bin</code> na karcie SD. Przydatne przy braku dostępu do internetu.</div></div>
-    <div class="fcard"><div class="fname">Device Info</div><div class="fdesc">Wyświetla wersję firmware, typ sprzętu, wolną pamięć RAM, stan karty SD, dostępność GPS i wersję SDK.</div></div>
-    <div class="fcard"><div class="fname">Settings</div><div class="fdesc">Graficzny interfejs do zmiany ustawień Maraudera (ForcePMKID, ForceProbe, SavePCAP, EnableLED, EPDeauth, ChanHop).</div></div>
-    <div class="fcard"><div class="fname">GPS Data</div><div class="fdesc">Skrót do wyświetlania aktualnych danych GPS bez wchodzenia do kategorii GPS.</div></div>
-    <div class="fcard"><div class="fname">GPS Tracker</div><div class="fdesc">Skrót do trybu śledzenia trasy GPS z poziomu menu Device.</div></div>
-    <div class="fcard"><div class="fname">Reboot</div><div class="fdesc">Natychmiastowy restart ESP32. Wszystkie aktywne skany i ataki zostają przerwane. CLI: <code class="i">reboot</code>.</div></div>
+  <div class="func-grid">
+    <div class="func-card"><div class="func-name">Web Update (OTA)</div><div class="func-desc">Pobiera najnowsze firmware przez WiFi. Marauder musi być połączony z internetem przez <code class="inline">Join WiFi</code>.</div></div>
+    <div class="func-card"><div class="func-name">SD Update</div><div class="func-desc">Aktualizuje firmware z pliku <code class="inline">.bin</code> na karcie SD. Przydatne przy braku dostępu do internetu.</div></div>
+    <div class="func-card"><div class="func-name">Device Info</div><div class="func-desc">Wyświetla wersję firmware, typ sprzętu, wolną pamięć RAM, stan karty SD, dostępność GPS i wersję SDK.</div></div>
+    <div class="func-card"><div class="func-name">Settings</div><div class="func-desc">Graficzny interfejs do zmiany ustawień Maraudera (ForcePMKID, ForceProbe, SavePCAP, EnableLED, EPDeauth, ChanHop).</div></div>
+    <div class="func-card"><div class="func-name">GPS Data</div><div class="func-desc">Skrót do wyświetlania aktualnych danych GPS bez wchodzenia do kategorii GPS.</div></div>
+    <div class="func-card"><div class="func-name">GPS Tracker</div><div class="func-desc">Skrót do trybu śledzenia trasy GPS z poziomu menu Device.</div></div>
+    <div class="func-card"><div class="func-name">Reboot</div><div class="func-desc">Natychmiastowy restart ESP32. Wszystkie aktywne skany i ataki zostają przerwane. CLI: <code class="inline">reboot</code>.</div></div>
   </div>
 </section>
 
-<section class="section" id="cli">
-  <div class="sec-hd">
-    <span class="sec-num">08</span>
-    <h2 class="sec-title">CLI – Interfejs linii poleceń</h2>
-    <span class="sec-icon">💻</span>
+<section class="section" id="cli" style="--i:8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2 class="section-title">CLI – Interfejs linii poleceń</h2>
+    <span class="section-icon">💻</span>
   </div>
-  <p>Sterowanie przez port szeregowy. Parametry połączenia: <code class="i">115200 baud, 8N1</code>.</p>
-  <div class="clitbl">
-    <table>
+  <p>Sterowanie przez port szeregowy. Parametry połączenia: <code class="inline">115200 baud, 8N1</code>.</p>
+  <div class="cli-wrap">
+    <table class="cli-table">
       <thead><tr><th>Komenda</th><th>Opis</th></tr></thead>
       <tbody>
-        <tr><td class="cc">help</td><td class="dc">Lista dostępnych komend z opisem</td></tr>
-        <tr><td class="cc">info</td><td class="dc">Informacje o urządzeniu (FW, sprzęt, pamięć)</td></tr>
-        <tr><td class="cc">reboot</td><td class="dc">Restart urządzenia</td></tr>
-        <tr><td class="cc">settings -s [nazwa] -v [wartość]</td><td class="dc">Zmiana ustawień, np. <code class="i">settings -s SavePCAP -v true</code></td></tr>
-        <tr><td class="cc">led</td><td class="dc">Włącza / wyłącza diodę LED</td></tr>
-        <tr><td class="cc">channel [1-13]</td><td class="dc">Ustawia kanał WiFi</td></tr>
-        <tr><td class="cc">scanap</td><td class="dc">Skanuje pobliskie AP</td></tr>
-        <tr><td class="cc">scansta</td><td class="dc">Skanuje stacje klienckie</td></tr>
-        <tr><td class="cc">select -a [idx]</td><td class="dc">Wybiera AP z listy po indeksie</td></tr>
-        <tr><td class="cc">stopscan</td><td class="dc">Zatrzymuje wszystkie aktywne skany i ataki</td></tr>
-        <tr><td class="cc">sniffbeacon</td><td class="dc">Nasłuch ramek beacon</td></tr>
-        <tr><td class="cc">sniffprobe</td><td class="dc">Nasłuch ramek probe request</td></tr>
-        <tr><td class="cc">sniffdeauth</td><td class="dc">Nasłuch ramek deauthentication</td></tr>
-        <tr><td class="cc">sniffpmkid</td><td class="dc">Przechwytywanie PMKID / EAPOL handshake</td></tr>
-        <tr><td class="cc">sniffesp</td><td class="dc">Nasłuch ramek ESP (Pwnagotchi itp.)</td></tr>
-        <tr><td class="cc">sniffsae</td><td class="dc">Nasłuch ramek SAE Commit (WPA3)</td></tr>
-        <tr><td class="cc">sniffpwn</td><td class="dc">Nasłuch ramek Pwnagotchi</td></tr>
-        <tr><td class="cc">sniffbt</td><td class="dc">Skanowanie urządzeń Bluetooth / BLE</td></tr>
-        <tr><td class="cc">sniffraw</td><td class="dc">Surowe ramki 802.11 do PCAP</td></tr>
-        <tr><td class="cc">attack -t [typ]</td><td class="dc">Uruchamia atak: deauth, beacon, probe, karma...</td></tr>
-        <tr><td class="cc">evilportal -s</td><td class="dc">Uruchamia Evil Portal z plikiem HTML</td></tr>
-        <tr><td class="cc">wardrive</td><td class="dc">Wardrive WiFi (wymaga GPS)</td></tr>
-        <tr><td class="cc">btspamall</td><td class="dc">Wszystkie BLE spam jednocześnie</td></tr>
-        <tr><td class="cc">btwardrive</td><td class="dc">Wardrive Bluetooth z GPS</td></tr>
-        <tr><td class="cc">sourapple</td><td class="dc">Sour Apple BLE spam (Apple)</td></tr>
-        <tr><td class="cc">swiftpair</td><td class="dc">Swift Pair BLE spam (Windows)</td></tr>
-        <tr><td class="cc">samsungblespam</td><td class="dc">Samsung BLE spam (Android)</td></tr>
-        <tr><td class="cc">spoofat</td><td class="dc">Emulacja AirTag przez BLE</td></tr>
-        <tr><td class="cc">ssid -a [nazwa]</td><td class="dc">Dodaje SSID do listy</td></tr>
-        <tr><td class="cc">clearlist</td><td class="dc">Czyści listy AP / SSID / stacji</td></tr>
-        <tr><td class="cc">save / load</td><td class="dc">Zapisuje / wczytuje dane z karty SD</td></tr>
-        <tr><td class="cc">list</td><td class="dc">Wyświetla aktualną listę AP / SSID / stacji</td></tr>
-        <tr><td class="cc">join -s [ssid] -p [hasło]</td><td class="dc">Łączy z siecią WiFi</td></tr>
-        <tr><td class="cc">pingscan</td><td class="dc">Skanuje hosty przez ICMP ping</td></tr>
-        <tr><td class="cc">packetcount</td><td class="dc">Zlicza pakiety na bieżącym kanale</td></tr>
-        <tr><td class="cc">sigmon</td><td class="dc">Monitoruje RSSI wybranego AP</td></tr>
-        <tr><td class="cc">mactrack</td><td class="dc">Śledzi urządzenie po adresie MAC</td></tr>
-        <tr><td class="cc">gpsdata</td><td class="dc">Wyświetla bieżące dane GPS</td></tr>
-        <tr><td class="cc">karma</td><td class="dc">Uruchamia atak Karma</td></tr>
-        <tr><td class="cc">update</td><td class="dc">Aktualizuje firmware przez OTA</td></tr>
+        <tr><td class="cmd-cell">help</td><td class="desc-cell">Lista dostępnych komend z opisem</td></tr>
+        <tr><td class="cmd-cell">info</td><td class="desc-cell">Informacje o urządzeniu (FW, sprzęt, pamięć)</td></tr>
+        <tr><td class="cmd-cell">reboot</td><td class="desc-cell">Restart urządzenia</td></tr>
+        <tr><td class="cmd-cell">settings -s [nazwa] -v [wartość]</td><td class="desc-cell">Zmiana ustawień, np. <code class="inline">settings -s SavePCAP -v true</code></td></tr>
+        <tr><td class="cmd-cell">led</td><td class="desc-cell">Włącza / wyłącza diodę LED</td></tr>
+        <tr><td class="cmd-cell">channel [1-13]</td><td class="desc-cell">Ustawia kanał WiFi</td></tr>
+        <tr><td class="cmd-cell">scanap</td><td class="desc-cell">Skanuje pobliskie AP</td></tr>
+        <tr><td class="cmd-cell">scansta</td><td class="desc-cell">Skanuje stacje klienckie</td></tr>
+        <tr><td class="cmd-cell">select -a [idx]</td><td class="desc-cell">Wybiera AP z listy po indeksie</td></tr>
+        <tr><td class="cmd-cell">stopscan</td><td class="desc-cell">Zatrzymuje wszystkie aktywne skany i ataki</td></tr>
+        <tr><td class="cmd-cell">sniffbeacon</td><td class="desc-cell">Nasłuch ramek beacon</td></tr>
+        <tr><td class="cmd-cell">sniffprobe</td><td class="desc-cell">Nasłuch ramek probe request</td></tr>
+        <tr><td class="cmd-cell">sniffdeauth</td><td class="desc-cell">Nasłuch ramek deauthentication</td></tr>
+        <tr><td class="cmd-cell">sniffpmkid</td><td class="desc-cell">Przechwytywanie PMKID / EAPOL handshake</td></tr>
+        <tr><td class="cmd-cell">sniffesp</td><td class="desc-cell">Nasłuch ramek ESP (Pwnagotchi itp.)</td></tr>
+        <tr><td class="cmd-cell">sniffsae</td><td class="desc-cell">Nasłuch ramek SAE Commit (WPA3)</td></tr>
+        <tr><td class="cmd-cell">sniffpwn</td><td class="desc-cell">Nasłuch ramek Pwnagotchi</td></tr>
+        <tr><td class="cmd-cell">sniffbt</td><td class="desc-cell">Skanowanie urządzeń Bluetooth / BLE</td></tr>
+        <tr><td class="cmd-cell">sniffraw</td><td class="desc-cell">Surowe ramki 802.11 do PCAP</td></tr>
+        <tr><td class="cmd-cell">attack -t [typ]</td><td class="desc-cell">Uruchamia atak: deauth, beacon, probe, karma...</td></tr>
+        <tr><td class="cmd-cell">evilportal -s</td><td class="desc-cell">Uruchamia Evil Portal z plikiem HTML</td></tr>
+        <tr><td class="cmd-cell">wardrive</td><td class="desc-cell">Wardrive WiFi (wymaga GPS)</td></tr>
+        <tr><td class="cmd-cell">btspamall</td><td class="desc-cell">Wszystkie BLE spam jednocześnie</td></tr>
+        <tr><td class="cmd-cell">btwardrive</td><td class="desc-cell">Wardrive Bluetooth z GPS</td></tr>
+        <tr><td class="cmd-cell">sourapple</td><td class="desc-cell">Sour Apple BLE spam (Apple)</td></tr>
+        <tr><td class="cmd-cell">swiftpair</td><td class="desc-cell">Swift Pair BLE spam (Windows)</td></tr>
+        <tr><td class="cmd-cell">samsungblespam</td><td class="desc-cell">Samsung BLE spam (Android)</td></tr>
+        <tr><td class="cmd-cell">spoofat</td><td class="desc-cell">Emulacja AirTag przez BLE</td></tr>
+        <tr><td class="cmd-cell">ssid -a [nazwa]</td><td class="desc-cell">Dodaje SSID do listy</td></tr>
+        <tr><td class="cmd-cell">clearlist</td><td class="desc-cell">Czyści listy AP / SSID / stacji</td></tr>
+        <tr><td class="cmd-cell">save / load</td><td class="desc-cell">Zapisuje / wczytuje dane z karty SD</td></tr>
+        <tr><td class="cmd-cell">list</td><td class="desc-cell">Wyświetla aktualną listę AP / SSID / stacji</td></tr>
+        <tr><td class="cmd-cell">join -s [ssid] -p [hasło]</td><td class="desc-cell">Łączy z siecią WiFi</td></tr>
+        <tr><td class="cmd-cell">pingscan</td><td class="desc-cell">Skanuje hosty przez ICMP ping</td></tr>
+        <tr><td class="cmd-cell">packetcount</td><td class="desc-cell">Zlicza pakiety na bieżącym kanale</td></tr>
+        <tr><td class="cmd-cell">sigmon</td><td class="desc-cell">Monitoruje RSSI wybranego AP</td></tr>
+        <tr><td class="cmd-cell">mactrack</td><td class="desc-cell">Śledzi urządzenie po adresie MAC</td></tr>
+        <tr><td class="cmd-cell">gpsdata</td><td class="desc-cell">Wyświetla bieżące dane GPS</td></tr>
+        <tr><td class="cmd-cell">karma</td><td class="desc-cell">Uruchamia atak Karma</td></tr>
+        <tr><td class="cmd-cell">update</td><td class="desc-cell">Aktualizuje firmware przez OTA</td></tr>
       </tbody>
     </table>
   </div>
 </section>
 
-<section class="section" id="workflows">
-  <div class="sec-hd">
-    <span class="sec-num">09</span>
-    <h2 class="sec-title">Przykładowe scenariusze użycia</h2>
-    <span class="sec-icon">📋</span>
+<section class="section" id="workflows" style="--i:9">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2 class="section-title">Przykładowe scenariusze użycia</h2>
+    <span class="section-icon">📋</span>
   </div>
   <p>Poniższe workflow pokazują jak łączyć funkcje Maraudera. Wszystkie wymagają pisemnego upoważnienia do testowanej infrastruktury.</p>
-
-  <div class="wfcard">
-    <div class="wfhd"><span class="wficon">🔑</span><span class="wftitle">Przechwycenie handshake WPA2 (PMKID)</span></div>
-    <div class="wfsteps">
-      <div class="wfstep"><div class="stepn">1</div><div class="stept"><code class="i">Scan APs</code> – zeskanuj pobliskie sieci i poczekaj na wyniki</div></div>
-      <div class="wfstep"><div class="stepn">2</div><div class="stept"><code class="i">Select APs</code> – wybierz docelowe AP z listy</div></div>
-      <div class="wfstep"><div class="stepn">3</div><div class="stept">Włącz <code class="i">SavePCAP=true</code> i <code class="i">ForcePMKID=true</code> w ustawieniach</div></div>
-      <div class="wfstep"><div class="stepn">4</div><div class="stept"><code class="i">EAPOL PMKID Scan</code> – uruchom nasłuch; ramki zapisywane są do .pcap na karcie SD</div></div>
-      <div class="wfstep"><div class="stepn">5</div><div class="stept">Pobierz PCAP z karty SD i analizuj w hashcat lub Wireshark</div></div>
+  <div class="workflow-card">
+    <div class="workflow-header"><span class="workflow-icon">🔑</span><span class="workflow-title">Przechwycenie handshake WPA2 (PMKID)</span></div>
+    <div class="workflow-steps">
+      <div class="workflow-step"><div class="step-num">1</div><div class="step-text"><code class="inline">Scan APs</code> – zeskanuj pobliskie sieci i poczekaj na wyniki</div></div>
+      <div class="workflow-step"><div class="step-num">2</div><div class="step-text"><code class="inline">Select APs</code> – wybierz docelowe AP z listy</div></div>
+      <div class="workflow-step"><div class="step-num">3</div><div class="step-text">Włącz <code class="inline">SavePCAP=true</code> i <code class="inline">ForcePMKID=true</code> w ustawieniach</div></div>
+      <div class="workflow-step"><div class="step-num">4</div><div class="step-text"><code class="inline">EAPOL PMKID Scan</code> – uruchom nasłuch; ramki zapisywane są do .pcap na karcie SD</div></div>
+      <div class="workflow-step"><div class="step-num">5</div><div class="step-text">Pobierz PCAP z karty SD i analizuj w hashcat lub Wireshark</div></div>
     </div>
   </div>
-
-  <div class="wfcard">
-    <div class="wfhd"><span class="wficon">🗺</span><span class="wftitle">Wardrive WiFi z GPS</span></div>
-    <div class="wfsteps">
-      <div class="wfstep"><div class="stepn">1</div><div class="stept">Podłącz moduł GPS przez UART i poczekaj na fix satelitarny</div></div>
-      <div class="wfstep"><div class="stepn">2</div><div class="stept">Wejdź do <code class="i">WiFi → Wardrive</code> i uruchom funkcję</div></div>
-      <div class="wfstep"><div class="stepn">3</div><div class="stept">Jeździj po okolicy — wykryte AP zapisywane są z koordynatami GPS do CSV na karcie SD</div></div>
-      <div class="wfstep"><div class="stepn">4</div><div class="stept">Pobierz CSV i zaimportuj do Wigle.net lub Google Maps</div></div>
+  <div class="workflow-card">
+    <div class="workflow-header"><span class="workflow-icon">🗺</span><span class="workflow-title">Wardrive WiFi z GPS</span></div>
+    <div class="workflow-steps">
+      <div class="workflow-step"><div class="step-num">1</div><div class="step-text">Podłącz moduł GPS przez UART i poczekaj na fix satelitarny</div></div>
+      <div class="workflow-step"><div class="step-num">2</div><div class="step-text">Wejdź do <code class="inline">WiFi → Wardrive</code> i uruchom funkcję</div></div>
+      <div class="workflow-step"><div class="step-num">3</div><div class="step-text">Jeździj po okolicy — wykryte AP zapisywane są z koordynatami GPS do CSV na karcie SD</div></div>
+      <div class="workflow-step"><div class="step-num">4</div><div class="step-text">Pobierz CSV i zaimportuj do Wigle.net lub Google Maps</div></div>
     </div>
   </div>
-
-  <div class="wfcard">
-    <div class="wfhd"><span class="wficon">🌐</span><span class="wftitle">Evil Portal (fałszywy captive portal)</span></div>
-    <div class="wfsteps">
-      <div class="wfstep"><div class="stepn">1</div><div class="stept">Przygotuj plik HTML i umieść go na karcie SD</div></div>
-      <div class="wfstep"><div class="stepn">2</div><div class="stept"><code class="i">WiFi General → Select EP HTML File</code> – wskaż plik</div></div>
-      <div class="wfstep"><div class="stepn">3</div><div class="stept">Opcjonalnie: włącz <code class="i">EPDeauth=true</code>, żeby wymusić rozłączenie klientów</div></div>
-      <div class="wfstep"><div class="stepn">4</div><div class="stept"><code class="i">WiFi Attacks → Evil Portal</code> – uruchom fałszywy hotspot</div></div>
-      <div class="wfstep"><div class="stepn">5</div><div class="stept">Monitoruj połączenia i dane przez Serial / CLI</div></div>
+  <div class="workflow-card">
+    <div class="workflow-header"><span class="workflow-icon">🌐</span><span class="workflow-title">Evil Portal (fałszywy captive portal)</span></div>
+    <div class="workflow-steps">
+      <div class="workflow-step"><div class="step-num">1</div><div class="step-text">Przygotuj plik HTML i umieść go na karcie SD</div></div>
+      <div class="workflow-step"><div class="step-num">2</div><div class="step-text"><code class="inline">WiFi General → Select EP HTML File</code> – wskaż plik</div></div>
+      <div class="workflow-step"><div class="step-num">3</div><div class="step-text">Opcjonalnie: włącz <code class="inline">EPDeauth=true</code>, żeby wymusić rozłączenie klientów</div></div>
+      <div class="workflow-step"><div class="step-num">4</div><div class="step-text"><code class="inline">WiFi Attacks → Evil Portal</code> – uruchom fałszywy hotspot</div></div>
+      <div class="workflow-step"><div class="step-num">5</div><div class="step-text">Monitoruj połączenia i dane przez Serial / CLI</div></div>
     </div>
   </div>
-
-  <div class="wfcard">
-    <div class="wfhd"><span class="wficon">💳</span><span class="wftitle">Wykrywanie skimmerów kart płatniczych</span></div>
-    <div class="wfsteps">
-      <div class="wfstep"><div class="stepn">1</div><div class="stept">Przejdź do <code class="i">Bluetooth → Sniffers → Detect Card Skimmers</code></div></div>
-      <div class="wfstep"><div class="stepn">2</div><div class="stept">Zbliż Maraudera do terminala płatniczego lub bankomatu</div></div>
-      <div class="wfstep"><div class="stepn">3</div><div class="stept">Urządzenie analizuje sygnały BLE i ostrzega o wzorcach typowych dla skimmerów</div></div>
+  <div class="workflow-card">
+    <div class="workflow-header"><span class="workflow-icon">💳</span><span class="workflow-title">Wykrywanie skimmerów kart płatniczych</span></div>
+    <div class="workflow-steps">
+      <div class="workflow-step"><div class="step-num">1</div><div class="step-text">Przejdź do <code class="inline">Bluetooth → Sniffers → Detect Card Skimmers</code></div></div>
+      <div class="workflow-step"><div class="step-num">2</div><div class="step-text">Zbliż Maraudera do terminala płatniczego lub bankomatu</div></div>
+      <div class="workflow-step"><div class="step-num">3</div><div class="step-text">Urządzenie analizuje sygnały BLE i ostrzega o wzorcach typowych dla skimmerów</div></div>
     </div>
   </div>
-
-  <div class="wfcard">
-    <div class="wfhd"><span class="wficon">📵</span><span class="wftitle">Test BLE Spam (środowisko laboratoryjne)</span></div>
-    <div class="wfsteps">
-      <div class="wfstep"><div class="stepn">1</div><div class="stept">Przejdź do <code class="i">Bluetooth → Attacks → BT Spam All</code></div></div>
-      <div class="wfstep"><div class="stepn">2</div><div class="stept">Marauder emituje ramki BLE imitujące Apple, Samsung i Windows</div></div>
-      <div class="wfstep"><div class="stepn">3</div><div class="stept">Obserwuj reakcję pobliskich urządzeń w kontrolowanym środowisku</div></div>
-      <div class="wfstep"><div class="stepn">4</div><div class="stept">Zatrzymaj przez <code class="i">Reboot</code> lub <code class="i">stopscan</code> w CLI</div></div>
+  <div class="workflow-card">
+    <div class="workflow-header"><span class="workflow-icon">📵</span><span class="workflow-title">Test BLE Spam (środowisko laboratoryjne)</span></div>
+    <div class="workflow-steps">
+      <div class="workflow-step"><div class="step-num">1</div><div class="step-text">Przejdź do <code class="inline">Bluetooth → Attacks → BT Spam All</code></div></div>
+      <div class="workflow-step"><div class="step-num">2</div><div class="step-text">Marauder emituje ramki BLE imitujące Apple, Samsung i Windows</div></div>
+      <div class="workflow-step"><div class="step-num">3</div><div class="step-text">Obserwuj reakcję pobliskich urządzeń w kontrolowanym środowisku</div></div>
+      <div class="workflow-step"><div class="step-num">4</div><div class="step-text">Zatrzymaj przez <code class="inline">Reboot</code> lub <code class="inline">stopscan</code> w CLI</div></div>
     </div>
   </div>
 </section>
 
-<section class="section" id="legal">
-  <div class="sec-hd">
-    <span class="sec-num">10</span>
-    <h2 class="sec-title">Ostrzeżenia prawne i etyczne</h2>
-    <span class="sec-icon">⚖️</span>
+<section class="section" id="legal" style="--i:10">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2 class="section-title">Ostrzeżenia prawne i etyczne</h2>
+    <span class="section-icon">⚖️</span>
   </div>
-  <ul class="wlist">
-    <li>Używaj ESP32 Maraudera wyłącznie w sieciach i środowiskach, do których posiadasz <strong>pisemne upoważnienie</strong>.</li>
-    <li>Przeprowadzanie ataków deauth, beacon spam lub Evil Portal na publicznych lub cudzych sieciach jest <strong>nielegalne</strong> w większości krajów, w tym w Polsce (art. 267–269 Kodeksu Karnego).</li>
-    <li>Funkcja BLE spam może zakłócać pracę urządzeń medycznych i innej krytycznej infrastruktury — zachowaj szczególną ostrożność w miejscach publicznych.</li>
-    <li>Pliki PCAP zawierające przechwycony ruch mogą zawierać wrażliwe dane osobowe — traktuj je zgodnie z RODO.</li>
-    <li>Projekt ESP32 Marauder jest open-source i przeznaczony do celów <strong>edukacyjnych oraz legalnego testowania bezpieczeństwa</strong>.</li>
-    <li>Autor projektu (justcallmekoko) nie ponosi odpowiedzialności za nielegalne lub nieetyczne użycie urządzenia.</li>
-  </ul>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+    <ul class="warn-list">
+      <li>Używaj ESP32 Maraudera wyłącznie w sieciach i środowiskach, do których posiadasz <strong>pisemne upoważnienie</strong>.</li>
+      <li>Przeprowadzanie ataków deauth, beacon spam lub Evil Portal na publicznych lub cudzych sieciach jest <strong>nielegalne</strong> w większości krajów, w tym w Polsce (art. 267–269 Kodeksu Karnego).</li>
+      <li>Funkcja BLE spam może zakłócać pracę urządzeń medycznych i innej krytycznej infrastruktury — zachowaj szczególną ostrożność w miejscach publicznych.</li>
+      <li>Pliki PCAP zawierające przechwycony ruch mogą zawierać wrażliwe dane osobowe — traktuj je zgodnie z RODO.</li>
+      <li>Projekt ESP32 Marauder jest open-source i przeznaczony do celów <strong>edukacyjnych oraz legalnego testowania bezpieczeństwa</strong>.</li>
+      <li>Autor projektu (justcallmekoko) nie ponosi odpowiedzialności za nielegalne lub nieetyczne użycie urządzenia.</li>
+    </ul>
+  </div>
 </section>
-
 </div>
 
 <footer>
   <div>Instrukcja obsługi <strong style="color:var(--green)">ESP32 Marauder v1.11.0</strong></div>
   <div style="opacity:.7">Oparta na oficjalnej dokumentacji wiki projektu</div>
-  <div style="margin-top:8px">
+  <div style="margin-top:8px;">
     <a href="https://github.com/justcallmekoko/ESP32Marauder" target="_blank" rel="noopener">github.com/justcallmekoko/ESP32Marauder</a>
     &nbsp;·&nbsp;
     <a href="https://github.com/justcallmekoko/ESP32Marauder/wiki" target="_blank" rel="noopener">Wiki</a>
   </div>
-  <div style="margin-top:10px;opacity:.35;font-size:10px">Używaj odpowiedzialnie i zgodnie z prawem · For educational and authorized testing purposes only</div>
+  <div style="margin-top:12px;opacity:.35;font-size:10px;">Używaj odpowiedzialnie i zgodnie z prawem · For educational and authorized testing purposes only</div>
 </footer>
-
 </div>
 
 <script>
-function toggleDrawer(){
-  var d=document.getElementById('navdrawer');
-  d.classList.toggle('open');
+function toggleMenu() {
+  document.getElementById('sidebar').classList.toggle('open');
 }
-function closeDrawer(){
-  document.getElementById('navdrawer').classList.remove('open');
-}
-document.addEventListener('click',function(e){
-  var d=document.getElementById('navdrawer');
-  var t=document.getElementById('navToggle');
-  if(d.classList.contains('open')&&!d.contains(e.target)&&!t.contains(e.target)){
-    d.classList.remove('open');
-  }
-});
-var sections=document.querySelectorAll('section[id]');
-var navLinks=document.querySelectorAll('.nav-link');
-var io=new IntersectionObserver(function(entries){
-  entries.forEach(function(e){
-    if(e.isIntersecting){
-      navLinks.forEach(function(a){a.classList.remove('active')});
-      var a=document.querySelector('.nav-link[href="#'+e.target.id+'"]');
-      if(a)a.classList.add('active');
+const sections = document.querySelectorAll('section[id]');
+const navItems = document.querySelectorAll('.nav-item[href^="#"]');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navItems.forEach(a => a.classList.remove('active'));
+      const a = document.querySelector(`.nav-item[href="#${e.target.id}"]`);
+      if (a) { a.classList.add('active'); a.scrollIntoView({block:'nearest'}); }
     }
   });
-},{rootMargin:'-10% 0px -70% 0px'});
-sections.forEach(function(s){io.observe(s)});
+}, { rootMargin: '-15% 0px -70% 0px' });
+sections.forEach(s => io.observe(s));
+function filterNav(q) {
+  q = q.toLowerCase();
+  navItems.forEach(a => a.style.display = (!q || a.textContent.toLowerCase().includes(q)) ? '' : 'none');
+  document.querySelectorAll('.nav-section-label').forEach(l => l.style.display = q ? 'none' : '');
+}
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+    e.preventDefault(); document.getElementById('searchInput').focus();
+  }
+  if (e.key === 'Escape') document.getElementById('searchInput').blur();
+});
 </script>
-
 </body>
 </html>
