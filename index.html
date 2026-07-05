@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ESP32 Marauder v1.11.0 – Instrukcja Obsługi</title>
+<title>ESP32 Marauder v1.12.1 – Instrukcja Obsługi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -160,7 +160,7 @@
   <div class="sidebar-logo">
     <div class="logo-tag">// dokumentacja</div>
     <h1>ESP32<br>Marauder</h1>
-    <span class="version">v1.11.0</span>
+    <span class="version">v1.12.1</span>
   </div>
   <div class="search-wrap">
     <input class="search-input" id="searchInput" placeholder="Szukaj... ( / )" oninput="filterNav(this.value)" autocomplete="off">
@@ -193,11 +193,12 @@
   <h1 class="hero-title">ESP32 <span>Marauder</span><span class="cursor"></span></h1>
   <p class="hero-sub">Kompletny przewodnik po funkcjach, aplikacjach i ustawieniach urządzenia do testowania bezpieczeństwa sieci WiFi i Bluetooth.</p>
   <div class="hero-badges">
-    <span class="badge badge-green">v1.11.0</span>
+    <span class="badge badge-green">v1.12.1</span>
     <span class="badge badge-blue">WiFi 802.11 b/g/n</span>
     <span class="badge badge-blue">Bluetooth / BLE</span>
     <span class="badge badge-amber">SD Card Support</span>
     <span class="badge badge-amber">GPS Ready</span>
+    <span class="badge badge-blue">M5Stack Cardputer ADV</span>
     <span class="badge badge-red">Tylko do legalnych testów</span>
   </div>
 </header>
@@ -236,7 +237,7 @@
   <p>ESP32 Marauder to wielofunkcyjne urządzenie do testowania bezpieczeństwa sieci WiFi i Bluetooth, działające na platformie mikrokontrolera ESP32. Oferuje szeroki zestaw narzędzi — od pasywnego nasłuchu i analizy protokołów, po aktywne testy penetracyjne.</p>
   <p>Dostępne jest w wersji z ekranem dotykowym (interfejs GUI) oraz bez ekranu (tryb CLI przez port szeregowy UART).</p>
   <div class="info-grid">
-    <div class="info-cell"><div class="info-label">Wersja</div><div class="info-value green">1.11.0</div></div>
+    <div class="info-cell"><div class="info-label">Wersja</div><div class="info-value green">1.12.1</div></div>
     <div class="info-cell"><div class="info-label">Projekt</div><div class="info-value">justcallmekoko</div></div>
     <div class="info-cell"><div class="info-label">Baud rate CLI</div><div class="info-value">115 200</div></div>
     <div class="info-cell"><div class="info-label">Interfejsy</div><div class="info-value">GUI + CLI (UART)</div></div>
@@ -276,7 +277,11 @@
     </div>
     <div class="settings-row">
       <span class="setting-name">ChanHop</span><span class="setting-type">bool</span><span class="setting-default false">false</span>
-      <span class="setting-desc">Automatyczna zmiana kanałów WiFi podczas nasłuchu. Umożliwia przechwytywanie ruchu ze wszystkich kanałów 2.4 GHz jednocześnie.</span>
+      <span class="setting-desc">Automatyczna zmiana kanałów WiFi podczas nasłuchu. Umożliwia przechwytywanie ruchu ze wszystkich kanałów 2.4 GHz jednocześnie. Obsługiwana również przez <code class="inline">Fox Hunt</code> i <code class="inline">Flock Sniff</code>.</span>
+    </div>
+    <div class="settings-row">
+      <span class="setting-name">RAM Cache</span><span class="setting-type">optym.</span><span class="setting-default true">aktywny</span>
+      <span class="setting-desc">Wewnętrzna optymalizacja: dane ustawień buforowane są w RAM, co eliminuje ciągłe alokacje na stercie i redukuje fragmentację pamięci heap (mniejsze zużycie RAM w czasie działania).</span>
     </div>
   </div>
 </section>
@@ -305,19 +310,19 @@
   </div>
   <p>Narzędzia do pasywnego i aktywnego przechwytywania ruchu sieciowego 802.11. Większość zapisuje dane PCAP na kartę SD (<code class="inline">SavePCAP=true</code>).</p>
   <div class="func-grid">
-    <div class="func-card sniffer"><div class="func-name">Probe Request Sniff <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Przechwytuje ramki probe request wysyłane przez urządzenia klienckie. Pokazuje, jakich sieci szukają okoliczne urządzenia.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Probe Request Sniff <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Przechwytuje ramki probe request wysyłane przez urządzenia klienckie. Pokazuje, jakich sieci szukają okoliczne urządzenia. <strong>Puste (blank) probe requesty są teraz oznaczane jako „[hidden]“</strong> — sygnalizują wyszukiwanie ukrytych sieci SSID.</div></div>
     <div class="func-card sniffer"><div class="func-name">Beacon Sniff <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Nasłuchuje ramek beacon rozsyłanych przez pobliskie AP. Tworzy listę sieci WiFi z SSID i adresami MAC.</div></div>
     <div class="func-card sniffer"><div class="func-name">Channel Analyzer <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Wyświetla aktywność na poszczególnych kanałach WiFi 2.4 GHz w formie histogramu. Pomaga wybrać najmniej zajęty kanał.</div></div>
     <div class="func-card sniffer"><div class="func-name">Deauth Sniff <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Przechwytuje ramki deauthentication. Pozwala wykryć próby ataków deauth przeprowadzanych przez inne urządzenia.</div></div>
-    <div class="func-card sniffer"><div class="func-name">Packet Count <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Zlicza pakiety WiFi wykryte na bieżącym kanale. Prosty wskaźnik aktywności sieci.</div></div>
-    <div class="func-card sniffer"><div class="func-name">Packet Monitor <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Wizualizuje natężenie ruchu pakietów WiFi w czasie rzeczywistym na wykresie słupkowym.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Packet Count <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Zlicza pakiety WiFi na bieżącym kanale. <strong>Teraz rejestruje oddzielnie pakiety przychodzące i wychodzące</strong> — pełniejszy obraz aktywności sieci.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Packet Monitor / Packet Rate <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Wizualizuje natężenie ruchu pakietów WiFi w czasie rzeczywistym na wykresie słupkowym. <strong>Packet Rate automatycznie zapisuje pliki PCAP</strong> na kartę SD gdy <code class="inline">SavePCAP=true</code>.</div></div>
     <div class="func-card sniffer"><div class="func-name">EAPOL PMKID Scan <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Przechwytuje ramki EAPOL/PMKID z handshake'ów WPA2. Pliki PCAP mogą być użyte do offline crackowania haseł. Opcja <code class="inline">ForcePMKID</code> przyspiesza przechwycenie.</div></div>
     <div class="func-card sniffer"><div class="func-name">Raw Sniff <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Przechwytuje surowe ramki 802.11 i zapisuje bezpośrednio do PCAP bez filtrowania. Wymaga karty SD.</div></div>
     <div class="func-card sniffer"><div class="func-name">Scan APs <span class="func-tag tag-sniffer">scan</span></div><div class="func-desc">Skanuje pobliskie AP z SSID, kanałem, RSSI i typem szyfrowania.</div></div>
     <div class="func-card sniffer"><div class="func-name">Scan All <span class="func-tag tag-sniffer">scan</span></div><div class="func-desc">Jednoczesne skanowanie AP i stacji klienckich. Kompletna mapa środowiska WiFi.</div></div>
     <div class="func-card sniffer"><div class="func-name">Scan Stations <span class="func-tag tag-sniffer">scan</span></div><div class="func-desc">Skanuje stacje klienckie powiązane z wykrytymi AP wraz z adresami MAC.</div></div>
-    <div class="func-card sniffer"><div class="func-name">Signal Monitor <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Monitoruje siłę sygnału (RSSI) wybranego AP lub stacji w czasie rzeczywistym. Przydatne do lokalizowania urządzeń.</div></div>
-    <div class="func-card sniffer"><div class="func-name">Wardrive <span class="func-tag tag-sniffer">gps</span></div><div class="func-desc">Skanuje AP podczas ruchu i zapisuje je z koordynatami GPS do CSV (kompatybilny z Wigle.net). Wymaga modułu GPS.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Fox Hunt <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Dawniej <em>Signal Monitor</em>. Monitoruje siłę sygnału (RSSI) wybranego AP lub stacji w czasie rzeczywistym — tryb polowania na nadajnik. <strong>Obsługuje channel hop</strong> dla pełnego pokrycia 2.4 GHz.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Wardrive <span class="func-tag tag-sniffer">gps</span></div><div class="func-desc">Skanuje AP podczas ruchu i zapisuje je z koordynatami GPS do CSV (kompatybilny z Wigle.net). <strong>Kanały skanowania są ważone</strong> — bardziej zatłoczone częściej skanowane. Obsługuje również <strong>live POI tagging</strong> i wykrywanie urządzeń Flock. Wymaga modułu GPS.</div></div>
     <div class="func-card sniffer"><div class="func-name">Station Wardrive <span class="func-tag tag-sniffer">gps</span></div><div class="func-desc">Jak Wardrive, ale rejestruje też stacje klienckie z lokalizacją GPS.</div></div>
     <div class="func-card sniffer"><div class="func-name">MAC Track <span class="func-tag tag-sniffer">sniffer</span></div><div class="func-desc">Śledzi konkretne urządzenie po adresie MAC i wyświetla jego aktywność oraz siłę sygnału.</div></div>
     <div class="func-card sniffer"><div class="func-name">Detect Pwnagotchi <span class="func-tag tag-sniffer">detect</span></div><div class="func-desc">Wykrywa urządzenia Pwnagotchi na podstawie charakterystycznych ramek beacon.</div></div>
@@ -389,8 +394,7 @@
     <div class="func-card sniffer"><div class="func-name">Bluetooth Wardrive <span class="func-tag tag-bt">gps</span></div><div class="func-desc">Rejestruje urządzenia BT/BLE z koordynatami GPS podczas ruchu. Wymaga modułu GPS.</div></div>
     <div class="func-card sniffer"><div class="func-name">BT Wardrive Continuous <span class="func-tag tag-bt">gps</span></div><div class="func-desc">Jak Bluetooth Wardrive, ale działa w trybie ciągłym bez przerywania skanowania.</div></div>
     <div class="func-card sniffer"><div class="func-name">Detect Card Skimmers <span class="func-tag tag-bt">detect</span></div><div class="func-desc">Wykrywa podejrzane urządzenia BT typowe dla skimmerów kart bankomatowych i terminali płatniczych.</div></div>
-    <div class="func-card sniffer"><div class="func-name">Flock Sniff <span class="func-tag tag-bt">bt</span></div><div class="func-desc">Wykrywa urządzenia BLE pracujące w trybie "Flock" (śledzenie IoT).</div></div>
-    <div class="func-card sniffer"><div class="func-name">Flock Wardrive <span class="func-tag tag-bt">gps</span></div><div class="func-desc">Flock Sniff z rejestracją lokalizacji GPS podczas warjazdu.</div></div>
+    <div class="func-card sniffer"><div class="func-name">Flock Sniff <span class="func-tag tag-bt">bt</span></div><div class="func-desc">Wykrywa kamery i urządzenia Flock (IoT CCTV). <strong>Aktywnie wywołuje transmisje kamer</strong> (elicit camera transmissions). Obsługuje <strong>filtrowanie OUI</strong> dla precyzyjniejszej identyfikacji urządzeń oraz <strong>channel hop</strong>. Flock Wardrive jest teraz częścią standardowego WiFi Wardrive.</div></div>
     <div class="func-card sniffer"><div class="func-name">Meta Detect <span class="func-tag tag-bt">detect</span></div><div class="func-desc">Wykrywa urządzenia Meta (Oculus/Quest) na podstawie charakterystycznych ramek BLE.</div></div>
   </div>
 
@@ -398,6 +402,7 @@
     <div class="sub-label">⚡ Ataki BLE</div>
     <div class="warn-box"><p>⚠ Ataki BLE spam mogą zakłócać pracę urządzeń medycznych i innej krytycznej infrastruktury. Zachowaj szczególną ostrożność w miejscach publicznych.</p></div>
     <div class="func-grid" style="margin-top:12px;">
+      <div class="func-card attack"><div class="func-name">Apple Juice <span class="func-tag tag-attack">apple</span></div><div class="func-desc"><strong>Nowy atak Apple BLE.</strong> Wysyła precyzyjne ramki BLE powodujące natrętne powiadomienia systemowe na urządzeniach Apple. Bardziej skuteczny niż Sour Apple. Dostępny w GUI i przez CLI: <code class="inline">applejuice</code>.</div></div>
       <div class="func-card attack"><div class="func-name">Sour Apple <span class="func-tag tag-attack">apple</span></div><div class="func-desc">Fałszywe ramki BLE imitujące urządzenia Apple (AirPods, Watch itp.). Powoduje wyświetlanie powiadomień parowania na iOS.</div></div>
       <div class="func-card attack"><div class="func-name">Swiftpair Spam <span class="func-tag tag-attack">windows</span></div><div class="func-desc">Fałszywe ramki BLE Microsoft Swift Pair. Powoduje powiadomienia o parowaniu na Windows 10/11.</div></div>
       <div class="func-card attack"><div class="func-name">Samsung BLE Spam <span class="func-tag tag-attack">android</span></div><div class="func-desc">Fałszywe ramki BLE Samsung Fast Pair. Powoduje powiadomienia parowania na urządzeniach Samsung Android.</div></div>
@@ -431,7 +436,7 @@
   <div class="func-grid">
     <div class="func-card"><div class="func-name">Web Update (OTA)</div><div class="func-desc">Pobiera najnowsze firmware przez WiFi. Marauder musi być połączony z internetem przez <code class="inline">Join WiFi</code>.</div></div>
     <div class="func-card"><div class="func-name">SD Update</div><div class="func-desc">Aktualizuje firmware z pliku <code class="inline">.bin</code> na karcie SD. Przydatne przy braku dostępu do internetu.</div></div>
-    <div class="func-card"><div class="func-name">Device Info</div><div class="func-desc">Wyświetla wersję firmware, typ sprzętu, wolną pamięć RAM, stan karty SD, dostępność GPS i wersję SDK.</div></div>
+    <div class="func-card"><div class="func-name">Device Info</div><div class="func-desc">Wyświetla wersję firmware, typ sprzętu, wolną pamięć RAM, stan karty SD, dostępność GPS i wersję SDK. <strong>Nowe: status połączenia sieciowego WiFi</strong> — aktywna sieć, adres IP i siła sygnału.</div></div>
     <div class="func-card"><div class="func-name">Settings</div><div class="func-desc">Graficzny interfejs do zmiany ustawień Maraudera (ForcePMKID, ForceProbe, SavePCAP, EnableLED, EPDeauth, ChanHop).</div></div>
     <div class="func-card"><div class="func-name">GPS Data</div><div class="func-desc">Skrót do wyświetlania aktualnych danych GPS bez wchodzenia do kategorii GPS.</div></div>
     <div class="func-card"><div class="func-name">GPS Tracker</div><div class="func-desc">Skrót do trybu śledzenia trasy GPS z poziomu menu Device.</div></div>
@@ -451,7 +456,7 @@
       <thead><tr><th>Komenda</th><th>Opis</th></tr></thead>
       <tbody>
         <tr><td class="cmd-cell">help</td><td class="desc-cell">Lista dostępnych komend z opisem</td></tr>
-        <tr><td class="cmd-cell">info</td><td class="desc-cell">Informacje o urządzeniu (FW, sprzęt, pamięć)</td></tr>
+        <tr><td class="cmd-cell">info</td><td class="desc-cell">Informacje o urządzeniu (FW, sprzęt, pamięć, <strong>status sieci</strong>)</td></tr>
         <tr><td class="cmd-cell">reboot</td><td class="desc-cell">Restart urządzenia</td></tr>
         <tr><td class="cmd-cell">settings -s [nazwa] -v [wartość]</td><td class="desc-cell">Zmiana ustawień, np. <code class="inline">settings -s SavePCAP -v true</code></td></tr>
         <tr><td class="cmd-cell">led</td><td class="desc-cell">Włącza / wyłącza diodę LED</td></tr>
@@ -474,6 +479,7 @@
         <tr><td class="cmd-cell">wardrive</td><td class="desc-cell">Wardrive WiFi (wymaga GPS)</td></tr>
         <tr><td class="cmd-cell">btspamall</td><td class="desc-cell">Wszystkie BLE spam jednocześnie</td></tr>
         <tr><td class="cmd-cell">btwardrive</td><td class="desc-cell">Wardrive Bluetooth z GPS</td></tr>
+        <tr><td class="cmd-cell">applejuice</td><td class="desc-cell">Apple Juice BLE spam (nowy atak Apple)</td></tr>
         <tr><td class="cmd-cell">sourapple</td><td class="desc-cell">Sour Apple BLE spam (Apple)</td></tr>
         <tr><td class="cmd-cell">swiftpair</td><td class="desc-cell">Swift Pair BLE spam (Windows)</td></tr>
         <tr><td class="cmd-cell">samsungblespam</td><td class="desc-cell">Samsung BLE spam (Android)</td></tr>
@@ -485,7 +491,7 @@
         <tr><td class="cmd-cell">join -s [ssid] -p [hasło]</td><td class="desc-cell">Łączy z siecią WiFi</td></tr>
         <tr><td class="cmd-cell">pingscan</td><td class="desc-cell">Skanuje hosty przez ICMP ping</td></tr>
         <tr><td class="cmd-cell">packetcount</td><td class="desc-cell">Zlicza pakiety na bieżącym kanale</td></tr>
-        <tr><td class="cmd-cell">sigmon</td><td class="desc-cell">Monitoruje RSSI wybranego AP</td></tr>
+        <tr><td class="cmd-cell">foxhunt</td><td class="desc-cell">Fox Hunt – polowanie na nadajnik po RSSI (dawniej sigmon)</td></tr>
         <tr><td class="cmd-cell">mactrack</td><td class="desc-cell">Śledzi urządzenie po adresie MAC</td></tr>
         <tr><td class="cmd-cell">gpsdata</td><td class="desc-cell">Wyświetla bieżące dane GPS</td></tr>
         <tr><td class="cmd-cell">karma</td><td class="desc-cell">Uruchamia atak Karma</td></tr>
@@ -570,7 +576,7 @@
 </div>
 
 <footer>
-  <div>Instrukcja obsługi <strong style="color:var(--green)">ESP32 Marauder v1.11.0</strong></div>
+  <div>Instrukcja obsługi <strong style="color:var(--green)">ESP32 Marauder v1.12.1</strong></div>
   <div style="opacity:.7">Oparta na oficjalnej dokumentacji wiki projektu</div>
   <div style="margin-top:8px;">
     <a href="https://github.com/justcallmekoko/ESP32Marauder" target="_blank" rel="noopener">github.com/justcallmekoko/ESP32Marauder</a>
