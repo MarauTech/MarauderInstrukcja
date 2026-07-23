@@ -22,9 +22,9 @@
   body { background:var(--bg); color:var(--text); font-family:var(--mono); font-size:14px; line-height:1.75; min-height:100vh; overflow-x:hidden; }
   body::before { content:''; position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px); pointer-events:none; z-index:9999; }
   /* Language system */
-  [data-lang="en"] { display:none; }
-  html[lang="en"] [data-lang="pl"] { display:none; }
-  html[lang="en"] [data-lang="en"] { display:inline; }
+  [data-lang="en"] { display: none !important; }
+  html[lang="en"] [data-lang="pl"] { display: none !important; }
+  html[lang="en"] [data-lang="en"] { display: unset !important; }
   /* Sidebar */
   #sidebar { position:fixed; left:0; top:0; width:260px; height:100vh; background:var(--bg2); border-right:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; z-index:100; transition:transform var(--transition); }
   .sidebar-logo { padding:24px 20px 18px; border-bottom:1px solid var(--border2); }
@@ -157,6 +157,32 @@
   .func-grid{grid-template-columns:1fr;}
   footer{padding:24px 20px;}
   }
+  /* === ATTACK GUIDE SPECIFIC STYLES === */
+  .attack-intro-box { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:20px 24px; margin-bottom:24px; }
+  .attack-intro-box p { font-size:13px; margin-bottom:6px; }
+  .attack-intro-box p:last-child { margin-bottom:0; }
+  .attack-category { margin-bottom:32px; }
+  .attack-category-title { font-family:var(--sans); font-weight:800; font-size:19px; color:var(--text-head); margin-bottom:6px; display:flex; align-items:center; gap:10px; }
+  .attack-category-title .cat-badge { font-size:9px; padding:2px 8px; border-radius:3px; text-transform:uppercase; letter-spacing:.8px; }
+  .attack-card { background:var(--bg2); border:1px solid var(--border2); border-radius:var(--radius); padding:18px 20px; margin-bottom:12px; transition:all var(--transition); }
+  .attack-card:hover { border-color:var(--border); background:var(--bg3); }
+  .attack-card-header { display:flex; align-items:center; gap:10px; margin-bottom:8px; flex-wrap:wrap; }
+  .attack-card-header .ac-name { font-family:var(--sans); font-weight:700; font-size:14px; color:var(--text-head); }
+  .attack-card-header .ac-type { font-size:9px; padding:1px 6px; border-radius:3px; text-transform:uppercase; letter-spacing:.7px; }
+  .attack-card .ac-purpose { font-size:12.5px; color:var(--text); margin-bottom:10px; line-height:1.7; }
+  .attack-card .ac-details { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+  .attack-card .ac-detail { background:var(--bg3); border:1px solid var(--border2); border-radius:4px; padding:8px 12px; }
+  .attack-card .ac-detail .ac-dl { font-size:9px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); margin-bottom:3px; }
+  .attack-card .ac-detail .ac-dv { font-size:11.5px; color:var(--text); font-family:var(--mono); line-height:1.5; }
+  .attack-card .ac-mech { font-size:12px; color:var(--text-dim); line-height:1.7; padding:8px 12px; background:rgba(0,255,136,.04); border-left:3px solid var(--green); border-radius:0 4px 4px 0; margin-bottom:10px; }
+  .attack-card .ac-steps { list-style:none; padding:0; margin:0; }
+  .attack-card .ac-steps li { font-size:12px; color:var(--text); padding:4px 0 4px 20px; position:relative; line-height:1.6; }
+  .attack-card .ac-steps li::before { content:'›'; position:absolute; left:0; color:var(--green); font-weight:700; font-size:16px; line-height:1.4; }
+  .ac-details-single { display:block; }
+  .ac-details-single .ac-detail { margin-bottom:8px; }
+  @media(max-width:768px){
+    .attack-card .ac-details { grid-template-columns:1fr; }
+  }
 </style>
 </head>
 <body>
@@ -197,6 +223,12 @@
     <a class="nav-item" href="#device">Device</a>
     <a class="nav-item" href="#cli">CLI</a>
     <a class="nav-item" href="#workflows"><span data-lang="pl">Scenariusze</span><span data-lang="en">Scenarios</span></a>
+    <div class="nav-section-label">⚔️ <span data-lang="pl">Ataki i Funkcje</span><span data-lang="en">Attacks & Functions</span></div>
+    <a class="nav-item sub" href="#atk-wifi"><span data-lang="pl">Ataki WiFi</span><span data-lang="en">WiFi Attacks</span></a>
+    <a class="nav-item sub" href="#atk-ble"><span data-lang="pl">Ataki BLE</span><span data-lang="en">BLE Attacks</span></a>
+    <a class="nav-item sub" href="#atk-sniffers"><span data-lang="pl">Sniffery / Skanery</span><span data-lang="en">Sniffers / Scanners</span></a>
+    <a class="nav-item sub" href="#atk-tools"><span data-lang="pl">Narzędzia</span><span data-lang="en">Tools</span></a>
+    <div class="nav-section-label"><span data-lang="pl">Zakończenie</span><span data-lang="en">Closing</span></div>
     <a class="nav-item" href="#legal"><span data-lang="pl">Ostrzeżenia prawne</span><span data-lang="en">Legal Warnings</span></a>
   </div>
 </nav>
@@ -428,8 +460,8 @@
     <div class="func-card sniffer"><div class="func-name">BT Wardrive Continuous <span class="func-tag tag-bt">gps</span></div><div class="func-desc"><span data-lang="pl">Jak Bluetooth Wardrive, ale działa w trybie ciągłym bez przerywania skanowania.</span><span data-lang="en">Like Bluetooth Wardrive, but operates in continuous mode without interrupting scanning.</span></div></div>
     <div class="func-card sniffer"><div class="func-name">Detect Card Skimmers <span class="func-tag tag-bt">detect</span></div><div class="func-desc"><span data-lang="pl">Wykrywa podejrzane urządzenia BT typowe dla skimmerów kart bankomatowych i terminali płatniczych.</span><span data-lang="en">Detects suspicious BT devices typical of ATM and payment terminal card skimmers.</span></div></div>
     <div class="func-card sniffer"><div class="func-name">Flock Sniff <span class="func-tag tag-bt">bt</span></div><div class="func-desc"><span data-lang="pl">Wykrywa kamery i urządzenia Flock (IoT CCTV). <strong>Aktywnie wywołuje transmisje kamer</strong>. Obsługuje <strong>filtrowanie OUI</strong> dla precyzyjniejszej identyfikacji oraz <strong>channel hop</strong>. Flock Wardrive jest teraz częścią standardowego WiFi Wardrive.</span><span data-lang="en">Detects Flock cameras and IoT CCTV devices. <strong>Actively elicits camera transmissions</strong>. Supports <strong>OUI filtering</strong> for more precise device identification and <strong>channel hop</strong>. Flock Wardrive is now part of standard WiFi Wardrive.</span></div></div>
-    <div class="func-card sniffer"><div class="func-name">BT Fox Hunt <span class="func-tag tag-bt">bt</span></div><div class="func-desc"><span data-lang="pl"><strong>Nowość!</strong> Polowanie na nadajnik BT/BLE po sile sygnału RSSI — analogicznie do WiFi Fox Hunt. CLI: <code class="inline">foxhunt -b</code>.</span><span data-lang="en"><strong>New!</strong> Hunt for BT/BLE transmitter by RSSI signal strength — analogous to WiFi Fox Hunt but for Bluetooth. CLI: <code class="inline">foxhunt -b</code>.</span></div></div>
-    <div class="func-card sniffer"><div class="func-name">FindMy Live <span class="func-tag tag-bt">bt</span></div><div class="func-desc"><span data-lang="pl"><strong>Nowość!</strong> Nakłania urządzenia Apple FindMy do emisji dźwięku (ping) — przydatne do lokalizowania trackerów. CLI: <code class="inline">findmysound</code>.</span><span data-lang="en"><strong>New!</strong> Triggers Apple FindMy devices to emit a sound ping — useful for locating trackers. CLI: <code class="inline">findmysound</code>.</span></div></div>
+    <div class="func-card sniffer"><div class="func-name">BT Fox Hunt <span class="func-tag tag-bt">bt</span></div><div class="func-desc"><span data-lang="pl"><strong>Nowość!</strong> Polowanie na nadajnik BT/BLE po sile sygnału RSSI — analogicznie do WiFi Fox Hunt. CLI: <code class="inline">foxhunt -b</code>.</span><span data-lang="en"><strong>New!</strong> Hunt for BT/BLE transmitter by RSSI signal strength — analogous to WiFi Fox Hunt. CLI: <code class="inline">foxhunt -b</code>.</span></div></div>
+    <div class="func-card sniffer"><div class="func-name">FindMy Live <span class="func-tag tag-bt">bt</span></div><div class="func-desc"><span data-lang="pl"><strong>Nowość!</strong> Nakłania urządzenia Apple FindMy do emisji dźwięku (ping). CLI: <code class="inline">findmysound</code>.</span><span data-lang="en"><strong>New!</strong> Triggers Apple FindMy devices to emit a sound ping. CLI: <code class="inline">findmysound</code>.</span></div></div>
     <div class="func-card sniffer"><div class="func-name">Meta Detect <span class="func-tag tag-bt">detect</span></div><div class="func-desc"><span data-lang="pl">Wykrywa urządzenia Meta (Oculus/Quest) na podstawie charakterystycznych ramek BLE.</span><span data-lang="en">Detects Meta devices (Oculus/Quest) based on characteristic BLE frames.</span></div></div>
   </div>
 
@@ -473,11 +505,11 @@
   <div class="func-grid">
     <div class="func-card"><div class="func-name">Web Update (OTA)</div><div class="func-desc"><span data-lang="pl">Pobiera najnowsze firmware przez WiFi. Marauder musi być połączony z internetem przez <code class="inline">Join WiFi</code>.</span><span data-lang="en">Downloads the latest firmware over WiFi. Marauder must be connected to the internet via <code class="inline">Join WiFi</code>.</span></div></div>
     <div class="func-card"><div class="func-name">SD Update</div><div class="func-desc"><span data-lang="pl">Aktualizuje firmware z pliku <code class="inline">.bin</code> na karcie SD. Przydatne przy braku dostępu do internetu.</span><span data-lang="en">Updates firmware from a <code class="inline">.bin</code> file on the SD card. Useful when internet access is unavailable.</span></div></div>
-    <div class="func-card"><div class="func-name">Device Info</div><div class="func-desc"><span data-lang="pl">Wyświetla wersję firmware, typ sprzętu, wolną pamięć RAM, stan karty SD, dostępność GPS i wersję SDK. <strong>Nowe: status połączenia sieciowego WiFi</strong> — aktywna sieć, adres IP i siła sygnału.</span><span data-lang="en">Displays firmware version, hardware type, free RAM, SD card status, GPS availability and SDK version. <strong>New: WiFi network connection status</strong> — active network, IP address and signal strength.</span></div></div>
-    <div class="func-card"><div class="func-name">Settings</div><div class="func-desc"><span data-lang="pl">Graficzny interfejs do zmiany ustawień Maraudera (ForcePMKID, ForceProbe, SavePCAP, EnableLED, EPDeauth, ChanHop).</span><span data-lang="en">Graphical interface for changing Marauder settings (ForcePMKID, ForceProbe, SavePCAP, EnableLED, EPDeauth, ChanHop).</span></div></div>
-    <div class="func-card"><div class="func-name">GPS Data</div><div class="func-desc"><span data-lang="pl">Skrót do wyświetlania aktualnych danych GPS bez wchodzenia do kategorii GPS.</span><span data-lang="en">Shortcut to display current GPS data without entering the GPS category.</span></div></div>
-    <div class="func-card"><div class="func-name">GPS Tracker</div><div class="func-desc"><span data-lang="pl">Skrót do trybu śledzenia trasy GPS z poziomu menu Device.</span><span data-lang="en">Shortcut to GPS route tracking mode from the Device menu.</span></div></div>
-    <div class="func-card"><div class="func-name">Reboot</div><div class="func-desc"><span data-lang="pl">Natychmiastowy restart ESP32. Wszystkie aktywne skany i ataki zostają przerwane. CLI: <code class="inline">reboot</code>.</span><span data-lang="en">Immediate ESP32 restart. All active scans and attacks are stopped. CLI: <code class="inline">reboot</code>.</span></div></div>
+    <div class="func-card"><div class="func-name">Device Info</div><div class="func-desc"><span data-lang="pl">Wyświetla wersję firmware, typ sprzętu, wolną pamięć RAM, stan karty SD, dostępność GPS i wersję SDK. <strong>Nowe: status połączenia sieciowego WiFi</strong>.</span><span data-lang="en">Displays firmware version, hardware type, free RAM, SD card status, GPS availability and SDK version. <strong>New: WiFi network connection status</strong>.</span></div></div>
+    <div class="func-card"><div class="func-name">Settings</div><div class="func-desc"><span data-lang="pl">Graficzny interfejs do zmiany ustawień Maraudera (ForcePMKID, ForceProbe, SavePCAP, EnableLED, EPDeauth, ChanHop).</span><span data-lang="en">Graphical interface for changing Marauder settings.</span></div></div>
+    <div class="func-card"><div class="func-name">GPS Data</div><div class="func-desc"><span data-lang="pl">Skrót do wyświetlania aktualnych danych GPS.</span><span data-lang="en">Shortcut to display current GPS data.</span></div></div>
+    <div class="func-card"><div class="func-name">GPS Tracker</div><div class="func-desc"><span data-lang="pl">Skrót do trybu śledzenia trasy GPS.</span><span data-lang="en">Shortcut to GPS route tracking mode.</span></div></div>
+    <div class="func-card"><div class="func-name">Reboot</div><div class="func-desc"><span data-lang="pl">Natychmiastowy restart ESP32. CLI: <code class="inline">reboot</code>.</span><span data-lang="en">Immediate ESP32 restart. CLI: <code class="inline">reboot</code>.</span></div></div>
   </div>
 </section>
 
@@ -493,49 +525,37 @@
     <table class="cli-table">
       <thead><tr><th><span data-lang="pl">Komenda</span><span data-lang="en">Command</span></th><th><span data-lang="pl">Opis</span><span data-lang="en">Description</span></th></tr></thead>
       <tbody>
-        <tr><td class="cmd-cell">help</td><td class="desc-cell"><span data-lang="pl">Lista dostępnych komend z opisem</span><span data-lang="en">List of available commands with description</span></td></tr>
-        <tr><td class="cmd-cell">info</td><td class="desc-cell"><span data-lang="pl">Informacje o urządzeniu (FW, sprzęt, pamięć, <strong>status sieci</strong>)</span><span data-lang="en">Device info (FW, hardware, memory, <strong>network status</strong>)</span></td></tr>
+        <tr><td class="cmd-cell">help</td><td class="desc-cell"><span data-lang="pl">Lista dostępnych komend z opisem</span><span data-lang="en">List of available commands</span></td></tr>
+        <tr><td class="cmd-cell">info</td><td class="desc-cell"><span data-lang="pl">Informacje o urządzeniu</span><span data-lang="en">Device info</span></td></tr>
         <tr><td class="cmd-cell">reboot</td><td class="desc-cell"><span data-lang="pl">Restart urządzenia</span><span data-lang="en">Device restart</span></td></tr>
-        <tr><td class="cmd-cell">settings -s [name] -v [value]</td><td class="desc-cell"><span data-lang="pl">Zmiana ustawień, np. <code class="inline">settings -s SavePCAP -v true</code></span><span data-lang="en">Change settings, e.g. <code class="inline">settings -s SavePCAP -v true</code></span></td></tr>
-        <tr><td class="cmd-cell">led</td><td class="desc-cell"><span data-lang="pl">Włącza / wyłącza diodę LED</span><span data-lang="en">Toggles status LED</span></td></tr>
-        <tr><td class="cmd-cell">channel [1-13]</td><td class="desc-cell"><span data-lang="pl">Ustawia kanał WiFi</span><span data-lang="en">Sets WiFi channel</span></td></tr>
+        <tr><td class="cmd-cell">settings -s [name] -v [value]</td><td class="desc-cell"><span data-lang="pl">Zmiana ustawień</span><span data-lang="en">Change settings</span></td></tr>
         <tr><td class="cmd-cell">scanap</td><td class="desc-cell"><span data-lang="pl">Skanuje pobliskie AP</span><span data-lang="en">Scans nearby APs</span></td></tr>
         <tr><td class="cmd-cell">scansta</td><td class="desc-cell"><span data-lang="pl">Skanuje stacje klienckie</span><span data-lang="en">Scans client stations</span></td></tr>
-        <tr><td class="cmd-cell">select -a [idx]</td><td class="desc-cell"><span data-lang="pl">Wybiera AP z listy po indeksie</span><span data-lang="en">Selects AP from list by index</span></td></tr>
-        <tr><td class="cmd-cell">stopscan</td><td class="desc-cell"><span data-lang="pl">Zatrzymuje wszystkie aktywne skany i ataki</span><span data-lang="en">Stops all active scans and attacks</span></td></tr>
         <tr><td class="cmd-cell">sniffbeacon</td><td class="desc-cell"><span data-lang="pl">Nasłuch ramek beacon</span><span data-lang="en">Beacon frame sniffing</span></td></tr>
-        <tr><td class="cmd-cell">sniffprobe</td><td class="desc-cell"><span data-lang="pl">Nasłuch ramek probe request</span><span data-lang="en">Probe request frame sniffing</span></td></tr>
-        <tr><td class="cmd-cell">sniffdeauth</td><td class="desc-cell"><span data-lang="pl">Nasłuch ramek deauthentication</span><span data-lang="en">Deauthentication frame sniffing</span></td></tr>
-        <tr><td class="cmd-cell">sniffpmkid</td><td class="desc-cell"><span data-lang="pl">Przechwytywanie PMKID / EAPOL handshake</span><span data-lang="en">PMKID / EAPOL handshake capture</span></td></tr>
-        <tr><td class="cmd-cell">sniffesp</td><td class="desc-cell"><span data-lang="pl">Nasłuch ramek ESP (Pwnagotchi itp.)</span><span data-lang="en">ESP frame sniffing (Pwnagotchi etc.)</span></td></tr>
-        <tr><td class="cmd-cell">sniffsae</td><td class="desc-cell"><span data-lang="pl">Nasłuch ramek SAE Commit (WPA3)</span><span data-lang="en">SAE Commit frame sniffing (WPA3)</span></td></tr>
-        <tr><td class="cmd-cell">sniffbt</td><td class="desc-cell"><span data-lang="pl">Skanowanie urządzeń Bluetooth / BLE</span><span data-lang="en">Bluetooth / BLE device scanning</span></td></tr>
+        <tr><td class="cmd-cell">sniffprobe</td><td class="desc-cell"><span data-lang="pl">Nasłuch ramek probe request</span><span data-lang="en">Probe request sniffing</span></td></tr>
+        <tr><td class="cmd-cell">sniffdeauth</td><td class="desc-cell"><span data-lang="pl">Nasłuch ramek deauth</span><span data-lang="en">Deauth frame sniffing</span></td></tr>
+        <tr><td class="cmd-cell">sniffpmkid</td><td class="desc-cell"><span data-lang="pl">Przechwytywanie PMKID handshake</span><span data-lang="en">PMKID handshake capture</span></td></tr>
         <tr><td class="cmd-cell">sniffraw</td><td class="desc-cell"><span data-lang="pl">Surowe ramki 802.11 do PCAP</span><span data-lang="en">Raw 802.11 frames to PCAP</span></td></tr>
-        <tr><td class="cmd-cell">attack -t [type]</td><td class="desc-cell"><span data-lang="pl">Uruchamia atak: deauth, beacon, probe, karma...</span><span data-lang="en">Launches attack: deauth, beacon, probe, karma...</span></td></tr>
-        <tr><td class="cmd-cell">evilportal -s</td><td class="desc-cell"><span data-lang="pl">Uruchamia Evil Portal z plikiem HTML</span><span data-lang="en">Launches Evil Portal with HTML file</span></td></tr>
-        <tr><td class="cmd-cell">wardrive</td><td class="desc-cell"><span data-lang="pl">Wardrive WiFi (wymaga GPS)</span><span data-lang="en">WiFi Wardrive (requires GPS)</span></td></tr>
-        <tr><td class="cmd-cell">upload</td><td class="desc-cell"><span data-lang="pl">Bezpośredni upload wyników warjazdu do WiGLE lub WDGWars</span><span data-lang="en">Directly uploads wardrive results to WiGLE or WDGWars</span></td></tr>
-        <tr><td class="cmd-cell">btspamall</td><td class="desc-cell"><span data-lang="pl">Wszystkie BLE spam jednocześnie</span><span data-lang="en">All BLE spam simultaneously</span></td></tr>
-        <tr><td class="cmd-cell">btwardrive</td><td class="desc-cell"><span data-lang="pl">Wardrive Bluetooth z GPS</span><span data-lang="en">Bluetooth Wardrive with GPS</span></td></tr>
-        <tr><td class="cmd-cell">applejuice</td><td class="desc-cell"><span data-lang="pl">Apple Juice BLE spam (nowy atak Apple)</span><span data-lang="en">Apple Juice BLE spam (new Apple attack)</span></td></tr>
-        <tr><td class="cmd-cell">sourapple</td><td class="desc-cell">Sour Apple BLE spam (Apple)</td></tr>
-        <tr><td class="cmd-cell">swiftpair</td><td class="desc-cell">Swift Pair BLE spam (Windows)</td></tr>
-        <tr><td class="cmd-cell">samsungblespam</td><td class="desc-cell">Samsung BLE spam (Android)</td></tr>
-        <tr><td class="cmd-cell">spoofat</td><td class="desc-cell"><span data-lang="pl">Emulacja AirTag przez BLE</span><span data-lang="en">AirTag emulation via BLE</span></td></tr>
-        <tr><td class="cmd-cell">ssid -a [name]</td><td class="desc-cell"><span data-lang="pl">Dodaje SSID do listy</span><span data-lang="en">Adds SSID to list</span></td></tr>
-        <tr><td class="cmd-cell">clearlist</td><td class="desc-cell"><span data-lang="pl">Czyści listy AP / SSID / stacji</span><span data-lang="en">Clears AP / SSID / station lists</span></td></tr>
-        <tr><td class="cmd-cell">save / load</td><td class="desc-cell"><span data-lang="pl">Zapisuje / wczytuje dane z karty SD</span><span data-lang="en">Saves / loads data from SD card</span></td></tr>
-        <tr><td class="cmd-cell">list</td><td class="desc-cell"><span data-lang="pl">Wyświetla aktualną listę AP / SSID / stacji</span><span data-lang="en">Displays current AP / SSID / station list</span></td></tr>
-        <tr><td class="cmd-cell">listbt</td><td class="desc-cell"><span data-lang="pl">Wyświetla listę wykrytych urządzeń Bluetooth / BLE</span><span data-lang="en">Displays list of detected Bluetooth / BLE devices</span></td></tr>
-        <tr><td class="cmd-cell">join -s [ssid] -p [pass]</td><td class="desc-cell"><span data-lang="pl">Łączy z siecią WiFi</span><span data-lang="en">Connects to WiFi network</span></td></tr>
-        <tr><td class="cmd-cell">pingscan</td><td class="desc-cell"><span data-lang="pl">Skanuje hosty przez ICMP ping</span><span data-lang="en">Scans hosts via ICMP ping</span></td></tr>
-        <tr><td class="cmd-cell">packetcount</td><td class="desc-cell"><span data-lang="pl">Zlicza pakiety na bieżącym kanale</span><span data-lang="en">Counts packets on current channel</span></td></tr>
-        <tr><td class="cmd-cell">foxhunt</td><td class="desc-cell"><span data-lang="pl">Fox Hunt – polowanie na nadajnik po RSSI (dawniej sigmon)</span><span data-lang="en">Fox Hunt – transmitter hunting by RSSI (formerly sigmon)</span></td></tr>
-        <tr><td class="cmd-cell">mactrack</td><td class="desc-cell"><span data-lang="pl">Śledzi urządzenie po adresie MAC</span><span data-lang="en">Tracks device by MAC address</span></td></tr>
-        <tr><td class="cmd-cell">gpsdata</td><td class="desc-cell"><span data-lang="pl">Wyświetla bieżące dane GPS</span><span data-lang="en">Displays current GPS data</span></td></tr>
+        <tr><td class="cmd-cell">sniffbt</td><td class="desc-cell"><span data-lang="pl">Skanowanie urządzeń BT/BLE</span><span data-lang="en">BT/BLE device scanning</span></td></tr>
+        <tr><td class="cmd-cell">attack -t [type]</td><td class="desc-cell"><span data-lang="pl">Uruchamia atak: deauth, beacon, probe...</span><span data-lang="en">Launches attack: deauth, beacon, probe...</span></td></tr>
+        <tr><td class="cmd-cell">evilportal</td><td class="desc-cell"><span data-lang="pl">Uruchamia Evil Portal</span><span data-lang="en">Launches Evil Portal</span></td></tr>
         <tr><td class="cmd-cell">karma</td><td class="desc-cell"><span data-lang="pl">Uruchamia atak Karma</span><span data-lang="en">Launches Karma attack</span></td></tr>
-        <tr><td class="cmd-cell">findmysound</td><td class="desc-cell"><span data-lang="pl">Wysyła ping dźwiękowy do urządzeń Apple FindMy</span><span data-lang="en">Sends sound ping to Apple FindMy devices</span></td></tr>
-        <tr><td class="cmd-cell">update</td><td class="desc-cell"><span data-lang="pl">Aktualizuje firmware przez OTA</span><span data-lang="en">Updates firmware via OTA</span></td></tr>
+        <tr><td class="cmd-cell">applejuice</td><td class="desc-cell">Apple Juice BLE spam</td></tr>
+        <tr><td class="cmd-cell">sourapple</td><td class="desc-cell">Sour Apple BLE spam</td></tr>
+        <tr><td class="cmd-cell">swiftpair</td><td class="desc-cell">Swift Pair BLE spam (Windows)</td></tr>
+        <tr><td class="cmd-cell">samsungblespam</td><td class="desc-cell">Samsung BLE spam</td></tr>
+        <tr><td class="cmd-cell">btspamall</td><td class="desc-cell"><span data-lang="pl">Wszystkie BLE spam jednocześnie</span><span data-lang="en">All BLE spam simultaneously</span></td></tr>
+        <tr><td class="cmd-cell">spoofat</td><td class="desc-cell"><span data-lang="pl">Emulacja AirTag przez BLE</span><span data-lang="en">AirTag emulation via BLE</span></td></tr>
+        <tr><td class="cmd-cell">findmysound</td><td class="desc-cell"><span data-lang="pl">Ping dźwiękowy Apple FindMy</span><span data-lang="en">Apple FindMy sound ping</span></td></tr>
+        <tr><td class="cmd-cell">wardrive</td><td class="desc-cell"><span data-lang="pl">Wardrive WiFi z GPS</span><span data-lang="en">WiFi Wardrive with GPS</span></td></tr>
+        <tr><td class="cmd-cell">foxhunt</td><td class="desc-cell"><span data-lang="pl">Polowanie na nadajnik po RSSI</span><span data-lang="en">Transmitter hunting by RSSI</span></td></tr>
+        <tr><td class="cmd-cell">pingscan</td><td class="desc-cell"><span data-lang="pl">Skanowanie hostów ICMP ping</span><span data-lang="en">ICMP ping host scanning</span></td></tr>
+        <tr><td class="cmd-cell">packetcount</td><td class="desc-cell"><span data-lang="pl">Zliczanie pakietów na kanale</span><span data-lang="en">Packet count on channel</span></td></tr>
+        <tr><td class="cmd-cell">join -s [ssid] -p [pass]</td><td class="desc-cell"><span data-lang="pl">Łączy z siecią WiFi</span><span data-lang="en">Connects to WiFi network</span></td></tr>
+        <tr><td class="cmd-cell">list / listbt</td><td class="desc-cell"><span data-lang="pl">Wyświetla listy AP / BT</span><span data-lang="en">Displays AP / BT lists</span></td></tr>
+        <tr><td class="cmd-cell">save / load</td><td class="desc-cell"><span data-lang="pl">Zapis/wczyt z karty SD</span><span data-lang="en">Save/load from SD card</span></td></tr>
+        <tr><td class="cmd-cell">gpsdata</td><td class="desc-cell"><span data-lang="pl">Wyświetla dane GPS</span><span data-lang="en">Displays GPS data</span></td></tr>
+        <tr><td class="cmd-cell">update</td><td class="desc-cell"><span data-lang="pl">Aktualizacja firmware OTA</span><span data-lang="en">OTA firmware update</span></td></tr>
       </tbody>
     </table>
   </div>
@@ -553,74 +573,546 @@
   <div class="workflow-card">
     <div class="workflow-header"><span class="workflow-icon">🔑</span><span class="workflow-title"><span data-lang="pl">Przechwycenie handshake WPA2 (PMKID)</span><span data-lang="en">WPA2 Handshake Capture (PMKID)</span></span></div>
     <div class="workflow-steps">
-      <div class="workflow-step"><div class="step-num">1</div><div class="step-text"><code class="inline">Scan APs</code> – <span data-lang="pl">zeskanuj pobliskie sieci i poczekaj na wyniki</span><span data-lang="en">scan nearby networks and wait for results</span></div></div>
-      <div class="workflow-step"><div class="step-num">2</div><div class="step-text"><code class="inline">Select APs</code> – <span data-lang="pl">wybierz docelowe AP z listy</span><span data-lang="en">select target AP from list</span></div></div>
-      <div class="workflow-step"><div class="step-num">3</div><div class="step-text"><span data-lang="pl">Włącz <code class="inline">SavePCAP=true</code> i <code class="inline">ForcePMKID=true</code> w ustawieniach</span><span data-lang="en">Enable <code class="inline">SavePCAP=true</code> and <code class="inline">ForcePMKID=true</code> in settings</span></div></div>
-      <div class="workflow-step"><div class="step-num">4</div><div class="step-text"><code class="inline">EAPOL PMKID Scan</code> – <span data-lang="pl">uruchom nasłuch; ramki zapisywane są do .pcap na karcie SD</span><span data-lang="en">start sniffing; frames are saved to .pcap on SD card</span></div></div>
-      <div class="workflow-step"><div class="step-num">5</div><div class="step-text"><span data-lang="pl">Pobierz PCAP z karty SD i analizuj w hashcat lub Wireshark</span><span data-lang="en">Retrieve PCAP from SD card and analyze in hashcat or Wireshark</span></div></div>
+      <div class="workflow-step"><div class="step-num">1</div><div class="step-text"><code class="inline">Scan APs</code> – <span data-lang="pl">zeskanuj pobliskie sieci</span><span data-lang="en">scan nearby networks</span></div></div>
+      <div class="workflow-step"><div class="step-num">2</div><div class="step-text"><code class="inline">Select APs</code> – <span data-lang="pl">wybierz docelowe AP</span><span data-lang="en">select target AP</span></div></div>
+      <div class="workflow-step"><div class="step-num">3</div><div class="step-text">Włącz <code class="inline">SavePCAP=true</code> i <code class="inline">ForcePMKID=true</code></div></div>
+      <div class="workflow-step"><div class="step-num">4</div><div class="step-text"><code class="inline">EAPOL PMKID Scan</code> – uruchom nasłuch</div></div>
+      <div class="workflow-step"><div class="step-num">5</div><div class="step-text">Analizuj PCAP w hashcat lub Wireshark</div></div>
     </div>
   </div>
 
   <div class="workflow-card">
     <div class="workflow-header"><span class="workflow-icon">🗺</span><span class="workflow-title"><span data-lang="pl">Wardrive WiFi z GPS</span><span data-lang="en">WiFi Wardrive with GPS</span></span></div>
     <div class="workflow-steps">
-      <div class="workflow-step"><div class="step-num">1</div><div class="step-text"><span data-lang="pl">Podłącz moduł GPS przez UART i poczekaj na fix satelitarny</span><span data-lang="en">Connect GPS module via UART and wait for satellite fix</span></div></div>
-      <div class="workflow-step"><div class="step-num">2</div><div class="step-text"><span data-lang="pl">Wejdź do <code class="inline">WiFi → Wardrive</code> i uruchom funkcję</span><span data-lang="en">Go to <code class="inline">WiFi → Wardrive</code> and start the function</span></div></div>
-      <div class="workflow-step"><div class="step-num">3</div><div class="step-text"><span data-lang="pl">Jeździj po okolicy — wykryte AP zapisywane są z koordynatami GPS do CSV na karcie SD</span><span data-lang="en">Drive around — detected APs are saved with GPS coordinates to CSV on SD card</span></div></div>
-      <div class="workflow-step"><div class="step-num">4</div><div class="step-text"><span data-lang="pl">Użyj komendy <code class="inline">upload</code> lub pobierz CSV z karty SD i zaimportuj do Wigle.net</span><span data-lang="en">Use the <code class="inline">upload</code> command or retrieve CSV from SD card and import to Wigle.net</span></div></div>
+      <div class="workflow-step"><div class="step-num">1</div><div class="step-text">Podłącz moduł GPS przez UART, poczekaj na fix</div></div>
+      <div class="workflow-step"><div class="step-num">2</div><div class="step-text"><code class="inline">WiFi → Wardrive</code> – uruchom</div></div>
+      <div class="workflow-step"><div class="step-num">3</div><div class="step-text">AP zapisywane z GPS do CSV na SD</div></div>
+      <div class="workflow-step"><div class="step-num">4</div><div class="step-text">Upload do Wigle.net (<code class="inline">upload</code>) lub import CSV</div></div>
     </div>
   </div>
 
   <div class="workflow-card">
-    <div class="workflow-header"><span class="workflow-icon">🌐</span><span class="workflow-title"><span data-lang="pl">Evil Portal (fałszywy captive portal)</span><span data-lang="en">Evil Portal (fake captive portal)</span></span></div>
+    <div class="workflow-header"><span class="workflow-icon">🌐</span><span class="workflow-title"><span data-lang="pl">Evil Portal</span><span data-lang="en">Evil Portal</span></span></div>
     <div class="workflow-steps">
-      <div class="workflow-step"><div class="step-num">1</div><div class="step-text"><span data-lang="pl">Przygotuj plik HTML i umieść go na karcie SD</span><span data-lang="en">Prepare an HTML file and place it on the SD card</span></div></div>
-      <div class="workflow-step"><div class="step-num">2</div><div class="step-text"><code class="inline">WiFi General → Select EP HTML File</code> – <span data-lang="pl">wskaż plik</span><span data-lang="en">select the file</span></div></div>
-      <div class="workflow-step"><div class="step-num">3</div><div class="step-text"><span data-lang="pl">Opcjonalnie: włącz <code class="inline">EPDeauth=true</code>, żeby wymusić rozłączenie klientów</span><span data-lang="en">Optionally: enable <code class="inline">EPDeauth=true</code> to force client disconnection</span></div></div>
-      <div class="workflow-step"><div class="step-num">4</div><div class="step-text"><code class="inline">WiFi Attacks → Evil Portal</code> – <span data-lang="pl">uruchom fałszywy hotspot</span><span data-lang="en">launch the fake hotspot</span></div></div>
-      <div class="workflow-step"><div class="step-num">5</div><div class="step-text"><span data-lang="pl">Monitoruj połączenia i dane przez Serial / CLI</span><span data-lang="en">Monitor connections and data via Serial / CLI</span></div></div>
+      <div class="workflow-step"><div class="step-num">1</div><div class="step-text">Przygotuj plik HTML na karcie SD</div></div>
+      <div class="workflow-step"><div class="step-num">2</div><div class="step-text"><code class="inline">Select EP HTML File</code> – wskaż plik</div></div>
+      <div class="workflow-step"><div class="step-num">3</div><div class="step-text">Opcjonalnie: włącz <code class="inline">EPDeauth=true</code></div></div>
+      <div class="workflow-step"><div class="step-num">4</div><div class="step-text"><code class="inline">WiFi Attacks → Evil Portal</code> – uruchom</div></div>
+      <div class="workflow-step"><div class="step-num">5</div><div class="step-text">Monitoruj przez Serial / CLI</div></div>
     </div>
   </div>
 
   <div class="workflow-card">
-    <div class="workflow-header"><span class="workflow-icon">💳</span><span class="workflow-title"><span data-lang="pl">Wykrywanie skimmerów kart płatniczych</span><span data-lang="en">Payment Card Skimmer Detection</span></span></div>
+    <div class="workflow-header"><span class="workflow-icon">💳</span><span class="workflow-title"><span data-lang="pl">Wykrywanie skimmerów kart</span><span data-lang="en">Card Skimmer Detection</span></span></div>
     <div class="workflow-steps">
-      <div class="workflow-step"><div class="step-num">1</div><div class="step-text"><span data-lang="pl">Przejdź do <code class="inline">Bluetooth → Sniffers → Detect Card Skimmers</code></span><span data-lang="en">Go to <code class="inline">Bluetooth → Sniffers → Detect Card Skimmers</code></span></div></div>
-      <div class="workflow-step"><div class="step-num">2</div><div class="step-text"><span data-lang="pl">Zbliż Maraudera do terminala płatniczego lub bankomatu</span><span data-lang="en">Bring Marauder close to a payment terminal or ATM</span></div></div>
-      <div class="workflow-step"><div class="step-num">3</div><div class="step-text"><span data-lang="pl">Urządzenie analizuje sygnały BLE i ostrzega o wzorcach typowych dla skimmerów</span><span data-lang="en">The device analyzes BLE signals and warns about patterns typical of skimmers</span></div></div>
+      <div class="workflow-step"><div class="step-num">1</div><div class="step-text"><code class="inline">Bluetooth → Sniffers → Detect Card Skimmers</code></div></div>
+      <div class="workflow-step"><div class="step-num">2</div><div class="step-text">Zbliż do terminala płatniczego lub bankomatu</div></div>
+      <div class="workflow-step"><div class="step-num">3</div><div class="step-text">Marauder analizuje BLE i ostrzega o skimmerach</div></div>
     </div>
   </div>
 
   <div class="workflow-card">
-    <div class="workflow-header"><span class="workflow-icon">📵</span><span class="workflow-title"><span data-lang="pl">Test BLE Spam (środowisko laboratoryjne)</span><span data-lang="en">BLE Spam Test (laboratory environment)</span></span></div>
+    <div class="workflow-header"><span class="workflow-icon">📵</span><span class="workflow-title"><span data-lang="pl">Test BLE Spam</span><span data-lang="en">BLE Spam Test</span></span></div>
     <div class="workflow-steps">
-      <div class="workflow-step"><div class="step-num">1</div><div class="step-text"><span data-lang="pl">Przejdź do <code class="inline">Bluetooth → Attacks → BT Spam All</code></span><span data-lang="en">Go to <code class="inline">Bluetooth → Attacks → BT Spam All</code></span></div></div>
-      <div class="workflow-step"><div class="step-num">2</div><div class="step-text"><span data-lang="pl">Marauder emituje ramki BLE imitujące Apple, Samsung i Windows</span><span data-lang="en">Marauder emits BLE frames imitating Apple, Samsung and Windows</span></div></div>
-      <div class="workflow-step"><div class="step-num">3</div><div class="step-text"><span data-lang="pl">Obserwuj reakcję pobliskich urządzeń w kontrolowanym środowisku</span><span data-lang="en">Observe the reaction of nearby devices in a controlled environment</span></div></div>
-      <div class="workflow-step"><div class="step-num">4</div><div class="step-text"><span data-lang="pl">Zatrzymaj przez <code class="inline">Reboot</code> lub <code class="inline">stopscan</code> w CLI</span><span data-lang="en">Stop via <code class="inline">Reboot</code> or <code class="inline">stopscan</code> in CLI</span></div></div>
+      <div class="workflow-step"><div class="step-num">1</div><div class="step-text"><code class="inline">Bluetooth → Attacks → BT Spam All</code></div></div>
+      <div class="workflow-step"><div class="step-num">2</div><div class="step-text">Marauder emituje ramki Apple, Samsung i Windows</div></div>
+      <div class="workflow-step"><div class="step-num">3</div><div class="step-text">Obserwuj reakcję urządzeń w kontrolowanym środowisku</div></div>
+      <div class="workflow-step"><div class="step-num">4</div><div class="step-text">Zatrzymaj przez <code class="inline">Reboot</code> lub <code class="inline">stopscan</code></div></div>
     </div>
   </div>
 </section>
 
-<!-- 10 LEGAL -->
-<section class="section" id="legal" style="--i:10">
+<!-- ============================================================ -->
+<!-- N O W Y  S E K C J A :  A T A K I  I  F U N K C J E        -->
+<!-- ============================================================ -->
+<section class="section" id="attacks-guide" style="--i:10">
   <div class="section-header">
-    <span class="section-num">10</span>
-    <h2 class="section-title"><span data-lang="pl">Ostrzeżenia prawne i etyczne</span><span data-lang="en">Legal and Ethical Warnings</span></h2>
-    <span class="section-icon">⚖️</span>
+    <span class="section-num">⚔️</span>
+    <h2 class="section-title"><span data-lang="pl">Ataki i Funkcje – Pełny przewodnik</span><span data-lang="en">Attacks & Functions – Complete Guide</span></h2>
+    <span class="section-icon">⚡</span>
   </div>
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
-    <ul class="warn-list">
-      <li><span data-lang="pl">Używaj ESP32 Maraudera wyłącznie w sieciach i środowiskach, do których posiadasz <strong>pisemne upoważnienie</strong>.</span><span data-lang="en">Use ESP32 Marauder only in networks and environments for which you have <strong>written authorization</strong>.</span></li>
-      <li><span data-lang="pl">Przeprowadzanie ataków deauth, beacon spam lub Evil Portal na publicznych lub cudzych sieciach jest <strong>nielegalne</strong> w większości krajów, w tym w Polsce (art. 267–269 Kodeksu Karnego).</span><span data-lang="en">Performing deauth attacks, beacon spam or Evil Portal on public or others' networks is <strong>illegal</strong> in most countries (Computer Fraud and Abuse Act in the US, similar laws globally).</span></li>
-      <li><span data-lang="pl">Funkcja BLE spam może zakłócać pracę urządzeń medycznych i innej krytycznej infrastruktury — zachowaj szczególną ostrożność w miejscach publicznych.</span><span data-lang="en">The BLE spam function may interfere with medical devices and other critical infrastructure — exercise extreme caution in public places.</span></li>
-      <li><span data-lang="pl">Pliki PCAP zawierające przechwycony ruch mogą zawierać wrażliwe dane osobowe — traktuj je zgodnie z RODO.</span><span data-lang="en">PCAP files containing captured traffic may contain sensitive personal data — handle them in compliance with applicable privacy laws (GDPR etc.).</span></li>
-      <li><span data-lang="pl">Projekt ESP32 Marauder jest open-source i przeznaczony do celów <strong>edukacyjnych oraz legalnego testowania bezpieczeństwa</strong>.</span><span data-lang="en">The ESP32 Marauder project is open-source and intended for <strong>educational purposes and legal security testing</strong>.</span></li>
-      <li><span data-lang="pl">Autor projektu (justcallmekoko) nie ponosi odpowiedzialności za nielegalne lub nieetyczne użycie urządzenia.</span><span data-lang="en">The project author (justcallmekoko) is not responsible for illegal or unethical use of the device.</span></li>
+
+  <div class="attack-intro-box">
+    <p><span data-lang="pl">Poniższy przewodnik szczegółowo opisuje <strong>każdą funkcję ESP32 Maraudera</strong> — od skanowania i nasłuchu, przez aktywne ataki WiFi i BLE, po zaawansowane techniki. Każda sekcja zawiera:</span><span data-lang="en">The following guide describes <strong>every ESP32 Marauder function</strong> in detail — from scanning and sniffing, through active WiFi and BLE attacks, to advanced techniques. Each section includes:</span></p>
+    <ul style="margin:8px 0 0 20px;color:var(--text-dim);font-size:12.5px;line-height:2;">
+      <li><span data-lang="pl">✅ Cel i mechanizm działania</span><span data-lang="en">✅ Purpose and mechanism</span></li>
+      <li><span data-lang="pl">✅ Instrukcje GUI (krok po kroku)</span><span data-lang="en">✅ GUI instructions (step by step)</span></li>
+      <li><span data-lang="pl">✅ Komendy CLI</span><span data-lang="en">✅ CLI commands</span></li>
+      <li><span data-lang="pl">✅ Wskazówki i ostrzeżenia</span><span data-lang="en">✅ Tips and warnings</span></li>
     </ul>
   </div>
-</section>
 
+  <!-- === ATAKI WiFi === -->
+  <div class="attack-category" id="atk-wifi">
+    <div class="attack-category-title">
+      ⚡ <span data-lang="pl">Ataki WiFi</span><span data-lang="en">WiFi Attacks</span>
+      <span class="cat-badge" style="background:rgba(255,68,85,.15);color:var(--red);border:1px solid rgba(255,68,85,.3);">13 ataków</span>
+    </div>
+    <p style="font-size:12.5px;color:var(--text-dim);margin-bottom:14px;"><span data-lang="pl">Aktywne ataki na sieci 802.11 — od rozłączania klientów, przez spamowanie beaconami, aż po zaawansowane ataki na WPA3. Wszystkie wymagają autoryzacji.</span><span data-lang="en">Active 802.11 network attacks — from client disconnection, through beacon spamming, to advanced WPA3 attacks. All require authorization.</span></p>
+
+    <!-- Deauth Flood -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">Deauth Flood</span>
+        <span class="ac-type" style="background:rgba(255,68,85,.15);color:var(--red);border:1px solid rgba(255,68,85,.3);">DoS</span>
+        <span class="ac-type" style="background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.3);">broadcast</span>
+      </div>
+      <div class="ac-purpose"><span data-lang="pl"><strong>Cel:</strong> Wysłanie fali ramek deauthentication do wszystkich klientów wybranego AP — całkowite rozłączenie urządzeń z siecią.</span><span data-lang="en"><strong>Purpose:</strong> Send a flood of deauthentication frames to all clients of a selected AP — complete disconnection of all devices from the network.</span></div>
+      <div class="ac-mech"><span data-lang="pl"><strong>Mechanizm:</strong> Marauder forge'uje ramki deauth z adresem źródłowym AP i broadcastowym adresem docelowym (FF:FF:FF:FF:FF:FF). Każda stacja, która otrzyma taką ramkę, natychmiast się rozłącza. Atak jest bardzo widoczny i skuteczny.</span><span data-lang="en"><strong>Mechanism:</strong> Marauder forges deauth frames with the AP's source address and broadcast destination (FF:FF:FF:FF:FF:FF). Every station receiving such a frame disconnects immediately. The attack is highly visible and effective.</span></div>
+      <div class="ac-details">
+        <div class="ac-detail"><div class="ac-dl"><span data-lang="pl">GUI</span><span data-lang="en">GUI</span></div><div class="ac-dv">WiFi → Sniffers → Scan APs → Select APs → WiFi → Attacks → Deauth Flood</div></div>
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">scanap → select [indeks] → attack -t deauth</div></div>
+      </div>
+      <ul class="ac-steps">
+        <li><span data-lang="pl">Zeskanuj AP (<code class="inline">scanap</code>) i wybierz cel (<code class="inline">select</code>)</span><span data-lang="en">Scan APs (<code class="inline">scanap</code>) and select target (<code class="inline">select</code>)</span></li>
+        <li><span data-lang="pl">Atak trwa do momentu ręcznego zatrzymania (<code class="inline">stopscan</code>)</span><span data-lang="en">Attack continues until manually stopped (<code class="inline">stopscan</code>)</span></li>
+        <li><span data-lang="pl">Dla precyzyjnego ataku na konkretnego klienta: wybierz też stację (<code class="inline">selectsta</code>)</span><span data-lang="en">For targeted attack on a specific client: also select a station (<code class="inline">selectsta</code>)</span></li>
+        <li><span data-lang="pl">Można ręcznie podać adresy MAC: <code class="inline">attack -t deauth -s [MAC_AP] -d [MAC_klienta]</code></span><span data-lang="en">Manual MAC addresses: <code class="inline">attack -t deauth -s [MAC_AP] -d [MAC_client]</code></span></li>
+      </ul>
+    </div>
+
+    <!-- Beacon Spam List -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">Beacon Spam (List)</span>
+        <span class="ac-type" style="background:rgba(255,176,0,.12);color:var(--amber);border:1px solid rgba(255,176,0,.3);">spam</span>
+      </div>
+      <div class="ac-purpose"><span data-lang="pl"><strong>Cel:</strong> Emitowanie fałszywych ramek beacon z SSID zdefiniowanymi na liście — sieci pojawiają się na innych urządzeniach jako dostępne, co może powodować zamieszanie.</span><span data-lang="en"><strong>Purpose:</strong> Broadcast fake beacon frames with SSIDs from a defined list — networks appear as available on other devices, causing confusion.</span></div>
+      <div class="ac-mech"><span data-lang="pl"><strong>Mechanizm:</strong> Marauder cyklicznie nadaje ramki beacon dla każdego SSID z listy. Urządzenia w zasięgu widzą te sieci w liście dostępnych WiFi i mogą próbować się z nimi połączyć.</span><span data-lang="en"><strong>Mechanism:</strong> Marauder cyclically broadcasts beacon frames for each SSID on the list. Devices in range see these networks in their WiFi list and may attempt to connect.</span></div>
+      <div class="ac-details">
+        <div class="ac-detail"><div class="ac-dl">GUI</div><div class="ac-dv">WiFi → General → Add SSID → WiFi → Attacks → Beacon Spam List</div></div>
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">ssid -a "Nazwa" → attack -t beacon -l</div></div>
+      </div>
+      <ul class="ac-steps">
+        <li><span data-lang="pl">Dodaj SSID: CLI <code class="inline">ssid -a "NazwaSieci"</code> lub GUI <code class="inline">Add SSID</code></span><span data-lang="en">Add SSID: CLI <code class="inline">ssid -a "NetworkName"</code> or GUI <code class="inline">Add SSID</code></span></li>
+        <li><span data-lang="pl">Możesz wygenerować losowe SSID: <code class="inline">Generate SSIDs</code> w GUI</span><span data-lang="en">You can generate random SSIDs: <code class="inline">Generate SSIDs</code> in GUI</span></li>
+        <li><span data-lang="pl">Sprawdź listę: <code class="inline">list</code> w CLI</span><span data-lang="en">Check the list: <code class="inline">list</code> in CLI</span></li>
+      </ul>
+    </div>
+
+    <!-- Beacon Spam Random -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">Beacon Spam (Random)</span>
+        <span class="ac-type" style="background:rgba(255,176,0,.12);color:var(--amber);border:1px solid rgba(255,176,0,.3);">spam</span>
+      </div>
+      <div class="ac-purpose"><span data-lang="pl"><strong>Cel:</strong> Emitowanie ogromnej liczby losowych nazw sieci — całkowity chaos w liście dostępnych sieci WiFi w okolicy.</span><span data-lang="en"><strong>Purpose:</strong> Broadcast a massive number of random network names — total chaos in the available WiFi list in the area.</span></div>
+      <div class="ac-mech"><span data-lang="pl"><strong>Mechanizm:</strong> Marauder generuje losowe ciągi znaków jako SSID i emituje je w ramkach beacon z dużą częstotliwością.</span><span data-lang="en"><strong>Mechanism:</strong> Marauder generates random strings as SSIDs and broadcasts them in beacon frames at high frequency.</span></div>
+      <div class="ac-details">
+        <div class="ac-detail"><div class="ac-dl">GUI</div><div class="ac-dv">WiFi → Attacks → Beacon Spam Random</div></div>
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">attack -t beacon -r</div></div>
+      </div>
+    </div>
+
+    <!-- AP Clone Spam -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">AP Clone Spam</span>
+        <span class="ac-type" style="background:rgba(255,176,0,.12);color:var(--amber);border:1px solid rgba(255,176,0,.3);">clone</span>
+      </div>
+      <div class="ac-purpose"><span data-lang="pl"><strong>Cel:</strong> Klonowanie istniejącego AP i emitowanie wielu kopii tego samego SSID — dezorientacja użytkowników i potencjalne ataki phishingowe.</span><span data-lang="en"><strong>Purpose:</strong> Clone an existing AP and broadcast multiple copies of the same SSID — user disorientation and potential phishing attacks.</span></div>
+      <div class="ac-details">
+        <div class="ac-detail"><div class="ac-dl">GUI</div><div class="ac-dv">Scan APs → Select APs → WiFi → Attacks → AP Clone Spam</div></div>
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">scanap → select [indeks] → attack -t beacon -a</div></div>
+      </div>
+    </div>
+
+    <!-- Evil Portal -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">Evil Portal</span>
+        <span class="ac-type" style="background:rgba(255,68,85,.15);color:var(--red);border:1px solid rgba(255,68,85,.3);">phishing</span>
+      </div>
+      <div class="ac-purpose"><span data-lang="pl"><strong>Cel:</strong> Utworzenie fałszywego hotspotu WiFi z captive portalem. Ofiara łącząc się z siecią widzi stronę logowania, która przechwytuje wprowadzone dane.</span><span data-lang="en"><strong>Purpose:</strong> Create a fake WiFi hotspot with a captive portal. The victim, upon connecting to the network, sees a login page that captures entered credentials.</span></div>
+      <div class="ac-mech"><span data-lang="pl"><strong>Mechanizm:</strong> Marauder tworzy własną sieć WiFi z wybranym SSID. Po połączeniu urządzenie ofiary otrzymuje adres IP (DHCP), a wszystkie zapytania HTTP są przekierowywane na stronę HTML z karty SD. Opcja <code class="inline">EPDeauth</code> rozłącza klientów z prawdziwymi AP, by skusić ich do połączenia z fałszywą siecią.</span><span data-lang="en"><strong>Mechanism:</strong> Marauder creates its own WiFi network with a selected SSID. Upon connection, the victim's device gets an IP (DHCP), and all HTTP requests are redirected to an HTML page from the SD card. The <code class="inline">EPDeauth</code> option disconnects clients from real APs to lure them to the fake network.</span></div>
+      <div class="ac-details">
+        <div class="ac-detail"><div class="ac-dl">GUI</div><div class="ac-dv">Select EP HTML File → WiFi → Attacks → Evil Portal</div></div>
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">evilportal (wymaga pliku HTML na SD)</div></div>
+      </div>
+      <ul class="ac-steps">
+        <li><span data-lang="pl">Przygotuj plik HTML (formularz logowania) i zapisz na karcie SD</span><span data-lang="en">Prepare an HTML file (login form) and save it on the SD card</span></li>
+        <li><span data-lang="pl"><code class="inline">WiFi General → Select EP HTML File</code> — wskaż plik</span><span data-lang="en"><code class="inline">WiFi General → Select EP HTML File</code> — select the file</span></li>
+        <li><span data-lang="pl">Opcjonalnie: włącz <code class="inline">EPDeauth=true</code> w <code class="inline">Device → Settings</code></span><span data-lang="en">Optionally: enable <code class="inline">EPDeauth=true</code> in <code class="inline">Device → Settings</code></span></li>
+        <li><span data-lang="pl">Uruchom atak i monitoruj dane logowania przez Serial/CLI</span><span data-lang="en">Launch the attack and monitor login data via Serial/CLI</span></li>
+      </ul>
+    </div>
+
+    <!-- Probe Request Flood -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">Probe Request Flood</span>
+        <span class="ac-type" style="background:rgba(255,176,0,.12);color:var(--amber);border:1px solid rgba(255,176,0,.3);">flood</span>
+      </div>
+      <div class="ac-purpose"><span data-lang="pl"><strong>Cel:</strong> Wysyłanie lawiny ramek Probe Request do wybranego AP — zmusza AP do odpowiedzi i generuje dodatkowe obciążenie.</span><span data-lang="en"><strong>Purpose:</strong> Send a flood of Probe Request frames to a selected AP — forces the AP to respond and generates additional load.</span></div>
+      <div class="ac-details">
+        <div class="ac-detail"><div class="ac-dl">GUI</div><div class="ac-dv">Scan APs → Select APs → WiFi → Attacks → Probe Request Flood</div></div>
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">scanap → select [indeks] → attack -t probe</div></div>
+      </div>
+    </div>
+
+    <!-- Karma Attack -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">Karma Attack</span>
+        <span class="ac-type" style="background:rgba(255,68,85,.15);color:var(--red);border:1px solid rgba(255,68,85,.3);">spoofing</span>
+      </div>
+      <div class="ac-purpose"><span data-lang="pl"><strong>Cel:</strong> Odpowiadanie na probe requesty urządzeń — Marauder podszywa się pod dowolną sieć, której urządzenie szuka.</span><span data-lang="en"><strong>Purpose:</strong> Respond to device probe requests — Marauder impersonates any network the device is searching for.</span></div>
+      <div class="ac-mech"><span data-lang="pl"><strong>Mechanizm:</strong> Gdy urządzenie wysyła Probe Request z nazwą sieci, do której było wcześniej podłączone, Marauder odpowiada ramką Probe Response udając tę sieć. Urządzenie może automatycznie zainicjować połączenie.</span><span data-lang="en"><strong>Mechanism:</strong> When a device sends a Probe Request with a SSID it was previously connected to, Marauder responds with a Probe Response pretending to be that network. The device may automatically initiate a connection.</span></div>
+      <div class="ac-details">
+        <div class="ac-detail"><div class="ac-dl">GUI</div><div class="ac-dv">WiFi → Attacks → Karma</div></div>
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">karma</div></div>
+      </div>
+    </div>
+
+    <!-- Bad Msg -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">Bad Message Attack</span>
+        <span class="ac-type" style="background:rgba(255,68,85,.15);color:var(--red);border:1px solid rgba(255,68,85,.3);">fuzzing</span>
+      </div>
+      <div class="ac-purpose"><span data-lang="pl"><strong>Cel:</strong> Wysyłanie zniekształconych (malformed) ramek zarządzających WiFi do AP — może powodować błędy, niestabilność, a nawet crashowanie routerów.</span><span data-lang="en"><strong>Purpose:</strong> Send malformed WiFi management frames to APs — may cause errors, instability, or even router crashes.</span></div>
+      <div class="ac-details-single">
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">attack -t badmsg</div></div>
+      </div>
+    </div>
+
+    <!-- Sleep Attack -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">Sleep Attack</span>
+        <span class="ac-type" style="background:rgba(68,136,255,.15);color:var(--blue);border:1px solid rgba(68,136,255,.3);">power mgmt</span>
+      </div>
+      <div class="ac-purpose"><span data-lang="pl"><strong>Cel:</strong> Wysyłanie ramek Association Response do stacji, powodując ich "uśpienie" — stacja traci łączność z prawidłowym AP.</span><span data-lang="en"><strong>Purpose:</strong> Send Association Response frames to stations, causing them to "sleep" — the station loses connection with the legitimate AP.</span></div>
+      <div class="ac-details-single">
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">attack -t sleep</div></div>
+      </div>
+    </div>
+
+    <!-- SAE Commit Flood -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">SAE Commit Flood</span>
+        <span class="ac-type" style="background:rgba(255,68,85,.15);color:var(--red);border:1px solid rgba(255,68,85,.3);">WPA3</span>
+      </div>
+      <div class="ac-purpose"><span data-lang="pl"><strong>Cel:</strong> Zalanie AP fałszywymi ramkami SAE Commit (WPA3), przeciążając proces uwierzytelniania Dragonfly.</span><span data-lang="en"><strong>Purpose:</strong> Flood the AP with fake SAE Commit frames (WPA3), overloading the Dragonfly authentication process.</span></div>
+      <div class="ac-details-single">
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">attack -t sae</div></div>
+      </div>
+    </div>
+
+    <!-- Channel Switch -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">Channel Switch Attack</span>
+        <span class="ac-type" style="background:rgba(255,176,0,.12);color:var(--amber);border:1px solid rgba(255,176,0,.3);">CSA</span>
+      </div>
+      <div class="ac-purpose"><span data-lang="pl"><strong>Cel:</strong> Wysyłanie ramek Channel Switch Announcement (CSA), nakazując klientom zmianę kanału i powodując tymczasowe zerwanie połączeń.</span><span data-lang="en"><strong>Purpose:</strong> Send Channel Switch Announcement (CSA) frames, ordering clients to change channels and causing temporary connection drops.</span></div>
+      <div class="ac-details-single">
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">attack -t csa</div></div>
+      </div>
+    </div>
+
+    <!-- Quiet Time -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">Quiet Time Attack</span>
+        <span class="ac-type" style="background:rgba(68,136,255,.15);color:var(--blue);border:1px solid rgba(68,136,255,.3);">quiet</span>
+      </div>
+      <div class="ac-purpose"><span data-lang="pl"><strong>Cel:</strong> Wysyłanie ramek Quiet Element do AP, nakazując ciszę radiową na wybranym kanale — zatrzymanie transmisji.</span><span data-lang="en"><strong>Purpose:</strong> Send Quiet Element frames to an AP, ordering radio silence on the selected channel — stopping transmissions.</span></div>
+      <div class="ac-details-single">
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">attack -t quiet</div></div>
+      </div>
+    </div>
+
+    <!-- Rick Roll -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">Rick Roll Beacon</span>
+        <span class="ac-type" style="background:rgba(255,176,0,.12);color:var(--amber);border:1px solid rgba(255,176,0,.3);">fun</span>
+      </div>
+      <div class="ac-purpose"><span data-lang="pl"><strong>Cel:</strong> Emitowanie beaconów z SSID będącymi fragmentami tekstu piosenki "Never Gonna Give You Up" — atak humorystyczny demonstrujący możliwości beacon spam.</span><span data-lang="en"><strong>Purpose:</strong> Broadcast beacons with SSIDs containing lyrics from "Never Gonna Give You Up" — a humorous attack demonstrating beacon spam capabilities.</span></div>
+      <div class="ac-details">
+        <div class="ac-detail"><div class="ac-dl">GUI</div><div class="ac-dv">WiFi → Attacks → Rick Roll Beacon</div></div>
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">attack -t rickroll</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- === ATAKI BLE === -->
+  <div class="attack-category" id="atk-ble">
+    <div class="attack-category-title">
+      📶 <span data-lang="pl">Ataki Bluetooth / BLE</span><span data-lang="en">Bluetooth / BLE Attacks</span>
+      <span class="cat-badge" style="background:rgba(150,100,255,.15);color:#bb88ff;border:1px solid rgba(150,100,255,.3);">7 ataków</span>
+    </div>
+    <p style="font-size:12.5px;color:var(--text-dim);margin-bottom:14px;">
+      <span data-lang="pl">Ataki BLE polegają na emitowaniu fałszywych ramek reklamowych (Advertising Packets), które wywołują powiadomienia systemowe na urządzeniach mobilnych — iPhone, Android, Windows. Działają w zasięgu do ok. 10-30 metrów w zależności od mocy nadajnika i przeszkód.</span>
+      <span data-lang="en">BLE attacks consist of emitting fake advertising frames that trigger system notifications on mobile devices — iPhone, Android, Windows. Effective range is about 10-30 meters depending on transmitter power and obstacles.</span>
+    </p>
+
+    <!-- Apple Juice -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">🍎 Apple Juice BLE Spam</span>
+        <span class="ac-type" style="background:rgba(150,100,255,.15);color:#bb88ff;border:1px solid rgba(150,100,255,.3);">iOS</span>
+        <span class="ac-type" style="background:rgba(255,68,85,.15);color:var(--red);border:1px solid rgba(255,68,85,.3);">NOWY</span>
+      </div>
+      <div class="ac-purpose">
+        <span data-lang="pl"><strong>Cel:</strong> Najnowszy atak na urządzenia Apple. Wysyła precyzyjnie skonstruowane ramki BLE, które system iOS interpretuje jako obecność urządzeń Apple (AirPods, Apple Pencil, Apple TV, HomePod itp.). Powoduje natrętne powiadomienia push na ekranie blokady i w Centrum Powiadomień. Bardziej skuteczny niż Sour Apple.</span>
+        <span data-lang="en"><strong>Purpose:</strong> The latest Apple device attack. Sends precisely constructed BLE frames that iOS interprets as Apple devices nearby (AirPods, Apple Pencil, Apple TV, HomePod, etc.). Causes intrusive push notifications on the lock screen and Notification Center. More effective than Sour Apple.</span>
+      </div>
+      <div class="ac-mech">
+        <span data-lang="pl"><strong>Mechanizm:</strong> Wykorzystuje protokół Apple Continuity / Handoff przez BLE. Marauder emituje ramki z identyfikatorami producenta Apple i spreparowanymi danymi reklamowymi, które system iOS traktuje jako autentyczne urządzenia Apple w pobliżu. Urządzenie ofiary wyświetla powiadomienia "Set up your new AirPods Pro" lub podobne.</span>
+        <span data-lang="en"><strong>Mechanism:</strong> Exploits the Apple Continuity / Handoff protocol over BLE. Marauder emits frames with Apple manufacturer identifiers and crafted advertising data that iOS treats as genuine nearby Apple devices. The victim's device displays "Set up your new AirPods Pro" or similar notifications.</span>
+      </div>
+      <div class="ac-details">
+        <div class="ac-detail"><div class="ac-dl"><span data-lang="pl">GUI</span><span data-lang="en">GUI</span></div><div class="ac-dv">Bluetooth → Attacks → Apple Juice / Apple BLE Spam</div></div>
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">applejuice</div></div>
+      </div>
+      <ul class="ac-steps">
+        <li><span data-lang="pl">Uruchom komendę <code class="inline">applejuice</code> w CLI lub wybierz z menu GUI</span><span data-lang="en">Run <code class="inline">applejuice</code> in CLI or select from GUI menu</span></li>
+        <li><span data-lang="pl">Atak działa natychmiast — iPhone'y w zasięgu zaczną otrzymywać powiadomienia</span><span data-lang="en">Attack works immediately — iPhones in range will start receiving notifications</span></li>
+        <li><span data-lang="pl">Aby zatrzymać: <code class="inline">stopscan</code> lub <code class="inline">reboot</code></span><span data-lang="en">To stop: <code class="inline">stopscan</code> or <code class="inline">reboot</code></span></li>
+        <li><span data-lang="pl">Wskazówka: zwiększ moc nadawania w ustawieniach NimBLE dla większego zasięgu</span><span data-lang="en">Tip: increase NimBLE output power in settings for greater range</span></li>
+      </ul>
+    </div>
+
+    <!-- Sour Apple -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">🍏 Sour Apple BLE Spam</span>
+        <span class="ac-type" style="background:rgba(150,100,255,.15);color:#bb88ff;border:1px solid rgba(150,100,255,.3);">iOS</span>
+      </div>
+      <div class="ac-purpose">
+        <span data-lang="pl"><strong>Cel:</strong> Wcześniejsza wersja ataku na Apple. Emituje ramki BLE imitujące akcesoria Apple (AirPods, Apple Watch, iPad). Powoduje wyświetlanie powiadomień "Pair with your [urządzenie]" na iOS.</span>
+        <span data-lang="en"><strong>Purpose:</strong> Earlier version of the Apple attack. Emits BLE frames imitating Apple accessories (AirPods, Apple Watch, iPad). Causes "Pair with your [device]" notifications on iOS.</span>
+      </div>
+      <div class="ac-mech">
+        <span data-lang="pl"><strong>Mechanizm:</strong> Podobny do Apple Juice, ale używa starszego zestawu identyfikatorów. Wysyła ramki BLE z Apple Company ID (0x004C) i różnymi typami ramek (typ 0x10, 0x12, 0x07) dla różnych typów urządzeń.</span>
+        <span data-lang="en"><strong>Mechanism:</strong> Similar to Apple Juice but uses an older set of identifiers. Sends BLE frames with Apple Company ID (0x004C) and various frame types (type 0x10, 0x12, 0x07) for different device types.</span>
+      </div>
+      <div class="ac-details">
+        <div class="ac-detail"><div class="ac-dl">GUI</div><div class="ac-dv">Bluetooth → Attacks → Sour Apple</div></div>
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">sourapple</div></div>
+      </div>
+      <ul class="ac-steps">
+        <li><span data-lang="pl">Uruchom <code class="inline">sourapple</code> z CLI lub z menu GUI</span><span data-lang="en">Run <code class="inline">sourapple</code> from CLI or GUI menu</span></li>
+        <li><span data-lang="pl">Efekty widoczne na urządzeniach Apple w zasięgu BLE (ok. 10-20m)</span><span data-lang="en">Effects visible on Apple devices in BLE range (approx. 10-20m)</span></li>
+        <li><span data-lang="pl">Zatrzymanie: <code class="inline">stopscan</code></span><span data-lang="en">Stop: <code class="inline">stopscan</code></span></li>
+      </ul>
+    </div>
+
+    <!-- Swiftpair Spam -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">💻 Swift Pair Spam</span>
+        <span class="ac-type" style="background:rgba(50,150,255,.15);color:#5599ff;border:1px solid rgba(50,150,255,.3);">Windows</span>
+      </div>
+      <div class="ac-purpose">
+        <span data-lang="pl"><strong>Cel:</strong> Atak na komputery z systemem Windows 10/11. Emituje ramki BLE Microsoft Swift Pair — system wyświetla powiadomienia "Pair with [nazwa urządzenia]" sugerujące dostępność nowego urządzenia Bluetooth do szybkiego parowania.</span>
+        <span data-lang="en"><strong>Purpose:</strong> Attack on Windows 10/11 computers. Emits Microsoft Swift Pair BLE frames — the system displays "Pair with [device name]" notifications suggesting a new Bluetooth device is available for quick pairing.</span>
+      </div>
+      <div class="ac-mech">
+        <span data-lang="pl"><strong>Mechanizm:</strong> Wykorzystuje protokół Microsoft Swift Pair (BLE Advertising Frame z Microsoft Company ID 0x0006). Windows nasłuchuje tych ramek i wyświetla powiadomienie z przyciskiem "Pair" — nawet jeśli urządzenie nie istnieje.</span>
+        <span data-lang="en"><strong>Mechanism:</strong> Exploits the Microsoft Swift Pair protocol (BLE Advertising Frame with Microsoft Company ID 0x0006). Windows listens for these frames and displays a notification with a "Pair" button — even if the device doesn't exist.</span>
+      </div>
+      <div class="ac-details">
+        <div class="ac-detail"><div class="ac-dl">GUI</div><div class="ac-dv">Bluetooth → Attacks → Swift Pair Spam</div></div>
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">swiftpair</div></div>
+      </div>
+      <ul class="ac-steps">
+        <li><span data-lang="pl">Uruchom <code class="inline">swiftpair</code> — komputery Windows w zasięgu otrzymają powiadomienia</span><span data-lang="en">Run <code class="inline">swiftpair</code> — Windows computers in range will receive notifications</span></li>
+        <li><span data-lang="pl">Działa na Windows 10 wersja 1803+ i Windows 11</span><span data-lang="en">Works on Windows 10 version 1803+ and Windows 11</span></li>
+        <li><span data-lang="pl">Można zmieniać nazwy urządzeń przez CLI</span><span data-lang="en">Device names can be changed via CLI</span></li>
+      </ul>
+    </div>
+
+    <!-- Samsung BLE Spam -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">📱 Samsung BLE Spam</span>
+        <span class="ac-type" style="background:rgba(0,200,100,.15);color:#66dd88;border:1px solid rgba(0,200,100,.3);">Android</span>
+      </div>
+      <div class="ac-purpose">
+        <span data-lang="pl"><strong>Cel:</strong> Spamowanie urządzeń Samsung (One UI) powiadomieniami BLE. Imituje Samsung SmartTag, Galaxy Buds, Galaxy Watch — wywołuje powiadomienia Fast Pair na Androidzie.</span>
+        <span data-lang="en"><strong>Purpose:</strong> Spam Samsung devices (One UI) with BLE notifications. Imitates Samsung SmartTag, Galaxy Buds, Galaxy Watch — triggers Fast Pair notifications on Android.</span>
+      </div>
+      <div class="ac-mech">
+        <span data-lang="pl"><strong>Mechanizm:</strong> Wykorzystuje protokół Samsung Fast Pair (BLE Advertising z Samsung Company ID). Urządzenia Samsung z włączonym Fast Pair wyświetlają powiadomienia o dostępności nowych akcesoriów.</span>
+        <span data-lang="en"><strong>Mechanism:</strong> Uses the Samsung Fast Pair protocol (BLE Advertising with Samsung Company ID). Samsung devices with Fast Pair enabled display notifications about new accessory availability.</span>
+      </div>
+      <div class="ac-details">
+        <div class="ac-detail"><div class="ac-dl">GUI</div><div class="ac-dv">Bluetooth → Attacks → Samsung BLE Spam</div></div>
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">samsungblespam</div></div>
+      </div>
+      <ul class="ac-steps">
+        <li><span data-lang="pl">Uruchom <code class="inline">samsungblespam</code> — telefony Samsung z One UI w zasięgu otrzymają spam</span><span data-lang="en">Run <code class="inline">samsungblespam</code> — Samsung phones with One UI in range will receive spam</span></li>
+        <li><span data-lang="pl">Działa też na innych Androidach z Google Fast Pair, ale najlepiej na Samsungach</span><span data-lang="en">Also works on other Androids with Google Fast Pair, but best on Samsung devices</span></li>
+      </ul>
+    </div>
+
+    <!-- Google BLE Spam -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">🤖 Google BLE Spam</span>
+        <span class="ac-type" style="background:rgba(0,200,100,.15);color:#66dd88;border:1px solid rgba(0,200,100,.3);">Android</span>
+      </div>
+      <div class="ac-purpose">
+        <span data-lang="pl"><strong>Cel:</strong> Uniwersalny atak na urządzenia Android przez Google Fast Pair. Powoduje powiadomienia o dostępności urządzeń do szybkiego parowania na wszystkich Androidach z usługami Google Play.</span>
+        <span data-lang="en"><strong>Purpose:</strong> Universal Android attack via Google Fast Pair. Triggers notifications about available devices for quick pairing on all Androids with Google Play Services.</span>
+      </div>
+      <div class="ac-details-single">
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">googleblespam</div></div>
+      </div>
+      <ul class="ac-steps">
+        <li><span data-lang="pl">Uruchom <code class="inline">googleblespam</code> z CLI</span><span data-lang="en">Run <code class="inline">googleblespam</code> from CLI</span></li>
+        <li><span data-lang="pl">Działa na wszystkich Androidach z Google Play Services 12.8+</span><span data-lang="en">Works on all Androids with Google Play Services 12.8+</span></li>
+      </ul>
+    </div>
+
+    <!-- Flipper BLE Spam -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">🐬 Flipper BLE Spam</span>
+        <span class="ac-type" style="background:rgba(150,100,255,.15);color:#bb88ff;border:1px solid rgba(150,100,255,.3);">cross</span>
+      </div>
+      <div class="ac-purpose">
+        <span data-lang="pl"><strong>Cel:</strong> Emituje ramki BLE charakterystyczne dla ataków przeprowadzanych przez Flipper Zero. Pozwala symulować obecność innego urządzenia hakerskiego i testować reakcje sieci.</span>
+        <span data-lang="en"><strong>Purpose:</strong> Emits BLE frames characteristic of Flipper Zero attacks. Allows simulating the presence of another hacking device and testing network reactions.</span>
+      </div>
+      <div class="ac-details">
+        <div class="ac-detail"><div class="ac-dl">GUI</div><div class="ac-dv">Bluetooth → Attacks → Flipper BLE Spam</div></div>
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">flipperblespam</div></div>
+      </div>
+    </div>
+
+    <!-- BT Spam All -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">🔥 BT Spam All</span>
+        <span class="ac-type" style="background:rgba(255,68,85,.15);color:var(--red);border:1px solid rgba(255,68,85,.3);">TOTAL</span>
+      </div>
+      <div class="ac-purpose">
+        <span data-lang="pl"><strong>Cel:</strong> Uruchamia WSZYSTKIE typy BLE spam jednocześnie — Apple Juice, Sour Apple, Swift Pair, Samsung, Google i Flipper. Maksymalne zakłócenie pracy urządzeń mobilnych w okolicy.</span>
+        <span data-lang="en"><strong>Purpose:</strong> Launches ALL BLE spam types simultaneously — Apple Juice, Sour Apple, Swift Pair, Samsung, Google and Flipper. Maximum disruption of mobile devices in the area.</span>
+      </div>
+      <div class="ac-mech">
+        <span data-lang="pl"><strong>Mechanizm:</strong> Marauder emituje ramki dla wszystkich platform jednocześnie wykorzystując wielowątkowość BLE. <strong>Zwiększona moc nadawania NimBLE</strong> — szerszy zasięg i większa skuteczność. Każdy typ ramki jest emitowany w pętli, co powoduje lawinę powiadomień na wszystkich urządzeniach.</span>
+        <span data-lang="en"><strong>Mechanism:</strong> Marauder emits frames for all platforms simultaneously using BLE multi-threading. <strong>Increased NimBLE output power</strong> — wider range and greater effectiveness. Each frame type is emitted in a loop, causing an avalanche of notifications on all devices.</span>
+      </div>
+      <div class="ac-details">
+        <div class="ac-detail"><div class="ac-dl">GUI</div><div class="ac-dv">Bluetooth → Attacks → BT Spam All</div></div>
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">btspamall</div></div>
+      </div>
+      <ul class="ac-steps">
+        <li><span data-lang="pl">Uruchom <code class="inline">btspamall</code> — atak na wszystkie platformy jednocześnie</span><span data-lang="en">Run <code class="inline">btspamall</code> — attacks all platforms simultaneously</span></li>
+        <li><span data-lang="pl">Obserwuj reakcje: iPhone (Apple), Samsung (Android), Windows (Swift Pair)</span><span data-lang="en">Observe reactions: iPhone (Apple), Samsung (Android), Windows (Swift Pair)</span></li>
+        <li><span data-lang="pl">Zatrzymaj przez <code class="inline">reboot</code> lub <code class="inline">stopscan</code></span><span data-lang="en">Stop via <code class="inline">reboot</code> or <code class="inline">stopscan</code></span></li>
+        <li><span data-lang="pl">⚠ Może znacząco obciążyć urządzenia w zasięgu — używaj w kontrolowanym środowisku</span><span data-lang="en">⚠ May significantly impact devices in range — use in controlled environment</span></li>
+      </ul>
+    </div>
+
+    <!-- Spoof AirTag -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">📍 Spoof AirTag</span>
+        <span class="ac-type" style="background:rgba(150,100,255,.15);color:#bb88ff;border:1px solid rgba(150,100,255,.3);">tracker</span>
+      </div>
+      <div class="ac-purpose">
+        <span data-lang="pl"><strong>Cel:</strong> Emulacja Apple AirTag przez BLE. iPhone'y w zasięgu otrzymają alert "AirTag znaleziony w pobliżu" — tak, jakby w okolicy był czyjś AirTag śledzący użytkownika.</span>
+        <span data-lang="en"><strong>Purpose:</strong> Apple AirTag emulation via BLE. iPhones in range will receive an "AirTag Found Near You" alert — as if someone's AirTag was tracking the user.</span>
+      </div>
+      <div class="ac-mech">
+        <span data-lang="pl"><strong>Mechanizm:</strong> Marauder emituje ramki BLE z identyczną strukturą jak Apple AirTag — Apple FindMy network identyfikuje je jako AirTag i powiadamia użytkownika. Adres MAC może być losowany dla uniknięcia namierzenia.</span>
+        <span data-lang="en"><strong>Mechanism:</strong> Marauder emits BLE frames with an identical structure to Apple AirTag — the Apple FindMy network identifies them as AirTags and notifies the user. MAC address can be randomized to avoid tracking.</span>
+      </div>
+      <div class="ac-details">
+        <div class="ac-detail"><div class="ac-dl">GUI</div><div class="ac-dv">Bluetooth → Attacks → Spoof AirTag</div></div>
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">spoofat</div></div>
+      </div>
+      <ul class="ac-steps">
+        <li><span data-lang="pl">Uruchom <code class="inline">spoofat</code> — iPhone'y w zasięgu zobaczą alert AirTag</span><span data-lang="en">Run <code class="inline">spoofat</code> — iPhones in range will see an AirTag alert</span></li>
+        <li><span data-lang="pl">Alert zawiera informację, że AirTag porusza się z użytkownikiem</span><span data-lang="en">The alert informs that an AirTag is moving with the user</span></li>
+        <li><span data-lang="pl">Zatrzymanie: <code class="inline">stopscan</code></span><span data-lang="en">Stop: <code class="inline">stopscan</code></span></li>
+      </ul>
+    </div>
+
+    <!-- FindMy Sound -->
+    <div class="attack-card">
+      <div class="attack-card-header">
+        <span class="ac-name">🔊 FindMy Sound (Live)</span>
+        <span class="ac-type" style="background:rgba(150,100,255,.15);color:#bb88ff;border:1px solid rgba(150,100,255,.3);">tracker</span>
+        <span class="ac-type" style="background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.3);">NOWY</span>
+      </div>
+      <div class="ac-purpose">
+        <span data-lang="pl"><strong>Cel:</strong> Nakłonienie urządzeń Apple FindMy (AirTag, zgubiony iPhone, iPad) do emisji dźwięku. Przydatne do lokalizowania trackerów — zarówno własnych, jak i potencjalnie niebezpiecznych AirTagów podrzuconych przez stalkerów.</span>
+        <span data-lang="en"><strong>Purpose:</strong> Trigger Apple FindMy devices (AirTag, lost iPhone, iPad) to emit sound. Useful for locating trackers — both your own and potentially dangerous AirTags planted by stalkers.</span>
+      </div>
+      <div class="ac-mech">
+        <span data-lang="pl"><strong>Mechanizm:</strong> Marauder wysyła spreparowane ramki BLE, które AirTag / FindMy device interpretuje jako ping z autoryzowanego urządzenia Apple. Urządzenie emituje dźwięk (charakterystyczne "ding-ding") przez ok. 10-15 sekund.</span>
+        <span data-lang="en"><strong>Mechanism:</strong> Marauder sends crafted BLE frames that the AirTag / FindMy device interprets as a ping from an authorized Apple device. The device emits a sound (characteristic "ding-ding") for about 10-15 seconds.</span>
+      </div>
+      <div class="ac-details-single">
+        <div class="ac-detail"><div class="ac-dl">CLI</div><div class="ac-dv">findmysound</div></div>
+      </div>
+      <ul class="ac-steps">
+        <li><span data-lang="pl">Uruchom <code class="inline">findmysound</code> — AirTag/iDevice w zasięgu zacznie piszczeć</span><span data-lang="en">Run <code class="inline">findmysound</code> — AirTag/iDevice in range will start beeping</span></li>
+        <li><span data-lang="pl">Użyj do sprawdzenia, czy w twoim otoczeniu nie ma nieznanych AirTagów</span><span data-lang="en">Use to check if there are unknown AirTags in your vicinity</span></li>
+        <li><span data-lang="pl">Zatrzymanie: <code class="inline">stopscan</code> lub automatycznie po 15 sekundach</span><span data-lang="en">Stop: <code class="inline">stopscan</code> or automatically after 15 seconds</span></li>
+      </ul>
+    </div>
+
+    <!-- Ostrzeżenie BLE -->
+    <div class="warn-box" style="margin-top:20px;">
+      <p style="font-size:12.5px;color:#ffcc88;">
+        ⚠ <strong><span data-lang="pl">UWAGA:</span><span data-lang="en">WARNING:</span></strong>
+        <span data-lang="pl">Ataki BLE spam mogą zakłócać pracę urządzeń medycznych (rozruszniki, pompy insulinowe), systemów alarmowych i innej krytycznej infrastruktury. <strong>Nie używaj w szpitalach, na lotniskach ani w miejscach publicznych bez wyraźnej zgody administratora.</strong> W niektórych jurysdykcjach samo emitowanie ramek BLE może być traktowane jako zakłócanie pracy urządzeń radiowych.</span>
+        <span data-lang="en">BLE spam attacks may interfere with medical devices (pacemakers, insulin pumps), alarm systems and other critical infrastructure. <strong>Do NOT use in hospitals, airports or public places without explicit administrator consent.</strong> In some jurisdictions, merely emitting BLE frames may be considered radio interference.</span>
+      </p>
+    </div>
+
+    <!-- Podsumowanie BLE -->
+    <div style="margin-top:16px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:14px 18px;">
+      <div style="font-family:var(--sans);font-weight:700;font-size:13px;color:var(--text-head);margin-bottom:8px;">
+        📊 <span data-lang="pl">Podsumowanie ataków BLE</span><span data-lang="en">BLE Attacks Summary</span>
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:11.5px;">
+        <tr style="border-bottom:1px solid var(--border2);">
+          <th style="text-align:left;padding:6px 8px;color:var(--green);font-family:var(--sans);font-weight:600;"><span data-lang="pl">Atak</span><span data-lang="en">Attack</span></th>
+          <th style="text-align:left;padding:6px 8px;color:var(--green);font-family:var(--sans);font-weight:600;"><span data-lang="pl">Platforma</span><span data-lang="en">Platform</span></th>
+          <th style="text-align:left;padding:6px 8px;color:var(--green);font-family:var(--sans);font-weight:600;"><span data-lang="pl">Komenda CLI</span><span data-lang="en">CLI Command</span></th>
+          <th style="text-align:left;padding:6px 8px;color:var(--green);font-family:var(--sans);font-weight:600;"><span data-lang="pl">Skuteczność</span><span data-lang="en">Effectiveness</span></th>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border2);">
+          <td style="padding:6px 8px;">Apple Juice</td><td style="padding:6px 8px;">iOS</td><td style="padding:6px 8px;font-family:var(--mono);">applejuice</td><td style="padding:6px 8px;color:var(--green);">⭐⭐⭐⭐⭐</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border2);">
+          <td style="padding:6px 8px;">Sour Apple</td><td style="padding:6px 8px;">iOS</td><td style="padding:6px 8px;font-family:var(--mono);">sourapple</td><td style="padding:6px 8px;color:var(--amber);">⭐⭐⭐⭐</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border2);">
+          <td style="padding:6px 8px;">Swift Pair</td><td style="padding:6px 8px;">Windows</td><td style="padding:6px 8px;font-family:var(--mono);">swiftpair</td><td style="padding:6px 8px;color:var(--green);">⭐⭐⭐⭐⭐</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border2);">
+          <td style="padding:6px 8px;">Samsung BLE</td><td style="padding:6px 8px;">Samsung</td><td style="padding:6px 8px;font-family:var(--mono);">samsungblespam</td><td style="padding:6px 8px;color:var(--green);">⭐⭐⭐⭐⭐</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border2);">
+          <td style="padding:6px 8px;">Google BLE</td><td style="padding:6px 8px;">Android</td><td style="padding:6px 8px;font-family:var(--mono);">googleblespam</td><td style="padding:6px 8px;color:var(--amber);">⭐⭐⭐⭐</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border2);">
+          <td style="padding:6px 8px;">Flipper BLE</td><td style="padding:6px 8px;">Cross</td><td style="padding:6px 8px;font-family:var(--mono);">flipperblespam</td><td style="padding:6px 8px;color:var(--amber);">⭐⭐⭐</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border2);">
+          <td style="padding:6px 8px;">BT Spam All</td><td style="padding:6px 8px;">ALL</td><td style="padding:6px 8px;font-family:var(--mono);">btspamall</td><td style="padding:6px 8px;color:var(--green);">⭐⭐⭐⭐⭐</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border2);">
+          <td style="padding:6px 8px;">Spoof AirTag</td><td style="padding:6px 8px;">iOS</td><td style="padding:6px 8px;font-family:var(--mono);">spoofat</td><td style="padding:6px 8px;color:var(--amber);">⭐⭐⭐⭐</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 8px;">FindMy Sound</td><td style="padding:6px 8px;">iOS</td><td style="padding:6px 8px;font-family:var(--mono);">findmysound</td><td style="padding:6px 8px;color:var(--green);">⭐⭐⭐⭐⭐</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
 </div>
 
 <footer>
@@ -641,17 +1133,27 @@ function toggleMenu() {
 }
 function toggleLang() {
   const html = document.documentElement;
-  const next = html.lang === 'pl' ? 'en' : 'pl';
+  const next = html.lang === 'en' ? 'pl' : 'en';
   html.lang = next;
   localStorage.setItem('marauder-lang', next);
-  document.getElementById('searchInput').placeholder = next === 'en' ? 'Search... ( / )' : 'Szukaj... ( / )';
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.placeholder = next === 'en' ? 'Search... ( / )' : 'Szukaj... ( / )';
+  }
 }
-// Restore saved language
-const saved = localStorage.getItem('marauder-lang');
-if (saved && saved !== 'pl') {
-  document.documentElement.lang = saved;
-  document.getElementById('searchInput').placeholder = 'Search... ( / )';
-}
+
+// Restore saved language on load
+(function() {
+  const saved = localStorage.getItem('marauder-lang');
+  if (saved) {
+    document.documentElement.lang = saved;
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+      searchInput.placeholder = saved === 'en' ? 'Search... ( / )' : 'Szukaj... ( / )';
+    }
+  }
+})();
+
 // Active nav highlight
 const sections = document.querySelectorAll('section[id]');
 const navItems = document.querySelectorAll('.nav-item[href^="#"]');
@@ -665,17 +1167,24 @@ const io = new IntersectionObserver(entries => {
   });
 }, { rootMargin: '-15% 0px -70% 0px' });
 sections.forEach(s => io.observe(s));
-// Search
+
+// Search filter
 function filterNav(q) {
   q = q.toLowerCase();
   navItems.forEach(a => a.style.display = (!q || a.textContent.toLowerCase().includes(q)) ? '' : 'none');
   document.querySelectorAll('.nav-section-label').forEach(l => l.style.display = q ? 'none' : '');
 }
+
 document.addEventListener('keydown', e => {
   if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
-    e.preventDefault(); document.getElementById('searchInput').focus();
+    e.preventDefault();
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.focus();
   }
-  if (e.key === 'Escape') document.getElementById('searchInput').blur();
+  if (e.key === 'Escape') {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.blur();
+  }
 });
 </script>
 </body>
